@@ -1,23 +1,139 @@
-# Protocol Spec
+---
+title: 协议规范
+titleTemplate: 指南
+description: Rudis 服务器通信协议规范说明
+---
 
-## Network layer
+# 协议规范
 
-A client connects to a Redis server by creating a TCP connection to its port (the default is 6379).
+## 网络层
 
-While RESP is technically non-TCP specific, the protocol is used exclusively with TCP connections (or equivalent stream-oriented connections like Unix sockets) in the context of Redis.
+客户端通过创建到 Rudis 服务器端口的 TCP 连接来连接（默认端口是 6379）。
 
-## RESP protocol description
+虽然从技术上讲 RESP 并不特定于 TCP，但在 Rudis 的上下文中，该协议专门与 TCP 连接（或类似的面向流的连接，如 Unix 套接字）一起使用。
 
-### Simple strings
+## RESP 协议描述
 
-Simple strings are encoded as a plus (+) character, followed by a string. The string mustn't contain a CR (\r) or LF (\n) character and is terminated by CRLF (i.e., \r\n).
+RESP（REdis Serialization Protocol）是 Redis 序列化协议的简称。它是 Redis 服务器和客户端之间通信的标准协议。
 
-Simple strings transmit short, non-binary strings with minimal overhead. For example, many Redis commands reply with just "OK" on success. The encoding of this Simple String is the following 5 bytes:
+### 简单字符串
+
+简单字符串编码为加号（+）字符，后跟一个字符串。该字符串不能包含回车符（\r）或换行符（\n）字符，并以 CRLF（即 \r\n）结尾。
+
+简单字符串以最小的开销传输短的非二进制字符串。例如，许多 Rudis 命令在成功时只回复 "OK"。这个简单字符串的编码是以下 5 个字节：
 
 ```
 +OK\r\n
 ```
 
-When Redis replies with a simple string, a client library should return to the caller a string value composed of the first character after the + up to the end of the string, excluding the final CRLF bytes.
+当 Rudis 回复简单字符串时，客户端库应该返回给调用者一个字符串值，该值由 + 之后的第一个字符组成，直到字符串末尾，不包括最后的 CRLF 字节。
 
-To send binary strings, use bulk strings instead.
+要发送二进制字符串，请改用批量字符串。
+
+### 错误
+
+错误与简单字符串非常相似，但第一个字符是减号（-）而不是加号。错误的格式如下：
+
+```
+-ERR unknown command 'foobar'\r\n
+```
+
+客户端库应该将错误返回给用户，而不是像简单字符串那样作为普通字符串返回。
+
+### 整数
+
+整数编码为冒号（:）字符，后跟一个数字，最后以 CRLF 结尾。例如：
+
+```
+:1000\r\n
+```
+
+### 批量字符串
+
+批量字符串用于表示长度最大为 512 MB 的二进制安全字符串。它编码为美元符号（$），后跟字符串的字节数（前缀长度），然后是 CRLF，接着是实际数据，最后以 CRLF 结尾。
+
+例如，"hello" 字符串的编码如下：
+
+```
+$5\r\nhello\r\n
+```
+
+空字符串的编码如下：
+
+```
+$0\r\n\r\n
+```
+
+RESP 还有一种特殊的批量字符串格式，用于表示 NULL 值。在这种特殊格式中，长度是 -1，没有数据和最终的 CRLF：
+
+```
+$-1\r\n
+```
+
+### 数组
+
+数组编码为星号（*），后跟数组中元素的数量，然后是 CRLF，接着是每个元素的 RESP 编码。
+
+例如，包含三个元素的数组 ["foo", "bar", "Hello"] 编码如下：
+
+```
+*3\r
+$3\r
+foo\r
+$3\r
+bar\r
+$5\r
+Hello\r
+
+```
+
+数组可以包含混合数据类型。例如，包含一个简单字符串、一个整数和一个数组的数组编码如下：
+
+```
+*3\r
++foo\r
+:1000\r
+*2\r
+$3\r
+bar\r
+$5\r
+Hello\r
+
+```
+
+空数组的编码如下：
+
+```
+*0\r\n
+```
+
+RESP 还允许数组中的元素为 NULL。这使用特殊的批量字符串 NULL 值（$-1）来表示：
+
+```
+*3\r
+$3\r
+foo\r
+$-1\r
+$3\r
+bar\r
+
+```
+
+### NIL 数组
+
+在某些情况下，服务器需要返回 NULL 数组的概念。这使用特殊格式编码，元素计数为 -1：
+
+```
+*-1\r\n
+```
+
+## 粘连命令处理机制
+
+在使用 redis-rust 客户端库连接到 Rudis 服务器时，该库会在建立连接后立即连续发送两个 CLIENT 命令：
+
+```
+CLIENT SETINFO LIB-NAME redis-rs
+CLIENT SETINFO LIB-VER 1.0.0-rc.4
+```
+
+这两个命令可能会在同一个 TCP 数据包中发送到服务器，形成所谓的"粘连命令"。Rudis 服务器经过特殊设计，能够正确处理这种情况，确保每个命令都能得到适当的响应，避免客户端在等待响应时超时。

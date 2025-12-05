@@ -1,9 +1,9 @@
 import {
   setupDevtoolsPlugin
-} from "./chunk-Y2XQL4KM.js";
+} from "./chunk-QYQIBODO.js";
 import {
   isVue2
-} from "./chunk-I3RIQLCS.js";
+} from "./chunk-CNGDNOZK.js";
 import {
   computed2 as computed,
   getCurrentScope,
@@ -18,14 +18,14 @@ import {
   unref,
   watch,
   watchEffect
-} from "./chunk-T3FA6UVC.js";
+} from "./chunk-PSA4C5QZ.js";
 import {
   __privateAdd,
   __privateGet,
   __privateMethod,
   __privateSet,
   __privateWrapper
-} from "./chunk-HL2QZUHZ.js";
+} from "./chunk-4MBMRILA.js";
 
 // node_modules/.pnpm/@tanstack+query-core@5.17.8/node_modules/@tanstack/query-core/build/modern/subscribable.js
 var Subscribable = class {
@@ -235,9 +235,9 @@ var _focused, _cleanup, _setup, _a;
 var FocusManager = (_a = class extends Subscribable {
   constructor() {
     super();
-    __privateAdd(this, _focused, void 0);
-    __privateAdd(this, _cleanup, void 0);
-    __privateAdd(this, _setup, void 0);
+    __privateAdd(this, _focused);
+    __privateAdd(this, _cleanup);
+    __privateAdd(this, _setup);
     __privateSet(this, _setup, (onFocus) => {
       if (!isServer && window.addEventListener) {
         const listener = () => onFocus();
@@ -301,8 +301,8 @@ var OnlineManager = (_a2 = class extends Subscribable {
   constructor() {
     super();
     __privateAdd(this, _online, true);
-    __privateAdd(this, _cleanup2, void 0);
-    __privateAdd(this, _setup2, void 0);
+    __privateAdd(this, _cleanup2);
+    __privateAdd(this, _setup2);
     __privateSet(this, _setup2, (onOnline) => {
       if (!isServer && window.addEventListener) {
         const onlineListener = () => onOnline(true);
@@ -561,7 +561,7 @@ var notifyManager = createNotifyManager();
 var _gcTimeout, _a3;
 var Removable = (_a3 = class {
   constructor() {
-    __privateAdd(this, _gcTimeout, void 0);
+    __privateAdd(this, _gcTimeout);
   }
   destroy() {
     this.clearGcTimeout();
@@ -589,23 +589,22 @@ var Removable = (_a3 = class {
 }, _gcTimeout = new WeakMap(), _a3);
 
 // node_modules/.pnpm/@tanstack+query-core@5.17.8/node_modules/@tanstack/query-core/build/modern/query.js
-var _initialState, _revertState, _cache, _promise, _retryer, _observers, _defaultOptions, _abortSignalConsumed, _setOptions, setOptions_fn, _dispatch, dispatch_fn, _a4;
+var _initialState, _revertState, _cache, _promise, _retryer, _observers, _defaultOptions, _abortSignalConsumed, _Query_instances, setOptions_fn, dispatch_fn, _a4;
 var Query = (_a4 = class extends Removable {
   constructor(config) {
     super();
-    __privateAdd(this, _setOptions);
-    __privateAdd(this, _dispatch);
-    __privateAdd(this, _initialState, void 0);
-    __privateAdd(this, _revertState, void 0);
-    __privateAdd(this, _cache, void 0);
-    __privateAdd(this, _promise, void 0);
-    __privateAdd(this, _retryer, void 0);
-    __privateAdd(this, _observers, void 0);
-    __privateAdd(this, _defaultOptions, void 0);
-    __privateAdd(this, _abortSignalConsumed, void 0);
+    __privateAdd(this, _Query_instances);
+    __privateAdd(this, _initialState);
+    __privateAdd(this, _revertState);
+    __privateAdd(this, _cache);
+    __privateAdd(this, _promise);
+    __privateAdd(this, _retryer);
+    __privateAdd(this, _observers);
+    __privateAdd(this, _defaultOptions);
+    __privateAdd(this, _abortSignalConsumed);
     __privateSet(this, _abortSignalConsumed, false);
     __privateSet(this, _defaultOptions, config.defaultOptions);
-    __privateMethod(this, _setOptions, setOptions_fn).call(this, config.options);
+    __privateMethod(this, _Query_instances, setOptions_fn).call(this, config.options);
     __privateSet(this, _observers, []);
     __privateSet(this, _cache, config.cache);
     this.queryKey = config.queryKey;
@@ -624,7 +623,7 @@ var Query = (_a4 = class extends Removable {
   }
   setData(newData, options) {
     const data = replaceData(this.state.data, newData, this.options);
-    __privateMethod(this, _dispatch, dispatch_fn).call(this, {
+    __privateMethod(this, _Query_instances, dispatch_fn).call(this, {
       data,
       type: "success",
       dataUpdatedAt: options == null ? void 0 : options.updatedAt,
@@ -633,7 +632,7 @@ var Query = (_a4 = class extends Removable {
     return data;
   }
   setState(state, setStateOptions) {
-    __privateMethod(this, _dispatch, dispatch_fn).call(this, { type: "setState", state, setStateOptions });
+    __privateMethod(this, _Query_instances, dispatch_fn).call(this, { type: "setState", state, setStateOptions });
   }
   cancel(options) {
     var _a12;
@@ -703,7 +702,7 @@ var Query = (_a4 = class extends Removable {
   }
   invalidate() {
     if (!this.state.isInvalidated) {
-      __privateMethod(this, _dispatch, dispatch_fn).call(this, { type: "invalidate" });
+      __privateMethod(this, _Query_instances, dispatch_fn).call(this, { type: "invalidate" });
     }
   }
   fetch(options, fetchOptions) {
@@ -717,12 +716,12 @@ var Query = (_a4 = class extends Removable {
       }
     }
     if (options) {
-      __privateMethod(this, _setOptions, setOptions_fn).call(this, options);
+      __privateMethod(this, _Query_instances, setOptions_fn).call(this, options);
     }
     if (!this.options.queryFn) {
       const observer = __privateGet(this, _observers).find((x) => x.options.queryFn);
       if (observer) {
-        __privateMethod(this, _setOptions, setOptions_fn).call(this, observer.options);
+        __privateMethod(this, _Query_instances, setOptions_fn).call(this, observer.options);
       }
     }
     if (true) {
@@ -779,12 +778,12 @@ var Query = (_a4 = class extends Removable {
     );
     __privateSet(this, _revertState, this.state);
     if (this.state.fetchStatus === "idle" || this.state.fetchMeta !== ((_c = context.fetchOptions) == null ? void 0 : _c.meta)) {
-      __privateMethod(this, _dispatch, dispatch_fn).call(this, { type: "fetch", meta: (_d = context.fetchOptions) == null ? void 0 : _d.meta });
+      __privateMethod(this, _Query_instances, dispatch_fn).call(this, { type: "fetch", meta: (_d = context.fetchOptions) == null ? void 0 : _d.meta });
     }
     const onError = (error) => {
       var _a13, _b2, _c2, _d2;
       if (!(isCancelledError(error) && error.silent)) {
-        __privateMethod(this, _dispatch, dispatch_fn).call(this, {
+        __privateMethod(this, _Query_instances, dispatch_fn).call(this, {
           type: "error",
           error
         });
@@ -836,13 +835,13 @@ var Query = (_a4 = class extends Removable {
       },
       onError,
       onFail: (failureCount, error) => {
-        __privateMethod(this, _dispatch, dispatch_fn).call(this, { type: "failed", failureCount, error });
+        __privateMethod(this, _Query_instances, dispatch_fn).call(this, { type: "failed", failureCount, error });
       },
       onPause: () => {
-        __privateMethod(this, _dispatch, dispatch_fn).call(this, { type: "pause" });
+        __privateMethod(this, _Query_instances, dispatch_fn).call(this, { type: "pause" });
       },
       onContinue: () => {
-        __privateMethod(this, _dispatch, dispatch_fn).call(this, { type: "continue" });
+        __privateMethod(this, _Query_instances, dispatch_fn).call(this, { type: "continue" });
       },
       retry: context.options.retry,
       retryDelay: context.options.retryDelay,
@@ -851,10 +850,10 @@ var Query = (_a4 = class extends Removable {
     __privateSet(this, _promise, __privateGet(this, _retryer).promise);
     return __privateGet(this, _promise);
   }
-}, _initialState = new WeakMap(), _revertState = new WeakMap(), _cache = new WeakMap(), _promise = new WeakMap(), _retryer = new WeakMap(), _observers = new WeakMap(), _defaultOptions = new WeakMap(), _abortSignalConsumed = new WeakMap(), _setOptions = new WeakSet(), setOptions_fn = function(options) {
+}, _initialState = new WeakMap(), _revertState = new WeakMap(), _cache = new WeakMap(), _promise = new WeakMap(), _retryer = new WeakMap(), _observers = new WeakMap(), _defaultOptions = new WeakMap(), _abortSignalConsumed = new WeakMap(), _Query_instances = new WeakSet(), setOptions_fn = function(options) {
   this.options = { ...__privateGet(this, _defaultOptions), ...options };
   this.updateGcTime(this.options.gcTime);
-}, _dispatch = new WeakSet(), dispatch_fn = function(action) {
+}, dispatch_fn = function(action) {
   const reducer = (state) => {
     switch (action.type) {
       case "failed":
@@ -960,7 +959,7 @@ var _queries, _a5;
 var QueryCache = (_a5 = class extends Subscribable {
   constructor(config = {}) {
     super();
-    __privateAdd(this, _queries, void 0);
+    __privateAdd(this, _queries);
     this.config = config;
     __privateSet(this, _queries, /* @__PURE__ */ new Map());
   }
@@ -1047,15 +1046,15 @@ var QueryCache = (_a5 = class extends Subscribable {
 }, _queries = new WeakMap(), _a5);
 
 // node_modules/.pnpm/@tanstack+query-core@5.17.8/node_modules/@tanstack/query-core/build/modern/mutation.js
-var _observers2, _defaultOptions2, _mutationCache, _retryer2, _dispatch2, dispatch_fn2, _a6;
+var _observers2, _defaultOptions2, _mutationCache, _retryer2, _Mutation_instances, dispatch_fn2, _a6;
 var Mutation = (_a6 = class extends Removable {
   constructor(config) {
     super();
-    __privateAdd(this, _dispatch2);
-    __privateAdd(this, _observers2, void 0);
-    __privateAdd(this, _defaultOptions2, void 0);
-    __privateAdd(this, _mutationCache, void 0);
-    __privateAdd(this, _retryer2, void 0);
+    __privateAdd(this, _Mutation_instances);
+    __privateAdd(this, _observers2);
+    __privateAdd(this, _defaultOptions2);
+    __privateAdd(this, _mutationCache);
+    __privateAdd(this, _retryer2);
     this.mutationId = config.mutationId;
     __privateSet(this, _defaultOptions2, config.defaultOptions);
     __privateSet(this, _mutationCache, config.mutationCache);
@@ -1116,13 +1115,13 @@ var Mutation = (_a6 = class extends Removable {
           return this.options.mutationFn(variables);
         },
         onFail: (failureCount, error) => {
-          __privateMethod(this, _dispatch2, dispatch_fn2).call(this, { type: "failed", failureCount, error });
+          __privateMethod(this, _Mutation_instances, dispatch_fn2).call(this, { type: "failed", failureCount, error });
         },
         onPause: () => {
-          __privateMethod(this, _dispatch2, dispatch_fn2).call(this, { type: "pause" });
+          __privateMethod(this, _Mutation_instances, dispatch_fn2).call(this, { type: "pause" });
         },
         onContinue: () => {
-          __privateMethod(this, _dispatch2, dispatch_fn2).call(this, { type: "continue" });
+          __privateMethod(this, _Mutation_instances, dispatch_fn2).call(this, { type: "continue" });
         },
         retry: this.options.retry ?? 0,
         retryDelay: this.options.retryDelay,
@@ -1133,7 +1132,7 @@ var Mutation = (_a6 = class extends Removable {
     const restored = this.state.status === "pending";
     try {
       if (!restored) {
-        __privateMethod(this, _dispatch2, dispatch_fn2).call(this, { type: "pending", variables });
+        __privateMethod(this, _Mutation_instances, dispatch_fn2).call(this, { type: "pending", variables });
         await ((_b = (_a12 = __privateGet(this, _mutationCache).config).onMutate) == null ? void 0 : _b.call(
           _a12,
           variables,
@@ -1141,7 +1140,7 @@ var Mutation = (_a6 = class extends Removable {
         ));
         const context = await ((_d = (_c = this.options).onMutate) == null ? void 0 : _d.call(_c, variables));
         if (context !== this.state.context) {
-          __privateMethod(this, _dispatch2, dispatch_fn2).call(this, {
+          __privateMethod(this, _Mutation_instances, dispatch_fn2).call(this, {
             type: "pending",
             context,
             variables
@@ -1166,7 +1165,7 @@ var Mutation = (_a6 = class extends Removable {
         this
       ));
       await ((_l = (_k = this.options).onSettled) == null ? void 0 : _l.call(_k, data, null, variables, this.state.context));
-      __privateMethod(this, _dispatch2, dispatch_fn2).call(this, { type: "success", data });
+      __privateMethod(this, _Mutation_instances, dispatch_fn2).call(this, { type: "success", data });
       return data;
     } catch (error) {
       try {
@@ -1200,11 +1199,11 @@ var Mutation = (_a6 = class extends Removable {
         ));
         throw error;
       } finally {
-        __privateMethod(this, _dispatch2, dispatch_fn2).call(this, { type: "error", error });
+        __privateMethod(this, _Mutation_instances, dispatch_fn2).call(this, { type: "error", error });
       }
     }
   }
-}, _observers2 = new WeakMap(), _defaultOptions2 = new WeakMap(), _mutationCache = new WeakMap(), _retryer2 = new WeakMap(), _dispatch2 = new WeakSet(), dispatch_fn2 = function(action) {
+}, _observers2 = new WeakMap(), _defaultOptions2 = new WeakMap(), _mutationCache = new WeakMap(), _retryer2 = new WeakMap(), _Mutation_instances = new WeakSet(), dispatch_fn2 = function(action) {
   const reducer = (state) => {
     switch (action.type) {
       case "failed":
@@ -1289,9 +1288,9 @@ var _mutations, _mutationId, _resuming, _a7;
 var MutationCache = (_a7 = class extends Subscribable {
   constructor(config = {}) {
     super();
-    __privateAdd(this, _mutations, void 0);
-    __privateAdd(this, _mutationId, void 0);
-    __privateAdd(this, _resuming, void 0);
+    __privateAdd(this, _mutations);
+    __privateAdd(this, _mutationId);
+    __privateAdd(this, _resuming);
     this.config = config;
     __privateSet(this, _mutations, []);
     __privateSet(this, _mutationId, 0);
@@ -1489,14 +1488,14 @@ function hasPreviousPage(options, data) {
 var _queryCache, _mutationCache2, _defaultOptions3, _queryDefaults, _mutationDefaults, _mountCount, _unsubscribeFocus, _unsubscribeOnline, _a8;
 var QueryClient = (_a8 = class {
   constructor(config = {}) {
-    __privateAdd(this, _queryCache, void 0);
-    __privateAdd(this, _mutationCache2, void 0);
-    __privateAdd(this, _defaultOptions3, void 0);
-    __privateAdd(this, _queryDefaults, void 0);
-    __privateAdd(this, _mutationDefaults, void 0);
-    __privateAdd(this, _mountCount, void 0);
-    __privateAdd(this, _unsubscribeFocus, void 0);
-    __privateAdd(this, _unsubscribeOnline, void 0);
+    __privateAdd(this, _queryCache);
+    __privateAdd(this, _mutationCache2);
+    __privateAdd(this, _defaultOptions3);
+    __privateAdd(this, _queryDefaults);
+    __privateAdd(this, _mutationDefaults);
+    __privateAdd(this, _mountCount);
+    __privateAdd(this, _unsubscribeFocus);
+    __privateAdd(this, _unsubscribeOnline);
     __privateSet(this, _queryCache, config.queryCache || new QueryCache());
     __privateSet(this, _mutationCache2, config.mutationCache || new MutationCache());
     __privateSet(this, _defaultOptions3, config.defaultOptions || {});
@@ -1742,34 +1741,26 @@ var QueryClient = (_a8 = class {
 }, _queryCache = new WeakMap(), _mutationCache2 = new WeakMap(), _defaultOptions3 = new WeakMap(), _queryDefaults = new WeakMap(), _mutationDefaults = new WeakMap(), _mountCount = new WeakMap(), _unsubscribeFocus = new WeakMap(), _unsubscribeOnline = new WeakMap(), _a8);
 
 // node_modules/.pnpm/@tanstack+query-core@5.17.8/node_modules/@tanstack/query-core/build/modern/queryObserver.js
-var _client, _currentQuery, _currentQueryInitialState, _currentResult, _currentResultState, _currentResultOptions, _selectError, _selectFn, _selectResult, _lastQueryWithDefinedData, _staleTimeoutId, _refetchIntervalId, _currentRefetchInterval, _trackedProps, _executeFetch, executeFetch_fn, _updateStaleTimeout, updateStaleTimeout_fn, _computeRefetchInterval, computeRefetchInterval_fn, _updateRefetchInterval, updateRefetchInterval_fn, _updateTimers, updateTimers_fn, _clearStaleTimeout, clearStaleTimeout_fn, _clearRefetchInterval, clearRefetchInterval_fn, _updateQuery, updateQuery_fn, _notify, notify_fn, _a9;
+var _client, _currentQuery, _currentQueryInitialState, _currentResult, _currentResultState, _currentResultOptions, _selectError, _selectFn, _selectResult, _lastQueryWithDefinedData, _staleTimeoutId, _refetchIntervalId, _currentRefetchInterval, _trackedProps, _QueryObserver_instances, executeFetch_fn, updateStaleTimeout_fn, computeRefetchInterval_fn, updateRefetchInterval_fn, updateTimers_fn, clearStaleTimeout_fn, clearRefetchInterval_fn, updateQuery_fn, notify_fn, _a9;
 var QueryObserver = (_a9 = class extends Subscribable {
   constructor(client, options) {
     super();
-    __privateAdd(this, _executeFetch);
-    __privateAdd(this, _updateStaleTimeout);
-    __privateAdd(this, _computeRefetchInterval);
-    __privateAdd(this, _updateRefetchInterval);
-    __privateAdd(this, _updateTimers);
-    __privateAdd(this, _clearStaleTimeout);
-    __privateAdd(this, _clearRefetchInterval);
-    __privateAdd(this, _updateQuery);
-    __privateAdd(this, _notify);
-    __privateAdd(this, _client, void 0);
-    __privateAdd(this, _currentQuery, void 0);
-    __privateAdd(this, _currentQueryInitialState, void 0);
-    __privateAdd(this, _currentResult, void 0);
-    __privateAdd(this, _currentResultState, void 0);
-    __privateAdd(this, _currentResultOptions, void 0);
-    __privateAdd(this, _selectError, void 0);
-    __privateAdd(this, _selectFn, void 0);
-    __privateAdd(this, _selectResult, void 0);
+    __privateAdd(this, _QueryObserver_instances);
+    __privateAdd(this, _client);
+    __privateAdd(this, _currentQuery);
+    __privateAdd(this, _currentQueryInitialState);
+    __privateAdd(this, _currentResult);
+    __privateAdd(this, _currentResultState);
+    __privateAdd(this, _currentResultOptions);
+    __privateAdd(this, _selectError);
+    __privateAdd(this, _selectFn);
+    __privateAdd(this, _selectResult);
     // This property keeps track of the last query with defined data.
     // It will be used to pass the previous data and query to the placeholder function between renders.
-    __privateAdd(this, _lastQueryWithDefinedData, void 0);
-    __privateAdd(this, _staleTimeoutId, void 0);
-    __privateAdd(this, _refetchIntervalId, void 0);
-    __privateAdd(this, _currentRefetchInterval, void 0);
+    __privateAdd(this, _lastQueryWithDefinedData);
+    __privateAdd(this, _staleTimeoutId);
+    __privateAdd(this, _refetchIntervalId);
+    __privateAdd(this, _currentRefetchInterval);
     __privateAdd(this, _trackedProps, /* @__PURE__ */ new Set());
     this.options = options;
     __privateSet(this, _client, client);
@@ -1784,11 +1775,11 @@ var QueryObserver = (_a9 = class extends Subscribable {
     if (this.listeners.size === 1) {
       __privateGet(this, _currentQuery).addObserver(this);
       if (shouldFetchOnMount(__privateGet(this, _currentQuery), this.options)) {
-        __privateMethod(this, _executeFetch, executeFetch_fn).call(this);
+        __privateMethod(this, _QueryObserver_instances, executeFetch_fn).call(this);
       } else {
         this.updateResult();
       }
-      __privateMethod(this, _updateTimers, updateTimers_fn).call(this);
+      __privateMethod(this, _QueryObserver_instances, updateTimers_fn).call(this);
     }
   }
   onUnsubscribe() {
@@ -1812,8 +1803,8 @@ var QueryObserver = (_a9 = class extends Subscribable {
   }
   destroy() {
     this.listeners = /* @__PURE__ */ new Set();
-    __privateMethod(this, _clearStaleTimeout, clearStaleTimeout_fn).call(this);
-    __privateMethod(this, _clearRefetchInterval, clearRefetchInterval_fn).call(this);
+    __privateMethod(this, _QueryObserver_instances, clearStaleTimeout_fn).call(this);
+    __privateMethod(this, _QueryObserver_instances, clearRefetchInterval_fn).call(this);
     __privateGet(this, _currentQuery).removeObserver(this);
   }
   setOptions(options, notifyOptions) {
@@ -1833,7 +1824,7 @@ var QueryObserver = (_a9 = class extends Subscribable {
     if (!this.options.queryKey) {
       this.options.queryKey = prevOptions.queryKey;
     }
-    __privateMethod(this, _updateQuery, updateQuery_fn).call(this);
+    __privateMethod(this, _QueryObserver_instances, updateQuery_fn).call(this);
     const mounted = this.hasListeners();
     if (mounted && shouldFetchOptionally(
       __privateGet(this, _currentQuery),
@@ -1841,15 +1832,15 @@ var QueryObserver = (_a9 = class extends Subscribable {
       this.options,
       prevOptions
     )) {
-      __privateMethod(this, _executeFetch, executeFetch_fn).call(this);
+      __privateMethod(this, _QueryObserver_instances, executeFetch_fn).call(this);
     }
     this.updateResult(notifyOptions);
     if (mounted && (__privateGet(this, _currentQuery) !== prevQuery || this.options.enabled !== prevOptions.enabled || this.options.staleTime !== prevOptions.staleTime)) {
-      __privateMethod(this, _updateStaleTimeout, updateStaleTimeout_fn).call(this);
+      __privateMethod(this, _QueryObserver_instances, updateStaleTimeout_fn).call(this);
     }
-    const nextRefetchInterval = __privateMethod(this, _computeRefetchInterval, computeRefetchInterval_fn).call(this);
+    const nextRefetchInterval = __privateMethod(this, _QueryObserver_instances, computeRefetchInterval_fn).call(this);
     if (mounted && (__privateGet(this, _currentQuery) !== prevQuery || this.options.enabled !== prevOptions.enabled || nextRefetchInterval !== __privateGet(this, _currentRefetchInterval))) {
-      __privateMethod(this, _updateRefetchInterval, updateRefetchInterval_fn).call(this, nextRefetchInterval);
+      __privateMethod(this, _QueryObserver_instances, updateRefetchInterval_fn).call(this, nextRefetchInterval);
     }
   }
   getOptimisticResult(options) {
@@ -1894,7 +1885,7 @@ var QueryObserver = (_a9 = class extends Subscribable {
     return query.fetch().then(() => this.createResult(query, defaultedOptions));
   }
   fetch(fetchOptions) {
-    return __privateMethod(this, _executeFetch, executeFetch_fn).call(this, {
+    return __privateMethod(this, _QueryObserver_instances, executeFetch_fn).call(this, {
       ...fetchOptions,
       cancelRefetch: fetchOptions.cancelRefetch ?? true
     }).then(() => {
@@ -2049,16 +2040,16 @@ var QueryObserver = (_a9 = class extends Subscribable {
     if ((notifyOptions == null ? void 0 : notifyOptions.listeners) !== false && shouldNotifyListeners()) {
       defaultNotifyOptions.listeners = true;
     }
-    __privateMethod(this, _notify, notify_fn).call(this, { ...defaultNotifyOptions, ...notifyOptions });
+    __privateMethod(this, _QueryObserver_instances, notify_fn).call(this, { ...defaultNotifyOptions, ...notifyOptions });
   }
   onQueryUpdate() {
     this.updateResult();
     if (this.hasListeners()) {
-      __privateMethod(this, _updateTimers, updateTimers_fn).call(this);
+      __privateMethod(this, _QueryObserver_instances, updateTimers_fn).call(this);
     }
   }
-}, _client = new WeakMap(), _currentQuery = new WeakMap(), _currentQueryInitialState = new WeakMap(), _currentResult = new WeakMap(), _currentResultState = new WeakMap(), _currentResultOptions = new WeakMap(), _selectError = new WeakMap(), _selectFn = new WeakMap(), _selectResult = new WeakMap(), _lastQueryWithDefinedData = new WeakMap(), _staleTimeoutId = new WeakMap(), _refetchIntervalId = new WeakMap(), _currentRefetchInterval = new WeakMap(), _trackedProps = new WeakMap(), _executeFetch = new WeakSet(), executeFetch_fn = function(fetchOptions) {
-  __privateMethod(this, _updateQuery, updateQuery_fn).call(this);
+}, _client = new WeakMap(), _currentQuery = new WeakMap(), _currentQueryInitialState = new WeakMap(), _currentResult = new WeakMap(), _currentResultState = new WeakMap(), _currentResultOptions = new WeakMap(), _selectError = new WeakMap(), _selectFn = new WeakMap(), _selectResult = new WeakMap(), _lastQueryWithDefinedData = new WeakMap(), _staleTimeoutId = new WeakMap(), _refetchIntervalId = new WeakMap(), _currentRefetchInterval = new WeakMap(), _trackedProps = new WeakMap(), _QueryObserver_instances = new WeakSet(), executeFetch_fn = function(fetchOptions) {
+  __privateMethod(this, _QueryObserver_instances, updateQuery_fn).call(this);
   let promise = __privateGet(this, _currentQuery).fetch(
     this.options,
     fetchOptions
@@ -2067,8 +2058,8 @@ var QueryObserver = (_a9 = class extends Subscribable {
     promise = promise.catch(noop);
   }
   return promise;
-}, _updateStaleTimeout = new WeakSet(), updateStaleTimeout_fn = function() {
-  __privateMethod(this, _clearStaleTimeout, clearStaleTimeout_fn).call(this);
+}, updateStaleTimeout_fn = function() {
+  __privateMethod(this, _QueryObserver_instances, clearStaleTimeout_fn).call(this);
   if (isServer || __privateGet(this, _currentResult).isStale || !isValidTimeout(this.options.staleTime)) {
     return;
   }
@@ -2082,33 +2073,33 @@ var QueryObserver = (_a9 = class extends Subscribable {
       this.updateResult();
     }
   }, timeout));
-}, _computeRefetchInterval = new WeakSet(), computeRefetchInterval_fn = function() {
+}, computeRefetchInterval_fn = function() {
   return (typeof this.options.refetchInterval === "function" ? this.options.refetchInterval(__privateGet(this, _currentQuery)) : this.options.refetchInterval) ?? false;
-}, _updateRefetchInterval = new WeakSet(), updateRefetchInterval_fn = function(nextInterval) {
-  __privateMethod(this, _clearRefetchInterval, clearRefetchInterval_fn).call(this);
+}, updateRefetchInterval_fn = function(nextInterval) {
+  __privateMethod(this, _QueryObserver_instances, clearRefetchInterval_fn).call(this);
   __privateSet(this, _currentRefetchInterval, nextInterval);
   if (isServer || this.options.enabled === false || !isValidTimeout(__privateGet(this, _currentRefetchInterval)) || __privateGet(this, _currentRefetchInterval) === 0) {
     return;
   }
   __privateSet(this, _refetchIntervalId, setInterval(() => {
     if (this.options.refetchIntervalInBackground || focusManager.isFocused()) {
-      __privateMethod(this, _executeFetch, executeFetch_fn).call(this);
+      __privateMethod(this, _QueryObserver_instances, executeFetch_fn).call(this);
     }
   }, __privateGet(this, _currentRefetchInterval)));
-}, _updateTimers = new WeakSet(), updateTimers_fn = function() {
-  __privateMethod(this, _updateStaleTimeout, updateStaleTimeout_fn).call(this);
-  __privateMethod(this, _updateRefetchInterval, updateRefetchInterval_fn).call(this, __privateMethod(this, _computeRefetchInterval, computeRefetchInterval_fn).call(this));
-}, _clearStaleTimeout = new WeakSet(), clearStaleTimeout_fn = function() {
+}, updateTimers_fn = function() {
+  __privateMethod(this, _QueryObserver_instances, updateStaleTimeout_fn).call(this);
+  __privateMethod(this, _QueryObserver_instances, updateRefetchInterval_fn).call(this, __privateMethod(this, _QueryObserver_instances, computeRefetchInterval_fn).call(this));
+}, clearStaleTimeout_fn = function() {
   if (__privateGet(this, _staleTimeoutId)) {
     clearTimeout(__privateGet(this, _staleTimeoutId));
     __privateSet(this, _staleTimeoutId, void 0);
   }
-}, _clearRefetchInterval = new WeakSet(), clearRefetchInterval_fn = function() {
+}, clearRefetchInterval_fn = function() {
   if (__privateGet(this, _refetchIntervalId)) {
     clearInterval(__privateGet(this, _refetchIntervalId));
     __privateSet(this, _refetchIntervalId, void 0);
   }
-}, _updateQuery = new WeakSet(), updateQuery_fn = function() {
+}, updateQuery_fn = function() {
   const query = __privateGet(this, _client).getQueryCache().build(__privateGet(this, _client), this.options);
   if (query === __privateGet(this, _currentQuery)) {
     return;
@@ -2120,7 +2111,7 @@ var QueryObserver = (_a9 = class extends Subscribable {
     prevQuery == null ? void 0 : prevQuery.removeObserver(this);
     query.addObserver(this);
   }
-}, _notify = new WeakSet(), notify_fn = function(notifyOptions) {
+}, notify_fn = function(notifyOptions) {
   notifyManager.batch(() => {
     if (notifyOptions.listeners) {
       this.listeners.forEach((listener) => {
@@ -2168,32 +2159,28 @@ function replaceAt(array, index, value) {
   copy[index] = value;
   return copy;
 }
-var _client2, _result, _queries2, _observers3, _options, _combinedResult, _setResult, setResult_fn, _combineResult, combineResult_fn, _findMatchingObservers, findMatchingObservers_fn, _onUpdate, onUpdate_fn, _notify2, notify_fn2, _a10;
+var _client2, _result, _queries2, _observers3, _options, _combinedResult, _QueriesObserver_instances, setResult_fn, combineResult_fn, findMatchingObservers_fn, onUpdate_fn, notify_fn2, _a10;
 var QueriesObserver = (_a10 = class extends Subscribable {
   constructor(client, queries, options) {
     super();
-    __privateAdd(this, _setResult);
-    __privateAdd(this, _combineResult);
-    __privateAdd(this, _findMatchingObservers);
-    __privateAdd(this, _onUpdate);
-    __privateAdd(this, _notify2);
-    __privateAdd(this, _client2, void 0);
-    __privateAdd(this, _result, void 0);
-    __privateAdd(this, _queries2, void 0);
-    __privateAdd(this, _observers3, void 0);
-    __privateAdd(this, _options, void 0);
-    __privateAdd(this, _combinedResult, void 0);
+    __privateAdd(this, _QueriesObserver_instances);
+    __privateAdd(this, _client2);
+    __privateAdd(this, _result);
+    __privateAdd(this, _queries2);
+    __privateAdd(this, _observers3);
+    __privateAdd(this, _options);
+    __privateAdd(this, _combinedResult);
     __privateSet(this, _client2, client);
     __privateSet(this, _queries2, []);
     __privateSet(this, _observers3, []);
-    __privateMethod(this, _setResult, setResult_fn).call(this, []);
+    __privateMethod(this, _QueriesObserver_instances, setResult_fn).call(this, []);
     this.setQueries(queries, options);
   }
   onSubscribe() {
     if (this.listeners.size === 1) {
       __privateGet(this, _observers3).forEach((observer) => {
         observer.subscribe((result) => {
-          __privateMethod(this, _onUpdate, onUpdate_fn).call(this, observer, result);
+          __privateMethod(this, _QueriesObserver_instances, onUpdate_fn).call(this, observer, result);
         });
       });
     }
@@ -2214,7 +2201,7 @@ var QueriesObserver = (_a10 = class extends Subscribable {
     __privateSet(this, _options, options);
     notifyManager.batch(() => {
       const prevObservers = __privateGet(this, _observers3);
-      const newObserverMatches = __privateMethod(this, _findMatchingObservers, findMatchingObservers_fn).call(this, __privateGet(this, _queries2));
+      const newObserverMatches = __privateMethod(this, _QueriesObserver_instances, findMatchingObservers_fn).call(this, __privateGet(this, _queries2));
       newObserverMatches.forEach(
         (match) => match.observer.setOptions(match.defaultedQueryOptions, notifyOptions)
       );
@@ -2229,7 +2216,7 @@ var QueriesObserver = (_a10 = class extends Subscribable {
         return;
       }
       __privateSet(this, _observers3, newObservers);
-      __privateMethod(this, _setResult, setResult_fn).call(this, newResult);
+      __privateMethod(this, _QueriesObserver_instances, setResult_fn).call(this, newResult);
       if (!this.hasListeners()) {
         return;
       }
@@ -2238,10 +2225,10 @@ var QueriesObserver = (_a10 = class extends Subscribable {
       });
       difference(newObservers, prevObservers).forEach((observer) => {
         observer.subscribe((result) => {
-          __privateMethod(this, _onUpdate, onUpdate_fn).call(this, observer, result);
+          __privateMethod(this, _QueriesObserver_instances, onUpdate_fn).call(this, observer, result);
         });
       });
-      __privateMethod(this, _notify2, notify_fn2).call(this);
+      __privateMethod(this, _QueriesObserver_instances, notify_fn2).call(this);
     });
   }
   getCurrentResult() {
@@ -2254,14 +2241,14 @@ var QueriesObserver = (_a10 = class extends Subscribable {
     return __privateGet(this, _observers3);
   }
   getOptimisticResult(queries, combine) {
-    const matches = __privateMethod(this, _findMatchingObservers, findMatchingObservers_fn).call(this, queries);
+    const matches = __privateMethod(this, _QueriesObserver_instances, findMatchingObservers_fn).call(this, queries);
     const result = matches.map(
       (match) => match.observer.getOptimisticResult(match.defaultedQueryOptions)
     );
     return [
       result,
       (r) => {
-        return __privateMethod(this, _combineResult, combineResult_fn).call(this, r ?? result, combine);
+        return __privateMethod(this, _QueriesObserver_instances, combineResult_fn).call(this, r ?? result, combine);
       },
       () => {
         return matches.map((match, index) => {
@@ -2271,16 +2258,16 @@ var QueriesObserver = (_a10 = class extends Subscribable {
       }
     ];
   }
-}, _client2 = new WeakMap(), _result = new WeakMap(), _queries2 = new WeakMap(), _observers3 = new WeakMap(), _options = new WeakMap(), _combinedResult = new WeakMap(), _setResult = new WeakSet(), setResult_fn = function(value) {
+}, _client2 = new WeakMap(), _result = new WeakMap(), _queries2 = new WeakMap(), _observers3 = new WeakMap(), _options = new WeakMap(), _combinedResult = new WeakMap(), _QueriesObserver_instances = new WeakSet(), setResult_fn = function(value) {
   var _a12;
   __privateSet(this, _result, value);
-  __privateSet(this, _combinedResult, __privateMethod(this, _combineResult, combineResult_fn).call(this, value, (_a12 = __privateGet(this, _options)) == null ? void 0 : _a12.combine));
-}, _combineResult = new WeakSet(), combineResult_fn = function(input, combine) {
+  __privateSet(this, _combinedResult, __privateMethod(this, _QueriesObserver_instances, combineResult_fn).call(this, value, (_a12 = __privateGet(this, _options)) == null ? void 0 : _a12.combine));
+}, combineResult_fn = function(input, combine) {
   if (combine) {
     return replaceEqualDeep(__privateGet(this, _combinedResult), combine(input));
   }
   return input;
-}, _findMatchingObservers = new WeakSet(), findMatchingObservers_fn = function(queries) {
+}, findMatchingObservers_fn = function(queries) {
   const prevObservers = __privateGet(this, _observers3);
   const prevObserversMap = new Map(
     prevObservers.map((observer) => [observer.options.queryHash, observer])
@@ -2316,13 +2303,13 @@ var QueriesObserver = (_a10 = class extends Subscribable {
   });
   const sortMatchesByOrderOfQueries = (a, b) => defaultedQueryOptions.indexOf(a.defaultedQueryOptions) - defaultedQueryOptions.indexOf(b.defaultedQueryOptions);
   return matchingObservers.concat(newOrReusedObservers).sort(sortMatchesByOrderOfQueries);
-}, _onUpdate = new WeakSet(), onUpdate_fn = function(observer, result) {
+}, onUpdate_fn = function(observer, result) {
   const index = __privateGet(this, _observers3).indexOf(observer);
   if (index !== -1) {
-    __privateMethod(this, _setResult, setResult_fn).call(this, replaceAt(__privateGet(this, _result), index, result));
-    __privateMethod(this, _notify2, notify_fn2).call(this);
+    __privateMethod(this, _QueriesObserver_instances, setResult_fn).call(this, replaceAt(__privateGet(this, _result), index, result));
+    __privateMethod(this, _QueriesObserver_instances, notify_fn2).call(this);
   }
-}, _notify2 = new WeakSet(), notify_fn2 = function() {
+}, notify_fn2 = function() {
   notifyManager.batch(() => {
     this.listeners.forEach((listener) => {
       listener(__privateGet(this, _result));
@@ -2391,21 +2378,20 @@ var InfiniteQueryObserver = class extends QueryObserver {
 };
 
 // node_modules/.pnpm/@tanstack+query-core@5.17.8/node_modules/@tanstack/query-core/build/modern/mutationObserver.js
-var _client3, _currentResult2, _currentMutation, _mutateOptions, _updateResult, updateResult_fn, _notify3, notify_fn3, _a11;
+var _client3, _currentResult2, _currentMutation, _mutateOptions, _MutationObserver_instances, updateResult_fn, notify_fn3, _a11;
 var MutationObserver = (_a11 = class extends Subscribable {
   constructor(client, options) {
     super();
-    __privateAdd(this, _updateResult);
-    __privateAdd(this, _notify3);
-    __privateAdd(this, _client3, void 0);
-    __privateAdd(this, _currentResult2, void 0);
-    __privateAdd(this, _currentMutation, void 0);
-    __privateAdd(this, _mutateOptions, void 0);
+    __privateAdd(this, _MutationObserver_instances);
+    __privateAdd(this, _client3);
+    __privateAdd(this, _currentResult2);
+    __privateAdd(this, _currentMutation);
+    __privateAdd(this, _mutateOptions);
     __privateSet(this, _currentResult2, void 0);
     __privateSet(this, _client3, client);
     this.setOptions(options);
     this.bindMethods();
-    __privateMethod(this, _updateResult, updateResult_fn).call(this);
+    __privateMethod(this, _MutationObserver_instances, updateResult_fn).call(this);
   }
   bindMethods() {
     this.mutate = this.mutate.bind(this);
@@ -2434,8 +2420,8 @@ var MutationObserver = (_a11 = class extends Subscribable {
     }
   }
   onMutationUpdate(action) {
-    __privateMethod(this, _updateResult, updateResult_fn).call(this);
-    __privateMethod(this, _notify3, notify_fn3).call(this, action);
+    __privateMethod(this, _MutationObserver_instances, updateResult_fn).call(this);
+    __privateMethod(this, _MutationObserver_instances, notify_fn3).call(this, action);
   }
   getCurrentResult() {
     return __privateGet(this, _currentResult2);
@@ -2444,8 +2430,8 @@ var MutationObserver = (_a11 = class extends Subscribable {
     var _a12;
     (_a12 = __privateGet(this, _currentMutation)) == null ? void 0 : _a12.removeObserver(this);
     __privateSet(this, _currentMutation, void 0);
-    __privateMethod(this, _updateResult, updateResult_fn).call(this);
-    __privateMethod(this, _notify3, notify_fn3).call(this);
+    __privateMethod(this, _MutationObserver_instances, updateResult_fn).call(this);
+    __privateMethod(this, _MutationObserver_instances, notify_fn3).call(this);
   }
   mutate(variables, options) {
     var _a12;
@@ -2455,7 +2441,7 @@ var MutationObserver = (_a11 = class extends Subscribable {
     __privateGet(this, _currentMutation).addObserver(this);
     return __privateGet(this, _currentMutation).execute(variables);
   }
-}, _client3 = new WeakMap(), _currentResult2 = new WeakMap(), _currentMutation = new WeakMap(), _mutateOptions = new WeakMap(), _updateResult = new WeakSet(), updateResult_fn = function() {
+}, _client3 = new WeakMap(), _currentResult2 = new WeakMap(), _currentMutation = new WeakMap(), _mutateOptions = new WeakMap(), _MutationObserver_instances = new WeakSet(), updateResult_fn = function() {
   var _a12;
   const state = ((_a12 = __privateGet(this, _currentMutation)) == null ? void 0 : _a12.state) ?? getDefaultState2();
   __privateSet(this, _currentResult2, {
@@ -2467,7 +2453,7 @@ var MutationObserver = (_a11 = class extends Subscribable {
     mutate: this.mutate,
     reset: this.reset
   });
-}, _notify3 = new WeakSet(), notify_fn3 = function(action) {
+}, notify_fn3 = function(action) {
   notifyManager.batch(() => {
     var _a12, _b, _c, _d, _e, _f, _g, _h;
     if (__privateGet(this, _mutateOptions) && this.hasListeners()) {
@@ -2572,7 +2558,7 @@ function hydrate(client, dehydratedState, options) {
   });
 }
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/utils.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/utils.js
 var VUE_QUERY_CLIENT = "VUE_QUERY_CLIENT";
 function getClientKey(key) {
   const suffix = key ? `:${key}` : "";
@@ -2627,7 +2613,7 @@ function shouldThrowError(throwOnError, params) {
   return !!throwOnError;
 }
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/useQueryClient.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/useQueryClient.js
 function useQueryClient(id = "") {
   if (!hasInjectionContext()) {
     throw new Error(
@@ -2644,7 +2630,7 @@ function useQueryClient(id = "") {
   return queryClient;
 }
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/queryCache.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/queryCache.js
 var QueryCache2 = class extends QueryCache {
   find(filters) {
     return super.find(cloneDeepUnref(filters));
@@ -2654,7 +2640,7 @@ var QueryCache2 = class extends QueryCache {
   }
 };
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/mutationCache.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/mutationCache.js
 var MutationCache2 = class extends MutationCache {
   find(filters) {
     return super.find(cloneDeepUnref(filters));
@@ -2664,7 +2650,7 @@ var MutationCache2 = class extends MutationCache {
   }
 };
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/queryClient.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/queryClient.js
 var QueryClient2 = class extends QueryClient {
   constructor(config = {}) {
     const vueQueryConfig = {
@@ -2765,7 +2751,7 @@ var QueryClient2 = class extends QueryClient {
   }
 };
 
-// node_modules/.pnpm/@tanstack+match-sorter-utils@8.8.4/node_modules/@tanstack/match-sorter-utils/build/lib/index.mjs
+// node_modules/.pnpm/@tanstack+match-sorter-utils@8.19.4/node_modules/@tanstack/match-sorter-utils/build/lib/index.mjs
 var characterMap = {
   À: "A",
   Á: "A",
@@ -3360,7 +3346,7 @@ function getAccessorAttributes(accessor) {
   };
 }
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/devtools/utils.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/devtools/utils.js
 function getQueryState(query) {
   if (query.state.fetchStatus === "fetching") {
     return 0;
@@ -3429,7 +3415,7 @@ var sortFns = {
   "Last Updated": dateSort
 };
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/devtools/devtools.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/devtools/devtools.js
 var pluginId = "vue-query";
 var pluginName = "Vue Query";
 function setupDevtools(app, queryClient) {
@@ -3655,7 +3641,7 @@ function setupDevtools(app, queryClient) {
   );
 }
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/vueQueryPlugin.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/vueQueryPlugin.js
 var VueQueryPlugin = {
   install: (app, options = {}) => {
     const clientKey = getClientKey(options.queryClientKey);
@@ -3721,12 +3707,12 @@ var VueQueryPlugin = {
   }
 };
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/queryOptions.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/queryOptions.js
 function queryOptions(options) {
   return options;
 }
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/useBaseQuery.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/useBaseQuery.js
 function useBaseQuery(Observer, options, queryClient) {
   if (true) {
     if (!getCurrentScope()) {
@@ -3820,12 +3806,12 @@ function useBaseQuery(Observer, options, queryClient) {
   return object;
 }
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/useQuery.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/useQuery.js
 function useQuery(options, queryClient) {
   return useBaseQuery(QueryObserver, options, queryClient);
 }
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/useQueries.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/useQueries.js
 function useQueries({
   queries,
   ...options
@@ -3902,7 +3888,7 @@ function useQueries({
   return readonly(state);
 }
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/useInfiniteQuery.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/useInfiniteQuery.js
 function useInfiniteQuery(options, queryClient) {
   return useBaseQuery(
     InfiniteQueryObserver,
@@ -3911,7 +3897,7 @@ function useInfiniteQuery(options, queryClient) {
   );
 }
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/useMutation.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/useMutation.js
 function useMutation(mutationOptions, queryClient) {
   if (true) {
     if (!getCurrentScope()) {
@@ -3956,7 +3942,7 @@ function useMutation(mutationOptions, queryClient) {
   };
 }
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/useIsFetching.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/useIsFetching.js
 function useIsFetching(fetchingFilters = {}, queryClient) {
   if (true) {
     if (!getCurrentScope()) {
@@ -3978,7 +3964,7 @@ function useIsFetching(fetchingFilters = {}, queryClient) {
   return isFetching;
 }
 
-// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5/node_modules/@tanstack/vue-query/build/modern/useMutationState.js
+// node_modules/.pnpm/@tanstack+vue-query@5.17.8_vue@3.4.5_typescript@5.9.3_/node_modules/@tanstack/vue-query/build/modern/useMutationState.js
 function useIsMutating(filters = {}, queryClient) {
   if (true) {
     if (!getCurrentScope()) {
@@ -4058,15 +4044,15 @@ export {
 
 @tanstack/match-sorter-utils/build/lib/index.mjs:
   (**
-   * match-sorter-utils
-   *
-   * Copyright (c) TanStack
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE.md file in the root directory of this source tree.
-   *
-   * @license MIT
-   *)
+     * match-sorter-utils
+     *
+     * Copyright (c) TanStack
+     *
+     * This source code is licensed under the MIT license found in the
+     * LICENSE.md file in the root directory of this source tree.
+     *
+     * @license MIT
+     *)
   (**
    * @name match-sorter
    * @license MIT license.

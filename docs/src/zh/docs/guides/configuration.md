@@ -1,100 +1,95 @@
 ---
-title: Configuration
-titleTemplate: Guides
-description: Essential information to help you get set up with Tachiyomi.
+title: 配置
+titleTemplate: 指南
+description: 帮助您配置 Rudis 的基本信息
 ---
 
-# Configuration
+# 配置
 
-Overview of redis.conf, the Rudis configuration file.
+Rudis.properties 配置文件概述
 
-## Specify configuration file startup
+## 指定配置文件启动
 
-Rudis is able to start without a configuration file using a built-in default configuration, however this setup is only recommended for testing and development purposes.
+Rudis 能够在没有配置文件的情况下使用内置默认配置启动，但这种设置仅推荐用于测试和开发目的。
 
-The proper way to configure Redis is by providing a Redis configuration file, usually called redis.properties.
+配置 Rudis 的正确方法是提供一个 Rudis 配置文件，通常称为 Rudis.properties。
 
 ```
 ./rudis-server rudis.properties
 ```
 
-The list of configuration directives, and their meaning and intended usage is available in the self documented example redis.conf shipped into the Redis distribution.
+配置指令列表及其含义和预期用途在 Rudis 发行版中附带的自文档化示例 Rudis.conf 中提供。
 
-## Passing arguments via the command line
+## 通过命令行传递参数
 
-You can also pass Redis configuration parameters using the command line directly. This is very useful for testing purposes. The following is an example that starts a new Redis instance using port 6380 as a replica of the instance running at 127.0.0.1 port 6379.
+您也可以直接通过命令行传递 Rudis 配置参数。这对于测试目的非常有用。以下示例启动一个新的 Rudis 实例，使用端口 6380 作为运行在 127.0.0.1 端口 6379 的实例的副本。
 
 ```
 ./rudis-server --port 6380
 ```
 
-The format of the arguments passed via the command line is exactly the same as the one used in the redis.conf file, with the exception that the keyword is prefixed with --.
+通过命令行传递的参数格式与 Rudis.conf 文件中使用的格式完全相同，只是关键字以 -- 为前缀。
 
-Note that internally this generates an in-memory temporary config file (possibly concatenating the config file passed by the user, if any) where arguments are translated into the format of redis.conf.
+请注意，内部会生成一个内存中的临时配置文件（可能会连接用户传递的配置文件，如果有的话），其中参数被转换为 Rudis.conf 的格式。
 
-## Changing Redis configuration while the server is running
+## 服务器配置
 
-<!-- TODO -->
+### requirepass
 
-## Server Configuration
+- 版本: `0.0.1`
 
-### Password
+为客户设置连接服务器的密码后，客户连接 Rudis 服务时需要进行密码验证，否则无法执行命令。此配置项用于设置客户端连接服务器所需的身份验证密码，一旦设置了密码，所有客户端在执行任何命令之前都必须先使用 AUTH 命令进行身份验证，密码应该是足够复杂的字符串，以确保安全性，如果未设置此配置项，则服务器不启用密码验证，任何客户端都可以直接连接。
 
-- version: `0.0.1`
+### port
 
-After setting the password for the client to connect to the server, password verification is required for the client to connect to the Redis service, otherwise the command cannot be executed.
+- 版本: `0.0.1`
 
-### Port
+接受指定端口上的连接，默认为 6379 (IANA #815344)。如果指定端口 0，Rudis 将不会监听 TCP 套接字。此配置项指定 Rudis 服务器监听的 TCP 端口号，默认端口 6379 是 Redis 协议的标准端口，可以根据实际需要修改为其他端口号，如 6380、7000 等，如果设置为 0，则服务器不会监听任何 TCP 端口，仅能通过 Unix 套接字等方式访问，在生产环境中，应确保所选端口未被其他服务占用。
 
-- version: `0.0.1`
+### appendonly
 
-Accept connections on the specified port, default is 6379 (IANA #815344). If port 0 is specified Redis will not listen on a TCP socket.
+- 版本: `0.0.1`
 
-### Appendonly
+指定是否在每次更新操作后记录日志。Rudis 默认不将数据写入磁盘。如果不启用，可能会在停电事件中导致一段时间的数据丢失。此配置项控制是否启用 AOF（Append Only File）持久化模式，可选值为 yes/no，分别表示启用/禁用 AOF 持久化，启用后，所有写操作都会被追加记录到 AOF 文件中，相比 RDB 快照，AOF 提供了更好的数据安全性，最多可能丢失一秒的数据，启用 AOF 会对性能有一定影响，因为每次写操作都需要记录到磁盘。
 
-- version: `0.0.1`
+### appendfilename
 
-Specify whether to log after each update operation. Rudis does not write data to the disk by default. If not enabled, it may result in data loss for a period of time in the event of a power outage.
+- 版本: `0.0.1`
 
-### Appendfilename
+指定更新日志文件名，默认为 appendonly.aof。此配置项指定 AOF 持久化文件的名称，默认文件名为 appendonly.aof，可以根据需要修改为其他名称，文件路径相对于 dir 配置项指定的工作目录，建议使用 .aof 作为文件扩展名以明确文件类型，在多实例部署时，应为每个实例设置不同的 AOF 文件名。
 
-- version: `0.0.1`
+### dbfilename
 
-Specify the update log file name, which defaults to appendonly.aof
+- 版本: `0.0.1`
 
-### Dbfilename
+指定本地数据库文件名，默认值为 dump.rdb。此配置项指定 RDB 快照持久化文件的名称，默认文件名为 dump.rdb，可以根据需要修改为其他名称，文件路径相对于 dir 配置项指定的工作目录，建议使用 .rdb 作为文件扩展名以明确文件类型，在多实例部署时，应为每个实例设置不同的 RDB 文件名。
 
-- version: `0.0.1`
+### save
 
-Specify the local database file name, with a default value of dump.rdb.
+- 版本: `0.0.1`
 
-### Save
+指定将数据同步到数据文件的时间。此配置项控制 RDB 快照的自动保存策略，格式为 "秒数 修改次数"，表示在指定时间内如果有指定次数的键被修改就触发保存，可以设置多个保存条件，如 "save 900 1" 和 "save 300 10"，默认情况下可能没有设置保存策略，需要手动配置，保存操作会阻塞服务器，因此不宜设置过于频繁的保存条件。
 
-- version: `0.0.1`
+### databases
 
-Specify how long to synchronize data to a data file.
+- 版本: `0.0.1`
 
-### Databases
+设置数据库数量。默认数据库是 DB 0。您可以在每个连接上使用 select dbid 命令选择不同的数据库，但 dbid 必须是 0 到 databases -1 之间的值。此配置项指定 Rudis 服务器支持的数据库数量，默认值为 16，意味着可以使用 DB 0 到 DB 15，客户端可以通过 SELECT 命令在不同数据库之间切换，每个数据库都是独立的命名空间，键名不会冲突，增加数据库数量会略微增加内存开销。
 
-- version: `0.0.1`
+### bind
 
-Set the number of databases. The default database is DB 0. You can use the select dbid command on each connection to select a different database, but the dbid must be a value between 0 and databases -1.
+- 版本: `0.0.1`
 
-### Bind
+绑定的主机地址有效地控制 Rudis 服务器监听的网络接口，从而实现更安全和专有的网络访问设置。此配置项指定服务器绑定的网络接口 IP 地址，设置为 127.0.0.1 表示仅允许本地访问，提高安全性，设置为 0.0.0.0 表示允许所有网络接口访问，可以绑定到特定的网卡 IP 地址，限制访问来源，在生产环境中，应根据网络安全策略谨慎设置此参数。
 
-- version: `0.0.1`
+### maxclients
 
-The bound host address effectively controls the network interface that Rudis server listens to, thereby achieving safer and more proprietary network access settings.
+- 版本: `0.0.1`
 
-### Maxclients
+设置同时客户端连接的最大数量，默认值为 0，表示无限制。当客户端连接数达到限制时，Rudis 将关闭新连接并向客户端返回达到最大客户端数的错误消息。此配置项控制服务器允许的最大并发客户端连接数，默认值 0 表示不限制连接数，但实际上会受到系统资源限制，可以根据服务器硬件性能和业务需求设置合适的值，设置过小可能影响服务能力，设置过大可能导致系统资源耗尽，建议根据实际压力测试结果来确定最优值。
 
-- version: `0.0.1`
+### hz
 
-Set the maximum number of client connections at the same time, with a default value of 0, indicating no restrictions. When the number of client connections reaches the limit, Rudis will close new connections and return a max number of clients reached error message to the client.
+- 版本: `0.0.1`
 
-
-### Hz
-
-- version: `0.0.1`
-
-By modifying the value of the hz parameter, you can adjust the frequency of Redis executing periodic tasks, thereby changing the efficiency of Redis clearing expired keys and clearing timeout connections.
+通过修改 hz 参数的值，您可以调整 Rudis 执行周期性任务的频率，从而改变 Rudis 清除过期键和清除超时连接的效率。此配置项控制服务器执行后台任务的频率，默认值为 10，表示每秒执行 10 次后台任务，后台任务包括清理过期键、关闭超时连接等，增加此值可以提高后台任务的执行频率，但会增加 CPU 使用率，减少此值可以降低 CPU 使用率，但可能影响后台任务的及时性。

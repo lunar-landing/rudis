@@ -1,17 +1,89 @@
 ---
-title: Install
-description: Browse and download sources for Tachiyomi.
+title: 安装
+description: Rudis 安装指南
 lastUpdated: false
 editLink: false
 prev: false
 next: false
 ---
 
-# Install
+# 安装
 
-Install Redis on Linux, macOS, and Windows.
+在 Linux、macOS 和 Windows 上安装 Rudis。
 
-This is a an installation guide. You'll learn how to install, run, and experiment with the Redis server process.
+本安装指南将教您如何安装、运行和试验 Rudis 服务器进程。
+
+## 普通安装
+
+根据系统环境要求，[下载](../../../release) 匹配的 Rudis 版本
+
+通过系统常规命令启动 Rudis 服务
+
+### Windows 系统
+
+```sh
+// windows 常规启动
+start rudis-server.exe
+
+// windows 配置文件启动
+start rudis-server.exe --config ./config/rudis.conf
+
+// windows 指定参数启动
+start rudis-server.exe --port 6379
+```
+
+### Linux/macOS 系统
+
+```sh
+// linux/macos 常规启动
+./rudis-server
+
+// linux/macos 配置文件启动
+./rudis-server --config ./config/rudis.conf
+
+// linux/macos 指定参数启动
+./rudis-server --port 6379
+```
+
+## 容器安装
+
+通过 docker 容器启动 Rudis 服务
+
+如需更多安装命令，请前往 [docker/README.md](../../../docker/README.md) 查看
+
+```sh
+// docker 常规启动
+docker run -p 6379:6379 ghcr.io/sleeprite/rudis:latest
+
+// docker 指定参数启动
+docker run -p 6379:8848 ghcr.io/sleeprite/rudis:latest --port 8848
+```
+
+## 源码构建
+
+如果您希望通过构建源码的方式得到发行包，请使用 cargo 常用命令。
+
+```sh
+// 普通启动
+cargo run
+
+// 带参启动
+cargo run -- --port 8848
+cargo run -- --save 20/1 60/2
+
+// 指定配置
+cargo run -- --config rudis.conf
+
+// 构建程序
+cargo build
+
+cargo build --release --target=x86_64-unknown-linux-musl
+
+cargo build --release
+
+// 代码检测
+cargo clippy
+```
 
 <AddRepoButton/>
 

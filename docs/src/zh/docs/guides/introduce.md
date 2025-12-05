@@ -1,15 +1,35 @@
 ---
-title: Introduce
-titleTemplate: Guides
-description: Essential information to help you get set up with Tachiyomi.
+title: 项目介绍
+titleTemplate: 指南
+description: Rudis 项目的基本信息和核心特性介绍
 ---
 
-# Introduce
+# 项目介绍
 
-Rudis is a high-performance in memory database.
+Rudis 是一个采用 Rust 语言编写的高性能、兼容 Redis 协议的键值存储系统。项目旨在充分利用 Rust 在内存安全、零成本抽象和高并发方面的优势，构建一个高性能的数据库，为用户提供更高性能、更可靠、更安全的内存数据存储解决方案，同时保持与 Redis 客户端的高度兼容。
 
-The goal of Rudis is to become a high-performance, reliable, and secure key value storage service, while leveraging the advantages of the Rust language to redesign and implement the core functions of Redis, making it more suitable for the needs of modern applications.
+## 技术架构
 
-## Star History
+项目围绕线程隔离与消息传递设计。系统为每个逻辑数据库分配独占的Tokio运行时线程，线程间通过多生产者单消费者通道进行通信，从而彻底避免共享内存的锁竞争。主线程作为网关接收客户端请求，依据路由信息将命令封装为消息，经由对应的MPSC通道发送给特定DB线程。每个DB线程内部运行独立的事件循环，顺序处理本DB的所有读写操作，实现无锁化的内存数据访问，同时通过异步任务处理网络IO与阻塞操作。
 
-[![Star History Chart](https://api.star-history.com/svg?repos=sleeprite/rudis&type=Date)](https://star-history.com/#sleeprite/rudis&Date)
+![alt text](image.png)
+
+## 应用场景
+
+Rudis 适用于各种需要高速读写操作的场景，包括但不限于：
+
+**缓存系统**：将查询频繁、变更较少的热点数据（如商品信息、用户配置、新闻头条）存储于内存中。应用请求数据时，优先从 Rudis 读取，未命中时再访问后端数据库。这能显著减少磁盘读写与数据库压力，提升应用吞吐与响应速度，尤其适用于高并发的 Web 或 App 后端。
+
+**会话存储**：在无状态 Web 应用中，使用 Rudis 集中存储用户会话状态（如用户 ID、权限、购物车内容）。用户登录后，会话信息以键值形式保存在 Rudis 集群中，使得用户请求可由任意后端服务器处理，并能跨节点共享一致会话状态，从而支持服务水平扩展。
+
+**分布式锁**：凭借单线程模型与原子操作特性，Rudis 可用于实现分布式协调。通过 SETNX 或带特定参数的 SET 命令创建具有超时时间的唯一键作为锁，分布式系统中的多个进程通过竞争该键来获取对共享资源（如数据库行、文件或任务）的独占访问权限，从而确保数据一致性。
+
+## 发展趋势
+
+欢迎在 GitHub 上关注我们的项目发展轨迹：
+
+如果你正在寻找一个与 Redis 兼容、具备现代化技术栈与高性能表现的键值存储，Rudis 会是一个值得尝试的选择。我们也在不断优化与迭代中，欢迎社区一起参与建设。
+
+<a href="https://github.com/sleeprite/rudis/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sleeprite/rudis" />
+</a>

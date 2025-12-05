@@ -1,6 +1,6 @@
 import {
   __export
-} from "./chunk-HL2QZUHZ.js";
+} from "./chunk-4MBMRILA.js";
 
 // node_modules/.pnpm/markdown-it@14.0.0/node_modules/markdown-it/lib/common/utils.mjs
 var utils_exports = {};
@@ -236,8 +236,7 @@ var slashedProtocol = {
   "file:": true
 };
 function urlParse(url, slashesDenoteHost) {
-  if (url && url instanceof Url)
-    return url;
+  if (url && url instanceof Url) return url;
   const u = new Url();
   u.parse(url, slashesDenoteHost);
   return u;
@@ -380,30 +379,34 @@ Url.prototype.parseHost = function(host) {
 };
 var parse_default = urlParse;
 
-// node_modules/.pnpm/uc.micro@2.0.0/node_modules/uc.micro/index.mjs
+// node_modules/.pnpm/uc.micro@2.1.0/node_modules/uc.micro/index.mjs
 var uc_exports = {};
 __export(uc_exports, {
   Any: () => regex_default,
   Cc: () => regex_default2,
   Cf: () => regex_default3,
   P: () => regex_default4,
-  Z: () => regex_default5
+  S: () => regex_default5,
+  Z: () => regex_default6
 });
 
-// node_modules/.pnpm/uc.micro@2.0.0/node_modules/uc.micro/properties/Any/regex.mjs
+// node_modules/.pnpm/uc.micro@2.1.0/node_modules/uc.micro/properties/Any/regex.mjs
 var regex_default = /[\0-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/;
 
-// node_modules/.pnpm/uc.micro@2.0.0/node_modules/uc.micro/categories/Cc/regex.mjs
+// node_modules/.pnpm/uc.micro@2.1.0/node_modules/uc.micro/categories/Cc/regex.mjs
 var regex_default2 = /[\0-\x1F\x7F-\x9F]/;
 
-// node_modules/.pnpm/uc.micro@2.0.0/node_modules/uc.micro/categories/Cf/regex.mjs
+// node_modules/.pnpm/uc.micro@2.1.0/node_modules/uc.micro/categories/Cf/regex.mjs
 var regex_default3 = /[\xAD\u0600-\u0605\u061C\u06DD\u070F\u0890\u0891\u08E2\u180E\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u206F\uFEFF\uFFF9-\uFFFB]|\uD804[\uDCBD\uDCCD]|\uD80D[\uDC30-\uDC3F]|\uD82F[\uDCA0-\uDCA3]|\uD834[\uDD73-\uDD7A]|\uDB40[\uDC01\uDC20-\uDC7F]/;
 
-// node_modules/.pnpm/uc.micro@2.0.0/node_modules/uc.micro/categories/P/regex.mjs
+// node_modules/.pnpm/uc.micro@2.1.0/node_modules/uc.micro/categories/P/regex.mjs
 var regex_default4 = /[!-#%-\*,-\/:;\?@\[-\]_\{\}\xA1\xA7\xAB\xB6\xB7\xBB\xBF\u037E\u0387\u055A-\u055F\u0589\u058A\u05BE\u05C0\u05C3\u05C6\u05F3\u05F4\u0609\u060A\u060C\u060D\u061B\u061D-\u061F\u066A-\u066D\u06D4\u0700-\u070D\u07F7-\u07F9\u0830-\u083E\u085E\u0964\u0965\u0970\u09FD\u0A76\u0AF0\u0C77\u0C84\u0DF4\u0E4F\u0E5A\u0E5B\u0F04-\u0F12\u0F14\u0F3A-\u0F3D\u0F85\u0FD0-\u0FD4\u0FD9\u0FDA\u104A-\u104F\u10FB\u1360-\u1368\u1400\u166E\u169B\u169C\u16EB-\u16ED\u1735\u1736\u17D4-\u17D6\u17D8-\u17DA\u1800-\u180A\u1944\u1945\u1A1E\u1A1F\u1AA0-\u1AA6\u1AA8-\u1AAD\u1B5A-\u1B60\u1B7D\u1B7E\u1BFC-\u1BFF\u1C3B-\u1C3F\u1C7E\u1C7F\u1CC0-\u1CC7\u1CD3\u2010-\u2027\u2030-\u2043\u2045-\u2051\u2053-\u205E\u207D\u207E\u208D\u208E\u2308-\u230B\u2329\u232A\u2768-\u2775\u27C5\u27C6\u27E6-\u27EF\u2983-\u2998\u29D8-\u29DB\u29FC\u29FD\u2CF9-\u2CFC\u2CFE\u2CFF\u2D70\u2E00-\u2E2E\u2E30-\u2E4F\u2E52-\u2E5D\u3001-\u3003\u3008-\u3011\u3014-\u301F\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF\uA60D-\uA60F\uA673\uA67E\uA6F2-\uA6F7\uA874-\uA877\uA8CE\uA8CF\uA8F8-\uA8FA\uA8FC\uA92E\uA92F\uA95F\uA9C1-\uA9CD\uA9DE\uA9DF\uAA5C-\uAA5F\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE61\uFE63\uFE68\uFE6A\uFE6B\uFF01-\uFF03\uFF05-\uFF0A\uFF0C-\uFF0F\uFF1A\uFF1B\uFF1F\uFF20\uFF3B-\uFF3D\uFF3F\uFF5B\uFF5D\uFF5F-\uFF65]|\uD800[\uDD00-\uDD02\uDF9F\uDFD0]|\uD801\uDD6F|\uD802[\uDC57\uDD1F\uDD3F\uDE50-\uDE58\uDE7F\uDEF0-\uDEF6\uDF39-\uDF3F\uDF99-\uDF9C]|\uD803[\uDEAD\uDF55-\uDF59\uDF86-\uDF89]|\uD804[\uDC47-\uDC4D\uDCBB\uDCBC\uDCBE-\uDCC1\uDD40-\uDD43\uDD74\uDD75\uDDC5-\uDDC8\uDDCD\uDDDB\uDDDD-\uDDDF\uDE38-\uDE3D\uDEA9]|\uD805[\uDC4B-\uDC4F\uDC5A\uDC5B\uDC5D\uDCC6\uDDC1-\uDDD7\uDE41-\uDE43\uDE60-\uDE6C\uDEB9\uDF3C-\uDF3E]|\uD806[\uDC3B\uDD44-\uDD46\uDDE2\uDE3F-\uDE46\uDE9A-\uDE9C\uDE9E-\uDEA2\uDF00-\uDF09]|\uD807[\uDC41-\uDC45\uDC70\uDC71\uDEF7\uDEF8\uDF43-\uDF4F\uDFFF]|\uD809[\uDC70-\uDC74]|\uD80B[\uDFF1\uDFF2]|\uD81A[\uDE6E\uDE6F\uDEF5\uDF37-\uDF3B\uDF44]|\uD81B[\uDE97-\uDE9A\uDFE2]|\uD82F\uDC9F|\uD836[\uDE87-\uDE8B]|\uD83A[\uDD5E\uDD5F]/;
 
-// node_modules/.pnpm/uc.micro@2.0.0/node_modules/uc.micro/categories/Z/regex.mjs
-var regex_default5 = /[ \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]/;
+// node_modules/.pnpm/uc.micro@2.1.0/node_modules/uc.micro/categories/S/regex.mjs
+var regex_default5 = /[\$\+<->\^`\|~\xA2-\xA6\xA8\xA9\xAC\xAE-\xB1\xB4\xB8\xD7\xF7\u02C2-\u02C5\u02D2-\u02DF\u02E5-\u02EB\u02ED\u02EF-\u02FF\u0375\u0384\u0385\u03F6\u0482\u058D-\u058F\u0606-\u0608\u060B\u060E\u060F\u06DE\u06E9\u06FD\u06FE\u07F6\u07FE\u07FF\u0888\u09F2\u09F3\u09FA\u09FB\u0AF1\u0B70\u0BF3-\u0BFA\u0C7F\u0D4F\u0D79\u0E3F\u0F01-\u0F03\u0F13\u0F15-\u0F17\u0F1A-\u0F1F\u0F34\u0F36\u0F38\u0FBE-\u0FC5\u0FC7-\u0FCC\u0FCE\u0FCF\u0FD5-\u0FD8\u109E\u109F\u1390-\u1399\u166D\u17DB\u1940\u19DE-\u19FF\u1B61-\u1B6A\u1B74-\u1B7C\u1FBD\u1FBF-\u1FC1\u1FCD-\u1FCF\u1FDD-\u1FDF\u1FED-\u1FEF\u1FFD\u1FFE\u2044\u2052\u207A-\u207C\u208A-\u208C\u20A0-\u20C0\u2100\u2101\u2103-\u2106\u2108\u2109\u2114\u2116-\u2118\u211E-\u2123\u2125\u2127\u2129\u212E\u213A\u213B\u2140-\u2144\u214A-\u214D\u214F\u218A\u218B\u2190-\u2307\u230C-\u2328\u232B-\u2426\u2440-\u244A\u249C-\u24E9\u2500-\u2767\u2794-\u27C4\u27C7-\u27E5\u27F0-\u2982\u2999-\u29D7\u29DC-\u29FB\u29FE-\u2B73\u2B76-\u2B95\u2B97-\u2BFF\u2CE5-\u2CEA\u2E50\u2E51\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u2FF0-\u2FFF\u3004\u3012\u3013\u3020\u3036\u3037\u303E\u303F\u309B\u309C\u3190\u3191\u3196-\u319F\u31C0-\u31E3\u31EF\u3200-\u321E\u322A-\u3247\u3250\u3260-\u327F\u328A-\u32B0\u32C0-\u33FF\u4DC0-\u4DFF\uA490-\uA4C6\uA700-\uA716\uA720\uA721\uA789\uA78A\uA828-\uA82B\uA836-\uA839\uAA77-\uAA79\uAB5B\uAB6A\uAB6B\uFB29\uFBB2-\uFBC2\uFD40-\uFD4F\uFDCF\uFDFC-\uFDFF\uFE62\uFE64-\uFE66\uFE69\uFF04\uFF0B\uFF1C-\uFF1E\uFF3E\uFF40\uFF5C\uFF5E\uFFE0-\uFFE6\uFFE8-\uFFEE\uFFFC\uFFFD]|\uD800[\uDD37-\uDD3F\uDD79-\uDD89\uDD8C-\uDD8E\uDD90-\uDD9C\uDDA0\uDDD0-\uDDFC]|\uD802[\uDC77\uDC78\uDEC8]|\uD805\uDF3F|\uD807[\uDFD5-\uDFF1]|\uD81A[\uDF3C-\uDF3F\uDF45]|\uD82F\uDC9C|\uD833[\uDF50-\uDFC3]|\uD834[\uDC00-\uDCF5\uDD00-\uDD26\uDD29-\uDD64\uDD6A-\uDD6C\uDD83\uDD84\uDD8C-\uDDA9\uDDAE-\uDDEA\uDE00-\uDE41\uDE45\uDF00-\uDF56]|\uD835[\uDEC1\uDEDB\uDEFB\uDF15\uDF35\uDF4F\uDF6F\uDF89\uDFA9\uDFC3]|\uD836[\uDC00-\uDDFF\uDE37-\uDE3A\uDE6D-\uDE74\uDE76-\uDE83\uDE85\uDE86]|\uD838[\uDD4F\uDEFF]|\uD83B[\uDCAC\uDCB0\uDD2E\uDEF0\uDEF1]|\uD83C[\uDC00-\uDC2B\uDC30-\uDC93\uDCA0-\uDCAE\uDCB1-\uDCBF\uDCC1-\uDCCF\uDCD1-\uDCF5\uDD0D-\uDDAD\uDDE6-\uDE02\uDE10-\uDE3B\uDE40-\uDE48\uDE50\uDE51\uDE60-\uDE65\uDF00-\uDFFF]|\uD83D[\uDC00-\uDED7\uDEDC-\uDEEC\uDEF0-\uDEFC\uDF00-\uDF76\uDF7B-\uDFD9\uDFE0-\uDFEB\uDFF0]|\uD83E[\uDC00-\uDC0B\uDC10-\uDC47\uDC50-\uDC59\uDC60-\uDC87\uDC90-\uDCAD\uDCB0\uDCB1\uDD00-\uDE53\uDE60-\uDE6D\uDE70-\uDE7C\uDE80-\uDE88\uDE90-\uDEBD\uDEBF-\uDEC5\uDECE-\uDEDB\uDEE0-\uDEE8\uDEF0-\uDEF8\uDF00-\uDF92\uDF94-\uDFCA]/;
+
+// node_modules/.pnpm/uc.micro@2.1.0/node_modules/uc.micro/categories/Z/regex.mjs
+var regex_default6 = /[ \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]/;
 
 // node_modules/.pnpm/entities@4.5.0/node_modules/entities/lib/esm/generated/decode-data-html.js
 var decode_data_html_default = new Uint16Array(
@@ -1884,10 +1887,8 @@ function process_inlines(tokens, state) {
           lastChar = text2.charCodeAt(t.index - 1);
         } else {
           for (j = i - 1; j >= 0; j--) {
-            if (tokens[j].type === "softbreak" || tokens[j].type === "hardbreak")
-              break;
-            if (!tokens[j].content)
-              continue;
+            if (tokens[j].type === "softbreak" || tokens[j].type === "hardbreak") break;
+            if (!tokens[j].content) continue;
             lastChar = tokens[j].content.charCodeAt(tokens[j].content.length - 1);
             break;
           }
@@ -1897,10 +1898,8 @@ function process_inlines(tokens, state) {
           nextChar = text2.charCodeAt(pos);
         } else {
           for (j = i + 1; j < tokens.length; j++) {
-            if (tokens[j].type === "softbreak" || tokens[j].type === "hardbreak")
-              break;
-            if (!tokens[j].content)
-              continue;
+            if (tokens[j].type === "softbreak" || tokens[j].type === "hardbreak") break;
+            if (!tokens[j].content) continue;
             nextChar = tokens[j].content.charCodeAt(0);
             break;
           }
@@ -2003,8 +2002,7 @@ function text_join(state) {
   const blockTokens = state.tokens;
   const l = blockTokens.length;
   for (let j = 0; j < l; j++) {
-    if (blockTokens[j].type !== "inline")
-      continue;
+    if (blockTokens[j].type !== "inline") continue;
     const tokens = blockTokens[j].children;
     const max = tokens.length;
     for (curr = 0; curr < max; curr++) {
@@ -2115,11 +2113,9 @@ function StateBlock(src, md, env, tokens) {
 StateBlock.prototype.push = function(type, tag, nesting) {
   const token = new token_default(type, tag, nesting);
   token.block = true;
-  if (nesting < 0)
-    this.level--;
+  if (nesting < 0) this.level--;
   token.level = this.level;
-  if (nesting > 0)
-    this.level++;
+  if (nesting > 0) this.level++;
   this.tokens.push(token);
   return token;
 };
@@ -2313,10 +2309,8 @@ function table(state, startLine, endLine, silent) {
     return false;
   }
   columns = escapedSplit(lineText);
-  if (columns.length && columns[0] === "")
-    columns.shift();
-  if (columns.length && columns[columns.length - 1] === "")
-    columns.pop();
+  if (columns.length && columns[0] === "") columns.shift();
+  if (columns.length && columns[columns.length - 1] === "") columns.pop();
   const columnCount = columns.length;
   if (columnCount === 0 || columnCount !== aligns.length) {
     return false;
@@ -2369,10 +2363,8 @@ function table(state, startLine, endLine, silent) {
       break;
     }
     columns = escapedSplit(lineText);
-    if (columns.length && columns[0] === "")
-      columns.shift();
-    if (columns.length && columns[columns.length - 1] === "")
-      columns.pop();
+    if (columns.length && columns[0] === "") columns.shift();
+    if (columns.length && columns[columns.length - 1] === "") columns.pop();
     if (nextLine === startLine + 2) {
       const token_tbo = state.push("tbody_open", "tbody", 1);
       token_tbo.map = tbodyLines = [startLine + 2, 0];
@@ -2740,16 +2732,14 @@ function list(state, startLine, endLine, silent) {
     isOrdered = true;
     start = state.bMarks[nextLine] + state.tShift[nextLine];
     markerValue = Number(state.src.slice(start, posAfterMarker - 1));
-    if (isTerminatingParagraph && markerValue !== 1)
-      return false;
+    if (isTerminatingParagraph && markerValue !== 1) return false;
   } else if ((posAfterMarker = skipBulletListMarker(state, nextLine)) >= 0) {
     isOrdered = false;
   } else {
     return false;
   }
   if (isTerminatingParagraph) {
-    if (state.skipSpaces(posAfterMarker) >= state.eMarks[nextLine])
-      return false;
+    if (state.skipSpaces(posAfterMarker) >= state.eMarks[nextLine]) return false;
   }
   if (silent) {
     return true;
@@ -3365,8 +3355,7 @@ ParserBlock.prototype.tokenize = function(state, startLine, endLine) {
         break;
       }
     }
-    if (!ok)
-      throw new Error("none of the block rules matched");
+    if (!ok) throw new Error("none of the block rules matched");
     state.tight = !hasEmptyLines;
     if (state.isEmpty(state.line - 1)) {
       hasEmptyLines = true;
@@ -3530,34 +3519,24 @@ function text(state, silent) {
 // node_modules/.pnpm/markdown-it@14.0.0/node_modules/markdown-it/lib/rules_inline/linkify.mjs
 var SCHEME_RE = /(?:^|[^a-z0-9.+-])([a-z][a-z0-9.+-]*)$/i;
 function linkify2(state, silent) {
-  if (!state.md.options.linkify)
-    return false;
-  if (state.linkLevel > 0)
-    return false;
+  if (!state.md.options.linkify) return false;
+  if (state.linkLevel > 0) return false;
   const pos = state.pos;
   const max = state.posMax;
-  if (pos + 3 > max)
-    return false;
-  if (state.src.charCodeAt(pos) !== 58)
-    return false;
-  if (state.src.charCodeAt(pos + 1) !== 47)
-    return false;
-  if (state.src.charCodeAt(pos + 2) !== 47)
-    return false;
+  if (pos + 3 > max) return false;
+  if (state.src.charCodeAt(pos) !== 58) return false;
+  if (state.src.charCodeAt(pos + 1) !== 47) return false;
+  if (state.src.charCodeAt(pos + 2) !== 47) return false;
   const match2 = state.pending.match(SCHEME_RE);
-  if (!match2)
-    return false;
+  if (!match2) return false;
   const proto = match2[1];
   const link2 = state.md.linkify.matchAtStart(state.src.slice(pos - proto.length));
-  if (!link2)
-    return false;
+  if (!link2) return false;
   let url = link2.url;
-  if (url.length <= proto.length)
-    return false;
+  if (url.length <= proto.length) return false;
   url = url.replace(/\*+$/, "");
   const fullUrl = state.md.normalizeLink(url);
-  if (!state.md.validateLink(fullUrl))
-    return false;
+  if (!state.md.validateLink(fullUrl)) return false;
   if (!silent) {
     state.pending = state.pending.slice(0, -proto.length);
     const token_o = state.push("link_open", "a", 1);
@@ -3586,8 +3565,7 @@ function newline(state, silent) {
     if (pmax >= 0 && state.pending.charCodeAt(pmax) === 32) {
       if (pmax >= 1 && state.pending.charCodeAt(pmax - 1) === 32) {
         let ws = pmax - 1;
-        while (ws >= 1 && state.pending.charCodeAt(ws - 1) === 32)
-          ws--;
+        while (ws >= 1 && state.pending.charCodeAt(ws - 1) === 32) ws--;
         state.pending = state.pending.slice(0, ws);
         state.push("hardbreak", "br", 0);
       } else {
@@ -3617,11 +3595,9 @@ for (let i = 0; i < 256; i++) {
 function escape2(state, silent) {
   let pos = state.pos;
   const max = state.posMax;
-  if (state.src.charCodeAt(pos) !== 92)
-    return false;
+  if (state.src.charCodeAt(pos) !== 92) return false;
   pos++;
-  if (pos >= max)
-    return false;
+  if (pos >= max) return false;
   let ch1 = state.src.charCodeAt(pos);
   if (ch1 === 10) {
     if (!silent) {
@@ -3630,8 +3606,7 @@ function escape2(state, silent) {
     pos++;
     while (pos < max) {
       ch1 = state.src.charCodeAt(pos);
-      if (!isSpace(ch1))
-        break;
+      if (!isSpace(ch1)) break;
       pos++;
     }
     state.pos = pos;
@@ -3676,8 +3651,7 @@ function backtick(state, silent) {
   const marker = state.src.slice(start, pos);
   const openerLength = marker.length;
   if (state.backticksScanned && (state.backticks[openerLength] || 0) <= start) {
-    if (!silent)
-      state.pending += marker;
+    if (!silent) state.pending += marker;
     state.pos += openerLength;
     return true;
   }
@@ -3701,8 +3675,7 @@ function backtick(state, silent) {
     state.backticks[closerLength] = matchStart;
   }
   state.backticksScanned = true;
-  if (!silent)
-    state.pending += marker;
+  if (!silent) state.pending += marker;
   state.pos += openerLength;
   return true;
 }
@@ -4122,13 +4095,10 @@ function autolink(state, silent) {
   const start = state.pos;
   const max = state.posMax;
   for (; ; ) {
-    if (++pos >= max)
-      return false;
+    if (++pos >= max) return false;
     const ch = state.src.charCodeAt(pos);
-    if (ch === 60)
-      return false;
-    if (ch === 62)
-      break;
+    if (ch === 60) return false;
+    if (ch === 62) break;
   }
   const url = state.src.slice(start + 1, pos);
   if (AUTOLINK_RE.test(url)) {
@@ -4203,10 +4173,8 @@ function html_inline(state, silent) {
   if (!silent) {
     const token = state.push("html_inline", "", 0);
     token.content = match2[0];
-    if (isLinkOpen2(token.content))
-      state.linkLevel++;
-    if (isLinkClose2(token.content))
-      state.linkLevel--;
+    if (isLinkOpen2(token.content)) state.linkLevel++;
+    if (isLinkClose2(token.content)) state.linkLevel--;
   }
   state.pos += match2[0].length;
   return true;
@@ -4218,10 +4186,8 @@ var NAMED_RE = /^&([a-z][a-z0-9]{1,31});/i;
 function entity(state, silent) {
   const pos = state.pos;
   const max = state.posMax;
-  if (state.src.charCodeAt(pos) !== 38)
-    return false;
-  if (pos + 1 >= max)
-    return false;
+  if (state.src.charCodeAt(pos) !== 38) return false;
+  if (pos + 1 >= max) return false;
   const ch = state.src.charCodeAt(pos + 1);
   if (ch === 35) {
     const match2 = state.src.slice(pos).match(DIGITAL_RE);
@@ -4259,8 +4225,7 @@ function entity(state, silent) {
 function processDelimiters(delimiters) {
   const openersBottom = {};
   const max = delimiters.length;
-  if (!max)
-    return;
+  if (!max) return;
   let headerIdx = 0;
   let lastTokenIdx = -2;
   const jumps = [];
@@ -4272,8 +4237,7 @@ function processDelimiters(delimiters) {
     }
     lastTokenIdx = closer.token;
     closer.length = closer.length || 0;
-    if (!closer.close)
-      continue;
+    if (!closer.close) continue;
     if (!openersBottom.hasOwnProperty(closer.marker)) {
       openersBottom[closer.marker] = [-1, -1, -1, -1, -1, -1];
     }
@@ -4282,8 +4246,7 @@ function processDelimiters(delimiters) {
     let newMinOpenerIdx = openerIdx;
     for (; openerIdx > minOpenerIdx; openerIdx -= jumps[openerIdx] + 1) {
       const opener = delimiters[openerIdx];
-      if (opener.marker !== closer.marker)
-        continue;
+      if (opener.marker !== closer.marker) continue;
       if (opener.open && opener.end < 0) {
         let isOddMatch = false;
         if (opener.close || closer.open) {
@@ -4329,11 +4292,9 @@ function fragments_join(state) {
   const tokens = state.tokens;
   const max = state.tokens.length;
   for (curr = last = 0; curr < max; curr++) {
-    if (tokens[curr].nesting < 0)
-      level--;
+    if (tokens[curr].nesting < 0) level--;
     tokens[curr].level = level;
-    if (tokens[curr].nesting > 0)
-      level++;
+    if (tokens[curr].nesting > 0) level++;
     if (tokens[curr].type === "text" && curr + 1 < max && tokens[curr + 1].type === "text") {
       tokens[curr + 1].content = tokens[curr].content + tokens[curr + 1].content;
     } else {
@@ -4461,7 +4422,7 @@ function re_default(opts) {
   opts = opts || {};
   re.src_Any = regex_default.source;
   re.src_Cc = regex_default2.source;
-  re.src_Z = regex_default5.source;
+  re.src_Z = regex_default6.source;
   re.src_P = regex_default4.source;
   re.src_ZPCc = [re.src_Z, re.src_P, re.src_Cc].join("|");
   re.src_ZCc = [re.src_Z, re.src_Cc].join("|");
@@ -4814,14 +4775,11 @@ LinkifyIt.prototype.match = function match(text2) {
 LinkifyIt.prototype.matchAtStart = function matchAtStart(text2) {
   this.__text_cache__ = text2;
   this.__index__ = -1;
-  if (!text2.length)
-    return null;
+  if (!text2.length) return null;
   const m = this.re.schema_at_start.exec(text2);
-  if (!m)
-    return null;
+  if (!m) return null;
   const len = this.testSchemaAt(text2, m[2], m[0].length);
-  if (!len)
-    return null;
+  if (!len) return null;
   this.__schema__ = m[2];
   this.__index__ = m.index + m[1].length;
   this.__last_index__ = m.index + m[0].length + len;

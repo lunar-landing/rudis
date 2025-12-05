@@ -1,37 +1,37 @@
 ---
-title: Secure
-titleTemplate: Advance
-description: Essential information to help you get set up with Tachiyomi.
+title: 安全
+titleTemplate: 高级
+description: Rudis 安全模型和特性
 ---
 
-# Security
+# 安全
 
-Security model and features in Redis.
+Rudis 的安全模型和特性。
 
-## Network security
+## 网络安全
 
-Access to the Redis port should be denied to everybody but trusted clients in the network, so the servers running Redis should be directly accessible only by the computers implementing the application using Redis.
+Rudis 端口的访问应该被拒绝给网络中的所有人，除了受信任的客户端，因此运行 Rudis 的服务器应该只能被使用 Rudis 实现应用程序的计算机直接访问。
 
-In the common case of a single computer directly exposed to the internet, such as a virtualized Linux instance (Linode, EC2, ...), the Redis port should be firewalled to prevent access from the outside. Clients will still be able to access Redis using the loopback interface.
+在单台计算机直接暴露在互联网上的常见情况下，比如虚拟化的 Linux 实例（Linode、EC2 等），Rudis 端口应该通过防火墙防止外部访问。客户端仍然能够使用环回接口访问 Rudis。
 
-Note that it is possible to bind Redis to a single interface by adding a line like the following to the rudis.properties file:
-
-```
-bind=127.0.0.1
-```
-
-Failing to protect the Redis port from the outside can have a big security impact because of the nature of Redis. For instance, a single FLUSHALL command can be used by an external attacker to delete the whole data set.
-
-## Authentication
-
-The legacy authentication method is enabled by editing the redis.conf file, and providing a database password using the setting. This password is then used by all clients.requirepass
-
-When the setting is enabled, Redis will refuse any query by unauthenticated clients. A client can authenticate itself by sending the AUTH command followed by the password.requirepass
+请注意，可以通过在 rudis.conf 文件中添加如下行来将 Rudis 绑定到单个接口：
 
 ```
-password=12345
+bind 127.0.0.1
 ```
 
-The goal of the authentication layer is to optionally provide a layer of redundancy. If firewalling or any other system implemented to protect Redis from external attackers fail, an external client will still not be able to access the Redis instance without knowledge of the authentication password.
+未能保护 Rudis 端口免受外部访问可能会因为 Rudis 的特性而产生重大安全影响。例如，外部攻击者可以使用单个 FLUSHALL 命令删除整个数据集。
 
-Since the AUTH command, like every other Redis command, is sent unencrypted, it does not protect against an attacker that has enough access to the network to perform eavesdropping.
+## 认证
+
+传统的认证方法通过编辑 Rudis.conf 文件并使用 requirepass 设置提供数据库密码来启用。所有客户端都将使用此密码。
+
+当启用该设置时，Rudis 将拒绝未经身份验证的客户端的任何查询。客户端可以通过发送 AUTH 命令后跟密码来进行身份验证。
+
+```
+requirepass 12345
+```
+
+认证层的目标是可选地提供一层冗余。如果防火墙或任何其他用于保护 Rudis 免受外部攻击者攻击的系统失效，外部客户端仍然无法在不知道认证密码的情况下访问 Rudis 实例。
+
+由于 AUTH 命令与每个其他 Rudis 命令一样是以未加密形式发送的，因此它无法防止有权访问网络进行窃听的攻击者。

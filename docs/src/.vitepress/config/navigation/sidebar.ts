@@ -153,6 +153,14 @@ function zhSidebar(): DefaultTheme.SidebarItem[] {
           text: '安全',
           link: '/zh/docs/advance/security',
         },
+        {
+          text: '事务',
+          link: '/zh/docs/advance/transactions',
+        },
+        {
+          text: '主从同步',
+          link: '/zh/docs/advance/replication',
+        },
       ],
     }
   ]
