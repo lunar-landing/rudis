@@ -9,9 +9,7 @@ next: false
 
 # 安装
 
-在 Linux、macOS 和 Windows 上安装 Rudis。
-
-本安装指南将教您如何安装、运行和试验 Rudis 服务器进程。
+本指南介绍如何在 Linux、macOS 和 Windows 系统上安装并运行 Rudis 服务器。
 
 ## 普通安装
 
@@ -32,24 +30,36 @@ start rudis-server.exe --config ./config/rudis.conf
 start rudis-server.exe --port 6379
 ```
 
-### Linux/macOS 系统
+
+### Macos 系统
 
 ```sh
-// linux/macos 常规启动
+// macos 常规启动
 ./rudis-server
 
-// linux/macos 配置文件启动
+// macos 配置文件启动
 ./rudis-server --config ./config/rudis.conf
 
-// linux/macos 指定参数启动
+// macos 指定参数启动
+./rudis-server --port 6379
+```
+
+### Linux 系统
+
+```sh
+// linux 常规启动
+./rudis-server
+
+// linux 配置文件启动
+./rudis-server --config ./config/rudis.conf
+
+// linux 指定参数启动
 ./rudis-server --port 6379
 ```
 
 ## 容器安装
 
 通过 docker 容器启动 Rudis 服务
-
-如需更多安装命令，请前往 [docker/README.md](../../../docker/README.md) 查看
 
 ```sh
 // docker 常规启动
@@ -85,6 +95,7 @@ cargo build --release
 cargo clippy
 ```
 
+<!-- 
 <AddRepoButton/>
 
 <ExtensionsWrapper/>
@@ -92,4 +103,4 @@ cargo clippy
 <script setup>
 import AddRepoButton from '@theme/components/AddRepoButton.vue'
 import ExtensionsWrapper from '@theme/components/Extensions/ExtensionsWrapper.vue'
-</script>
+</script> -->
