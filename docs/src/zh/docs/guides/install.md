@@ -13,7 +13,7 @@ next: false
 
 ## 普通安装
 
-根据系统环境要求，[下载](../../../release) 匹配的 Rudis 版本
+根据系统环境要求，[下载](https://github.com/sleeprite/rudis/tree/master/release) 匹配的 Rudis 版本
 
 通过系统常规命令启动 Rudis 服务
 
