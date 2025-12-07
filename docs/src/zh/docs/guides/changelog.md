@@ -7,9 +7,9 @@ prev: false
 next: false
 ---
 
-# Changelogs
+# 更新日志
 
-Changelogs of all Rudis stable releases, which are also available [on GitHub](https://github.com/sleeprite/rudis/releases). Preview releases can be seen [on GitHub](https://github.com/sleeprite/rudis/releases).
+所有Rudis稳定版本的更新日志，也可以在[GitHub](https://github.com/sleeprite/rudis/releases)上获得。预览版可以在[GitHub](https://github.com/sleeprite/rudis/releases)上看到。
 
 ---
 
