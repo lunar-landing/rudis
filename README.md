@@ -40,7 +40,6 @@ Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在�
 ### v0.2.0
 
 - 新增 Set 数据结构 Sdiff 命令。
-- 增加 JSON.set、JSON.get、JSON.del 命令，支持 JSON 数据结构（ING.）。
 - 增加 maxclients 配置, 限制客户端连接数量。
 - 增加 appendsync 配置，配置 AOF 持久化的执行策略。
 - 新增 String 数据结构 Setrange 命令。

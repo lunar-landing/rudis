@@ -376,7 +376,7 @@ impl Handler {
                     results.push(Frame::Error("ERR nested transaction commands not allowed".to_string()));
                 },
                 _ => {
-                    // 为了避免递归（实际不会有）
+                    // 为了避免递归（实际不会有, 解决 Rust 编译问题）
                     let result = match command {
                         Command::Auth(auth) => auth.apply(self),
                         Command::Client(client) => client.apply(),
