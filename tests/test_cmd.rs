@@ -194,4 +194,187 @@ mod tests {
         let exists: usize = con.hexists("test-hmset", "city").unwrap();
         assert_eq!(exists, 0);
     }
+
+    #[test]
+    fn test_ltrim() {
+        let mut con = setup();
+
+        // 准备测试数据
+        let _: () = con.del("ltrim-test").unwrap();
+        let _: () = con.rpush("ltrim-test", "hello").unwrap();
+        let _: () = con.rpush("ltrim-test", "hello").unwrap();
+        let _: () = con.rpush("ltrim-test", "foo").unwrap();
+        let _: () = con.rpush("ltrim-test", "bar").unwrap();
+
+        // 执行 LTRIM 命令
+        let result: String = con.ltrim("ltrim-test", 1, -1).unwrap();
+        assert_eq!(result, "OK");
+
+        // 验证结果
+        let range: Vec<String> = con.lrange("ltrim-test", 0, -1).unwrap();
+        assert_eq!(range.len(), 3);
+        assert_eq!(range[0], "hello");
+        assert_eq!(range[1], "foo");
+        assert_eq!(range[2], "bar");
+    }
+
+    #[test]
+    fn test_ltrim_out_of_range() {
+        let mut con = setup();
+
+        // 准备测试数据
+        let _: () = con.del("ltrim-out-of-range-test").unwrap();
+        let _: () = con.rpush("ltrim-out-of-range-test", "hello").unwrap();
+        let _: () = con.rpush("ltrim-out-of-range-test", "world").unwrap();
+
+        // 执行 LTRIM 命令，使用超出范围的索引
+        let result: String = con.ltrim("ltrim-out-of-range-test", 5, 10).unwrap();
+        assert_eq!(result, "OK");
+
+        // 验证结果 - 列表应该为空
+        let range: Vec<String> = con.lrange("ltrim-out-of-range-test", 0, -1).unwrap();
+        assert_eq!(range.len(), 0);
+    }
+
+    #[test]
+    fn test_ltrim_with_negative_indices() {
+        let mut con = setup();
+
+        // 准备测试数据
+        let _: () = con.del("ltrim-negative-indices-test").unwrap();
+        let _: () = con.rpush("ltrim-negative-indices-test", "one").unwrap();
+        let _: () = con.rpush("ltrim-negative-indices-test", "two").unwrap();
+        let _: () = con.rpush("ltrim-negative-indices-test", "three").unwrap();
+        let _: () = con.rpush("ltrim-negative-indices-test", "four").unwrap();
+        let _: () = con.rpush("ltrim-negative-indices-test", "five").unwrap();
+
+        // 执行 LTRIM 命令，使用负数索引
+        let result: String = con.ltrim("ltrim-negative-indices-test", -3, -1).unwrap();
+        assert_eq!(result, "OK");
+
+        // 验证结果 - 应该保留最后3个元素
+        let range: Vec<String> = con.lrange("ltrim-negative-indices-test", 0, -1).unwrap();
+        assert_eq!(range.len(), 3);
+        assert_eq!(range[0], "three");
+        assert_eq!(range[1], "four");
+        assert_eq!(range[2], "five");
+    }
+
+    #[test]
+    fn test_ltrim_entire_list() {
+        let mut con = setup();
+
+        // 准备测试数据
+        let _: () = con.del("ltrim-entire-list-test").unwrap();
+        let _: () = con.rpush("ltrim-entire-list-test", "a").unwrap();
+        let _: () = con.rpush("ltrim-entire-list-test", "b").unwrap();
+        let _: () = con.rpush("ltrim-entire-list-test", "c").unwrap();
+
+        // 执行 LTRIM 命令，保留整个列表
+        let result: String = con.ltrim("ltrim-entire-list-test", 0, -1).unwrap();
+        assert_eq!(result, "OK");
+
+        // 验证结果 - 列表应该保持不变
+        let range: Vec<String> = con.lrange("ltrim-entire-list-test", 0, -1).unwrap();
+        assert_eq!(range.len(), 3);
+        assert_eq!(range[0], "a");
+        assert_eq!(range[1], "b");
+        assert_eq!(range[2], "c");
+    }
+
+    #[test]
+    fn test_ltrim_empty_list() {
+        let mut con = setup();
+
+        // 准备空列表
+        let _: () = con.del("ltrim-empty-list-test").unwrap();
+
+        // 执行 LTRIM 命令在空列表上
+        let result: String = con.ltrim("ltrim-empty-list-test", 0, -1).unwrap();
+        assert_eq!(result, "OK");
+
+        // 验证结果 - 列表应该仍然为空
+        let range: Vec<String> = con.lrange("ltrim-empty-list-test", 0, -1).unwrap();
+        assert_eq!(range.len(), 0);
+    }
+
+    #[test]
+    fn test_ltrim_start_greater_than_end() {
+        let mut con = setup();
+
+        // 准备测试数据
+        let _: () = con.del("ltrim-start-greater-test").unwrap();
+        let _: () = con.rpush("ltrim-start-greater-test", "x").unwrap();
+        let _: () = con.rpush("ltrim-start-greater-test", "y").unwrap();
+        let _: () = con.rpush("ltrim-start-greater-test", "z").unwrap();
+
+        // 执行 LTRIM 命令，start 大于 end
+        let result: String = con.ltrim("ltrim-start-greater-test", 2, 1).unwrap();
+        assert_eq!(result, "OK");
+
+        // 验证结果 - 列表应该为空
+        let range: Vec<String> = con.lrange("ltrim-start-greater-test", 0, -1).unwrap();
+        assert_eq!(range.len(), 0);
+    }
+
+    #[test]
+    fn test_ltrim_large_negative_start() {
+        let mut con = setup();
+
+        // 准备测试数据
+        let _: () = con.del("ltrim-large-negative-start-test").unwrap();
+        let _: () = con.rpush("ltrim-large-negative-start-test", "a").unwrap();
+        let _: () = con.rpush("ltrim-large-negative-start-test", "b").unwrap();
+        let _: () = con.rpush("ltrim-large-negative-start-test", "c").unwrap();
+
+        // 执行 LTRIM 命令，使用很大的负数作为起始索引
+        let result: String = con.ltrim("ltrim-large-negative-start-test", -10, -1).unwrap();
+        assert_eq!(result, "OK");
+
+        // 验证结果 - 应该保留整个列表（因为负数索引超出了范围，会被调整为0）
+        let range: Vec<String> = con.lrange("ltrim-large-negative-start-test", 0, -1).unwrap();
+        assert_eq!(range.len(), 3);
+        assert_eq!(range[0], "a");
+        assert_eq!(range[1], "b");
+        assert_eq!(range[2], "c");
+    }
+
+    #[test]
+    fn test_ltrim_single_element() {
+        let mut con = setup();
+
+        // 准备测试数据
+        let _: () = con.del("ltrim-single-element-test").unwrap();
+        let _: () = con.rpush("ltrim-single-element-test", "only").unwrap();
+
+        // 执行 LTRIM 命令，只保留一个元素
+        let result: String = con.ltrim("ltrim-single-element-test", 0, 0).unwrap();
+        assert_eq!(result, "OK");
+
+        // 验证结果
+        let range: Vec<String> = con.lrange("ltrim-single-element-test", 0, -1).unwrap();
+        assert_eq!(range.len(), 1);
+        assert_eq!(range[0], "only");
+    }
+
+    #[test]
+    fn test_ltrim_stop_exceeds_length() {
+        let mut con = setup();
+
+        // 准备测试数据
+        let _: () = con.del("ltrim-stop-exceeds-test").unwrap();
+        let _: () = con.rpush("ltrim-stop-exceeds-test", "first").unwrap();
+        let _: () = con.rpush("ltrim-stop-exceeds-test", "second").unwrap();
+        let _: () = con.rpush("ltrim-stop-exceeds-test", "third").unwrap();
+
+        // 执行 LTRIM 命令，停止索引超过列表长度
+        let result: String = con.ltrim("ltrim-stop-exceeds-test", 1, 100).unwrap();
+        assert_eq!(result, "OK");
+
+        // 验证结果 - 应该保留从索引1开始到列表末尾的所有元素
+        let range: Vec<String> = con.lrange("ltrim-stop-exceeds-test", 0, -1).unwrap();
+        assert_eq!(range.len(), 2);
+        assert_eq!(range[0], "second");
+        assert_eq!(range[1], "third");
+    }
 }

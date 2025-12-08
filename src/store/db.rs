@@ -201,6 +201,7 @@ impl Db {
             Command::Incr(incr) => incr.apply(self),
             Command::Decr(decr) => decr.apply(self),
             Command::Lset(lset) => lset.apply(self),
+            Command::Ltrim(ltrim) => ltrim.apply(self),
             Command::Zadd(zadd) => zadd.apply(self),
             Command::Zcount(zcount) => zcount.apply(self),
             Command::Zscore(zscore) => zscore.apply(self),

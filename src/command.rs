@@ -9,7 +9,7 @@ use crate::{
             del::Del, exists::Exists, expire::Expire, expireat::ExpireAt, keys::Keys, persist::Persist, pexpire::Pexpire, pexpireat::PexpireAt, pttl::Pttl, randomkey::RandomKey, rename::Rename, renamenx::Renamenx, r#move::Move, ttl::Ttl, r#type::Type
         }, listing::{
             lindex::Lindex, llen::Llen, lpop::Lpop, lpush::Lpush, lpushx::Lpushx, lrange::Lrange,
-            lset::Lset, rpop::Rpop, rpush::Rpush, rpushx::Rpushx,
+            lset::Lset, ltrim::Ltrim, rpop::Rpop, rpush::Rpush, rpushx::Rpushx,
         }, server::{bgsave::Bgsave, dbsize::Dbsize, flushall::Flushall, flushdb::Flushdb, info::Info, save::Save}, server_sync::{psync::Psync, replconf::Replconf}, set::{
             sadd::Sadd, scard::Scard, sdiff::Sdiff, sinter::Sinter, sismember::Sismember, smembers::Smembers,
             spop::Spop, srem::Srem, sunion::Sunion, sunionstore::Sunionstore,
@@ -82,6 +82,7 @@ pub enum Command {
     Incr(Incr),
     IncrbyFloat(IncrbyFloat),
     Lset(Lset),
+    Ltrim(Ltrim),
     Sunion(Sunion),
     Zcount(Zcount),
     Zadd(Zadd),
@@ -169,6 +170,7 @@ impl Command {
             "INCR" => Command::Incr(Incr::parse_from_frame(frame)?),
             "DECR" => Command::Decr(Decr::parse_from_frame(frame)?),
             "LSET" => Command::Lset(Lset::parse_from_frame(frame)?),
+            "LTRIM" => Command::Ltrim(Ltrim::parse_from_frame(frame)?),
             "SUNION" => Command::Sunion(Sunion::parse_from_frame(frame)?),
             "ZCOUNT" => Command::Zcount(Zcount::parse_from_frame(frame)?),
             "ZADD" => Command::Zadd(Zadd::parse_from_frame(frame)?),
@@ -228,6 +230,7 @@ impl Command {
             Command::Lpush(_) |
             Command::Lpushx(_) |
             Command::Lset(_) |
+            Command::Ltrim(_) |
             Command::Rpop(_) |
             Command::Rpush(_) |
             Command::Rpushx(_) |
