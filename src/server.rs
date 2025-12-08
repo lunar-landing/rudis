@@ -14,7 +14,7 @@ use crate::args::Args;
 use crate::network::session::Session;
 use crate::network::session_manager::SessionManager;
 use crate::network::session_role::SessionRole;
-use crate::persistence::aof_file::AofFile;
+use crate::persistence::aof_file::{AofFile, SyncStrategy};
 use crate::store::db::DatabaseMessage;
 use crate::store::db_manager::DatabaseManager;
 use crate::network::connection::Connection;
@@ -37,7 +37,8 @@ impl Server {
         let db_manager = Arc::new(DatabaseManager::new(args.clone()));
         let (aof_file, aof_sender) = if args.appendonly == "yes" {
             let file_path = PathBuf::from(&args.dir).join(&args.appendfilename);
-            let file = AofFile::new(file_path);
+            let sync_strategy = SyncStrategy::from_str(&args.appendfsync);
+            let file = AofFile::new(file_path, sync_strategy);
             let sender = file.get_sender();
             (Some(file), Some(sender))
         } else {

@@ -37,6 +37,12 @@ Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在�
 
 ## 更新日志
 
+### v0.2.0
+
+- 增加 JSON.set、JSON.get、JSON.del 命令，支持 JSON 数据结构（ING.）。
+- 增加 maxclients 配置, 限制客户端连接数量。
+- 增加 appendsync 配置，配置 AOF 持久化的执行策略。
+
 ### v0.1.0
 
 - 升级 Tokio 至 1.48.0 版本。
@@ -44,7 +50,6 @@ Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在�
 - 升级线程模型，由 shared-everything 架构替换为 shared-nothing 架构。
 - 修复 redis-insight 可视化工具无法正常连接的问题。
 - 新增事务功能，支持 exec、multi、discard 命令。
-- 增加 maxclients 配置, 限制客户端连接数量。
 - 优化 loglevel=debug 模式下的日志打印。
 - 优化 RESP 解析器，解决命令粘包问题。
 - 新增 replication 主从复制模式。
