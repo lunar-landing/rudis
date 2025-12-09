@@ -6,7 +6,7 @@ use crate::{
             hdel::Hdel, hexists::Hexists, hget::Hget, hgetall::Hgetall, hkeys::Hkeys, hlen::Hlen,
             hmget::Hmget, hmset::Hmset, hset::Hset, hsetnx::Hsetnx, hstrlen::Hstrlen, hvals::Hvals,
         }, key::{
-            del::Del, exists::Exists, expire::Expire, expireat::ExpireAt, keys::Keys, persist::Persist, pexpire::Pexpire, pexpireat::PexpireAt, pttl::Pttl, randomkey::RandomKey, rename::Rename, renamenx::Renamenx, r#move::Move, ttl::Ttl, r#type::Type
+            del::Del, exists::Exists, expire::Expire, expireat::ExpireAt, keys::Keys, persist::Persist, pexpire::Pexpire, pexpireat::PexpireAt, pttl::Pttl, randomkey::RandomKey, rename::Rename, renamenx::Renamenx, r#move::Move, scan::Scan, ttl::Ttl, r#type::Type
         }, listing::{
             lindex::Lindex, llen::Llen, lpop::Lpop, lpush::Lpush, lpushx::Lpushx, lrange::Lrange,
             lset::Lset, ltrim::Ltrim, rpop::Rpop, rpush::Rpush, rpushx::Rpushx,
@@ -23,7 +23,6 @@ use crate::{
     },
     frame::Frame,
 };
-
 // 命令
 pub enum Command {
     Auth(Auth),
@@ -38,6 +37,7 @@ pub enum Command {
     GetRange(GetRange),
     Ping(Ping),
     Pttl(Pttl),
+    Scan(Scan),
     Select(Select),
     Set(Set),
     SetRange(SetRange),
@@ -112,7 +112,6 @@ pub enum Command {
     Discard(Discard),
     Exec(Exec),
 }
-
 impl Command {
     pub fn parse_from_frame(frame: Frame) -> Result<Self, Error> {
         let command_name = frame.get_arg(0).unwrap();
@@ -199,11 +198,11 @@ impl Command {
             "MULTI" => Command::Multi(Multi::parse_from_frame(frame)?),
             "EXEC" => Command::Exec(Exec::parse_from_frame(frame)?),
             "DISCARD" => Command::Discard(Discard::parse_from_frame(frame)?),
+            "SCAN" => Command::Scan(Scan::parse_from_frame(frame)?),
             _ => Command::Unknown(Unknown::parse_from_frame(frame)?),
         };
         Ok(command)
     }
-
     pub fn propagate_aof_if_needed(&self) -> bool {
         match self {
             Command::Del(_) |

@@ -218,10 +218,10 @@ impl Db {
             Command::Lrange(lrange) => lrange.apply(self),
             Command::GetSet(getset) => getset.apply(self),
             Command::Info(info) => info.apply(self),
+            Command::Scan(scan) => scan.apply(self),
             _ => Err(Error::msg("Unknown command")),
         }
     }
-
     /**
      * 保存键值
      *
