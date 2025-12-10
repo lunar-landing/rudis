@@ -250,24 +250,6 @@ move 命令
 OK
 ```
 
-JSON.SET 命令
-```
-127.0.0.1:6379> JSON.SET user:1 $ {"name":"John","age":30}
-OK
-```
-
-JSON.GET 命令
-```
-127.0.0.1:6379> JSON.GET user:1
-"{\"name\":\"John\",\"age\":30}"
-```
-
-JSON.DEL 命令
-```
-127.0.0.1:6379> JSON.DEL user:1
-(integer) 1
-```
-
 > 有关事务功能的详细信息，请参阅 [事务功能说明](README-TRANSACTIONS.md)
 
 ## 构建源码
