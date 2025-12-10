@@ -28,7 +28,7 @@ Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在�
 ### 🌟 特性
 
 - 跨平台，兼容 windows、linux、macos 系统。
-- 兼容 字符串、集合、哈希、列表、有序集合数据结构。
+- 兼容 字符串、集合、哈希、列表、有序集合、JSON数据结构。
 - 提供 rdb 与 aof 机制以支持数据备份和恢复。
 - 拥有卓越的处理速度和即时响应能力。
 - 多个线程中并发创建和删除键值。
@@ -37,6 +37,15 @@ Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在�
 
 ## 更新日志
 
+### v0.2.0
+
+- 新增 Scan、Ltrim 命令。
+- 新增 maxclients 配置, 限制客户端连接数量。
+- 新增 appendsync 配置，配置 AOF 持久化的执行策略。
+- 新增 Set 类型 Sscan、Sdiff、Setrange 命令。
+- 优化 Keys 命令算法，提升 88%-99.55 % 性能。
+- 兼容 Redis-insight 的 Set 预览问题。
+
 ### v0.1.0
 
 - 升级 Tokio 至 1.48.0 版本。
@@ -44,7 +53,6 @@ Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在�
 - 升级线程模型，由 shared-everything 架构替换为 shared-nothing 架构。
 - 修复 redis-insight 可视化工具无法正常连接的问题。
 - 新增事务功能，支持 exec、multi、discard 命令。
-- 增加 maxclients 配置, 限制客户端连接数量。
 - 优化 loglevel=debug 模式下的日志打印。
 - 优化 RESP 解析器，解决命令粘包问题。
 - 新增 replication 主从复制模式。

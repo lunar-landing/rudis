@@ -1,8 +1,7 @@
 ---
 title: 字符串命令
 titleTemplate: 命令
-description: Rudis 字符串命令概述，包括 APPEND、DECR、DECRBY、GET、GETRANGE、GETSET、INCR、INCRBY、INCRBYFLOAT、MGET、MSET、SET 和 STRLEN 命令。
----
+description: Rudis 字符串命令概述，包括 APPEND、DECR、DECRBY、GET、GETRANGE、GETSET、INCR、INCRBY、INCRBYFLOAT、MGET、MSET、SET、SETRANGE 和 STRLEN 命令。---
 
 # 字符串命令
 
@@ -58,6 +57,10 @@ description: Rudis 字符串命令概述，包括 APPEND、DECR、DECRBY、GET�
   <a href="./string/set" class="command-card">
     <div class="card-title">SET</div>
     <div class="card-description">设置指定键的值</div>
+  </a>
+  <a href="./string/setrange" class="command-card">
+    <div class="card-title">SETRANGE</div>
+    <div class="card-description">用指定的字符串覆盖给定 key 所储存的字符串值，覆盖的位置从偏移量 offset 开始</div>
   </a>
   <a href="./string/strlen" class="command-card">
     <div class="card-title">STRLEN</div>

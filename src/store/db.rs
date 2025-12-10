@@ -52,7 +52,8 @@ pub enum Structure {
     SortedSet(BTreeMap<String, f64>),
     VectorCollection(Vector),
     Set(HashSet<String>),
-    List(Vec<String>)
+    List(Vec<String>),
+    Json(String)  // 使用字符串存储JSON数据
 }
 
 #[derive(Clone, Encode, Decode)]
@@ -163,6 +164,7 @@ impl Db {
             Command::Mset(mset) => mset.apply(self),
             Command::Mget(mget) => mget.apply(self),
             Command::Strlen(strlen) => strlen.apply(self),
+            Command::SetRange(setrange) => setrange.apply(self),
             Command::Append(append) => append.apply(self),
             Command::Dbsize(dbsize) => dbsize.apply(self),
             Command::Persist(persist) => persist.apply(self),
@@ -187,6 +189,7 @@ impl Db {
             Command::Llen(llen) => llen.apply(self),
             Command::Sadd(sadd) => sadd.apply(self),
             Command::Scard(scard) => scard.apply(self),
+            Command::Sdiff(sdiff) => sdiff.apply(self),
             Command::Spop(spop) => spop.apply(self),
             Command::Srem(srem) => srem.apply(self),
             Command::Sinter(sinter) => sinter.apply(self),
@@ -200,6 +203,7 @@ impl Db {
             Command::Incr(incr) => incr.apply(self),
             Command::Decr(decr) => decr.apply(self),
             Command::Lset(lset) => lset.apply(self),
+            Command::Ltrim(ltrim) => ltrim.apply(self),
             Command::Zadd(zadd) => zadd.apply(self),
             Command::Zcount(zcount) => zcount.apply(self),
             Command::Zscore(zscore) => zscore.apply(self),
@@ -214,10 +218,11 @@ impl Db {
             Command::Lrange(lrange) => lrange.apply(self),
             Command::GetSet(getset) => getset.apply(self),
             Command::Info(info) => info.apply(self),
+            Command::Scan(scan) => scan.apply(self),
+            Command::Sscan(sscan) => sscan.apply(self),
             _ => Err(Error::msg("Unknown command")),
         }
     }
-
     /**
      * 保存键值
      *
@@ -354,6 +359,12 @@ impl Db {
      * @return 符合模式的所有键的列表
      */
     pub fn keys(&self, pattern: &str) -> Vec<String> {
+        // 特殊情况优化：如果模式是 "*"，直接返回所有键
+        if pattern == "*" {
+            return self.records.keys().cloned().collect();
+        }
+        
+        // 对于其他模式，使用过滤器
         self.records.keys().filter(|key| pattern::is_match(key, pattern)).cloned().collect()
     }
 

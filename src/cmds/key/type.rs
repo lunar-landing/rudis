@@ -44,6 +44,9 @@ impl Type {
                     },
                     Structure::VectorCollection(_) => {
                         Ok(Frame::SimpleString("vector".to_string()))
+                    },
+                    Structure::Json(_) => {
+                        Ok(Frame::SimpleString("json".to_string()))
                     }
                 }
             },

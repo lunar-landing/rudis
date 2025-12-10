@@ -1,7 +1,7 @@
 ---
 title: 键命令
 titleTemplate: 命令
-description: Rudis 键命令概述，包括 DEL、EXISTS、EXPIRE、EXPIREAT、KEYS、MOVE、PERSIST、PEXPIRE、PEXPIREAT、PTTL、RANDOMKEY、RENAME、RENAMENX、TTL 和 TYPE 命令。
+description: Rudis 键命令概述，包括 DEL、EXISTS、EXPIRE、EXPIREAT、KEYS、MOVE、PERSIST、PEXPIRE、PEXPIREAT、PTTL、RANDOMKEY、RENAME、RENAMENX、SCAN 和 TYPE 命令。
 ---
 
 # 键命令
@@ -62,6 +62,10 @@ description: Rudis 键命令概述，包括 DEL、EXISTS、EXPIRE、EXPIREAT、K
   <a href="./key/renamenx" class="command-card">
     <div class="card-title">RENAMENX</div>
     <div class="card-description">仅在新键不存在时，将键重命名为新键</div>
+  </a>
+  <a href="./key/scan" class="command-card">
+    <div class="card-title">SCAN</div>
+    <div class="card-description">增量迭代数据库中的键</div>
   </a>
   <a href="./key/ttl" class="command-card">
     <div class="card-title">TTL</div>

@@ -17,6 +17,10 @@ hero:
     - theme: alt
       text: Get Started
       link: /docs/guides/install
+    - theme: alt
+      text: View on GitHub
+      link: https://github.com/sleeprite/rudis
+
 
 features:
   - title: 跨平台支持

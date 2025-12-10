@@ -8,3 +8,4 @@ pub mod lpop;
 pub mod rpop;
 pub mod llen;
 pub mod lset;
+pub mod ltrim;

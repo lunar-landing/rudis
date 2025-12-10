@@ -6,24 +6,22 @@ use crate::{
             hdel::Hdel, hexists::Hexists, hget::Hget, hgetall::Hgetall, hkeys::Hkeys, hlen::Hlen,
             hmget::Hmget, hmset::Hmset, hset::Hset, hsetnx::Hsetnx, hstrlen::Hstrlen, hvals::Hvals,
         }, key::{
-            del::Del, exists::Exists, expire::Expire, expireat::ExpireAt, keys::Keys, persist::Persist, pexpire::Pexpire, pexpireat::PexpireAt, pttl::Pttl, randomkey::RandomKey, rename::Rename, renamenx::Renamenx, r#move::Move, ttl::Ttl, r#type::Type
+            del::Del, exists::Exists, expire::Expire, expireat::ExpireAt, keys::Keys, r#move::Move, persist::Persist, pexpire::Pexpire, pexpireat::PexpireAt, pttl::Pttl, randomkey::RandomKey, rename::Rename, renamenx::Renamenx, scan::Scan, ttl::Ttl, r#type::Type
         }, listing::{
             lindex::Lindex, llen::Llen, lpop::Lpop, lpush::Lpush, lpushx::Lpushx, lrange::Lrange,
-            lset::Lset, rpop::Rpop, rpush::Rpush, rpushx::Rpushx,
+            lset::Lset, ltrim::Ltrim, rpop::Rpop, rpush::Rpush, rpushx::Rpushx,
         }, server::{bgsave::Bgsave, dbsize::Dbsize, flushall::Flushall, flushdb::Flushdb, info::Info, save::Save}, server_sync::{psync::Psync, replconf::Replconf}, set::{
-            sadd::Sadd, scard::Scard, sinter::Sinter, sismember::Sismember, smembers::Smembers,
-            spop::Spop, srem::Srem, sunion::Sunion, sunionstore::Sunionstore,
+            sadd::Sadd, scard::Scard, sdiff::Sdiff, sinter::Sinter, sismember::Sismember, smembers::Smembers, spop::Spop, srem::Srem, sscan::Sscan, sunion::Sunion, sunionstore::Sunionstore
         }, sorted_set::{
             zadd::Zadd, zcard::Zcard, zcount::Zcount, zrank::Zrank, zrem::Zrem, zscore::Zscore,
         }, string::{
-            append::Append, decr::Decr, decrby::Decrby, get::Get, getrange::GetRange, getset::GetSet, incr::Incr, incrby::Incrby, incrbyfloat::IncrbyFloat, mget::Mget, mset::Mset, set::Set, strlen::Strlen
+            append::Append, decr::Decr, decrby::Decrby, get::Get, getrange::GetRange, getset::GetSet, incr::Incr, incrby::Incrby, incrbyfloat::IncrbyFloat, mget::Mget, mset::Mset, set::Set, setrange::SetRange, strlen::Strlen
         }, transaction::{
-            multi::Multi, exec::Exec, discard::Discard
+            discard::Discard, exec::Exec, multi::Multi
         }, unknown::Unknown
     },
     frame::Frame,
 };
-
 // 命令
 pub enum Command {
     Auth(Auth),
@@ -38,8 +36,10 @@ pub enum Command {
     GetRange(GetRange),
     Ping(Ping),
     Pttl(Pttl),
+    Scan(Scan),
     Select(Select),
     Set(Set),
+    SetRange(SetRange),
     Ttl(Ttl),
     Unknown(Unknown),
     Mset(Mset),
@@ -73,16 +73,17 @@ pub enum Command {
     Sismember(Sismember),
     Smembers(Smembers),
     Scard(Scard),
+    Sdiff(Sdiff),
     Sinter(Sinter),
     Spop(Spop),
     Srem(Srem),
-    Flushall(Flushall),
-    Lpushx(Lpushx),
+    Flushall(Flushall),    Lpushx(Lpushx),
     Rpushx(Rpushx),
     Decr(Decr),
     Incr(Incr),
     IncrbyFloat(IncrbyFloat),
     Lset(Lset),
+    Ltrim(Ltrim),
     Sunion(Sunion),
     Zcount(Zcount),
     Zadd(Zadd),
@@ -105,12 +106,12 @@ pub enum Command {
     GetSet(GetSet),
     Info(Info),
     Move(Move),
+    Sscan(Sscan),
     // 事务命令
     Multi(Multi),
+    Discard(Discard),
     Exec(Exec),
-    Discard(Discard)
 }
-
 impl Command {
     pub fn parse_from_frame(frame: Frame) -> Result<Self, Error> {
         let command_name = frame.get_arg(0).unwrap();
@@ -127,6 +128,7 @@ impl Command {
             "TYPE" => Command::Type(Type::parse_from_frame(frame)?),
             "SELECT" => Command::Select(Select::parse_from_frame(frame)?),
             "SET" => Command::Set(Set::parse_from_frame(frame)?),
+            "SETRANGE" => Command::SetRange(SetRange::parse_from_frame(frame)?),
             "TTL" => Command::Ttl(Ttl::parse_from_frame(frame)?),
             "RANDOMKEY" => Command::RandomKey(RandomKey::parse_from_frame(frame)?),
             "RENAME" => Command::Rename(Rename::parse_from_frame(frame)?),
@@ -170,12 +172,14 @@ impl Command {
             "INCR" => Command::Incr(Incr::parse_from_frame(frame)?),
             "DECR" => Command::Decr(Decr::parse_from_frame(frame)?),
             "LSET" => Command::Lset(Lset::parse_from_frame(frame)?),
+            "LTRIM" => Command::Ltrim(Ltrim::parse_from_frame(frame)?),
             "SUNION" => Command::Sunion(Sunion::parse_from_frame(frame)?),
             "ZCOUNT" => Command::Zcount(Zcount::parse_from_frame(frame)?),
             "ZADD" => Command::Zadd(Zadd::parse_from_frame(frame)?),
             "ZCARD" => Command::Zcard(Zcard::parse_from_frame(frame)?),
             "ZSCORE" => Command::Zscore(Zscore::parse_from_frame(frame)?),
             "ZREM" => Command::Zrem(Zrem::parse_from_frame(frame)?),
+            "SDIFF" => Command::Sdiff(Sdiff::parse_from_frame(frame)?),
             "SINTER" => Command::Sinter(Sinter::parse_from_frame(frame)?),
             "ZRANK" => Command::Zrank(Zrank::parse_from_frame(frame)?),
             "INCRBY" => Command::Incrby(Incrby::parse_from_frame(frame)?),
@@ -194,11 +198,12 @@ impl Command {
             "MULTI" => Command::Multi(Multi::parse_from_frame(frame)?),
             "EXEC" => Command::Exec(Exec::parse_from_frame(frame)?),
             "DISCARD" => Command::Discard(Discard::parse_from_frame(frame)?),
+            "SCAN" => Command::Scan(Scan::parse_from_frame(frame)?),
+            "SSCAN" => Command::Sscan(Sscan::parse_from_frame(frame)?),
             _ => Command::Unknown(Unknown::parse_from_frame(frame)?),
         };
         Ok(command)
     }
-
     pub fn propagate_aof_if_needed(&self) -> bool {
         match self {
             Command::Del(_) |
@@ -218,6 +223,7 @@ impl Command {
             Command::IncrbyFloat(_) |
             Command::Mset(_) |
             Command::Set(_) | 
+            Command::SetRange(_) |
             Command::Flushall(_) |
             Command::Flushdb(_) |
             Command::Hdel(_) |
@@ -228,17 +234,19 @@ impl Command {
             Command::Lpush(_) |
             Command::Lpushx(_) |
             Command::Lset(_) |
+            Command::Ltrim(_) |
             Command::Rpop(_) |
             Command::Rpush(_) |
             Command::Rpushx(_) |
             Command::Sadd(_) |
+            Command::Sdiff(_) |
             Command::Sinter(_) |
             Command::Spop(_) |
             Command::Srem(_) |
             Command::Sunionstore(_) |
             Command::Zadd(_) |
             Command::Zrem(_) |
-            Command::Move(_) => true,
+            Command::Move(_) |
             _ => false,
         }
     }

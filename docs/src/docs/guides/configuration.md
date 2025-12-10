@@ -34,7 +34,14 @@ Note that internally this generates an in-memory temporary config file (possibly
 
 ## Changing Rudis configuration while the server is running
 
-<!-- TODO -->
+Rudis supports dynamic configuration changes without restarting the server. You can modify certain configuration parameters at runtime using the CONFIG SET command. For example:
+
+```
+CONFIG SET maxclients 1000
+CONFIG SET appendfsync everysec
+```
+
+Not all configuration options can be changed at runtime. Some settings require a server restart to take effect, such as port binding or persistence file locations. You can check which parameters can be modified dynamically by using the CONFIG GET command to retrieve current values.
 
 ## Server Configuration
 

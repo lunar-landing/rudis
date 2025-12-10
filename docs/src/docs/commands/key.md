@@ -1,7 +1,7 @@
 ---
 title: Key Commands
 titleTemplate: Commands
-description: Overview of Rudis key commands including DEL, EXISTS, EXPIRE, EXPIREAT, KEYS, MOVE, PERSIST, PEXPIRE, PEXPIREAT, PTTL, RANDOMKEY, RENAME, RENAMENX, TTL, and TYPE commands.
+description: Overview of Rudis key commands including DEL, EXISTS, EXPIRE, EXPIREAT, KEYS, MOVE, PERSIST, PEXPIRE, PEXPIREAT, PTTL, RANDOMKEY, RENAME, RENAMENX, SCAN, and TYPE commands.
 ---
 
 # Key Commands
@@ -62,6 +62,10 @@ Key commands are used to manage keys in Redis. These commands allow you to creat
   <a href="./key/renamenx" class="command-card">
     <div class="card-title">RENAMENX</div>
     <div class="card-description">Renames a key to a new key only if the new key does not exist</div>
+  </a>
+  <a href="./key/scan" class="command-card">
+    <div class="card-title">SCAN</div>
+    <div class="card-description">Incrementally iterates over keys in the database</div>
   </a>
   <a href="./key/ttl" class="command-card">
     <div class="card-title">TTL</div>

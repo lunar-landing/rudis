@@ -11,3 +11,4 @@ pub mod incrby;
 pub mod incrbyfloat;
 pub mod decrby;
 pub mod decr;
+pub mod setrange;

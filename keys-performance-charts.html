@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KEYS命令性能优化对比</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .chart-container {
+            position: relative;
+            height: 60vh;
+            margin-top: 30px;
+        }
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f7ef;
+            border-left: 4px solid #2ecc71;
+            border-radius: 4px;
+        }
+        .info h3 {
+            margin-top: 0;
+            color: #27ae60;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .improvement {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .regression {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>KEYS命令性能优化对比分析</h1>
+    
+        <div class="info">
+            <h3>优化说明</h3>
+            <p>本次优化主要针对KEYS命令进行了以下改进：</p>
+            <ol>
+                <li><strong>正则表达式缓存</strong>：避免重复编译相同的模式匹配正则表达式</li>
+                <li><strong>特殊模式优化</strong>：针对"*"通配符模式进行特殊处理，直接返回所有键</li>
+            </ol>
+            <p>从图表可以看出，在处理"*"通配符模式时性能提升显著，其他模式也有不同程度的改善。</p>
+        </div>
+        
+
+        <div class="chart-container">
+            <canvas id="performanceChart"></canvas>
+        </div>
+    
+        <table>
+            <thead>
+                <tr>
+                    <th>测试用例</th>
+                    <th>优化前耗时</th>
+                    <th>优化后耗时</th>
+                    <th>性能变化</th>
+                    <th>提升比例</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>KEYS * (10000个键)</td>
+                    <td>7.4010s</td>
+                    <td>0.0329s</td>
+                    <td class="improvement">显著提升</td>
+                    <td class="improvement">99.55%</td>
+                </tr>
+                <tr>
+                    <td>KEYS perf_test_key_* (10000个键)</td>
+                    <td>8.4708s</td>
+                    <td>0.9614s</td>
+                    <td class="improvement">明显提升</td>
+                    <td class="improvement">88.65%</td>
+                </tr>
+                <tr>
+                    <td>KEYS perf_test_key_1* (1111个键)</td>
+                    <td>8.1101s</td>
+                    <td>0.4967s</td>
+                    <td class="improvement">明显提升</td>
+                    <td class="improvement">93.87%</td>
+                </tr>
+                <tr>
+                    <td>KEYS perf_test_key_5000 (1个键)</td>
+                    <td>0.2976s</td>
+                    <td>0.0187s</td>
+                    <td class="improvement">明显提升</td>
+                    <td class="improvement">93.72%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            
+            // 性能数据（单位：秒）
+            const testData = {
+                labels: ['KEYS * (10k)', 'KEYS perf_test_key_* (10k)', 'KEYS perf_test_key_1* (1.1k)', 'KEYS perf_test_key_5000 (1)'],
+                datasets: [
+                    {
+                        label: '优化前',
+                        data: [7.4010, 8.4708, 8.1101, 0.2976],
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.1
+                    },
+                    {
+                        label: '优化后',
+                        data: [0.0329, 0.9614, 0.4967, 0.0187],
+                        borderColor: 'rgb(54, 162, 235)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        tension: 0.1
+                    }
+                ]
+            };
+            
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: testData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '耗时 (秒)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '测试用例'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'KEYS命令性能优化前后对比'
+                        },
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y.toFixed(4)} 秒`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

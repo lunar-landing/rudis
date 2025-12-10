@@ -17,6 +17,9 @@ hero:
     - theme: alt
       text: Get Started
       link: /docs/guides/install
+    - theme: alt
+      text: View on GitHub
+      link: https://github.com/sleeprite/rudis
 
 features:
   - title: Cross-platform Support
