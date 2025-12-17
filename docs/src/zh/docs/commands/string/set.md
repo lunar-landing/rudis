@@ -1,24 +1,24 @@
 # SET
 
-The Rudis SET command is used to set the value of a given key. If the key has already stored other values, SET will overwrite the old value and ignore the type.
+Rudis SET 命令用于设置给定键的值。如果键已经存储了其他值，SET 将覆盖旧值并忽略类型。
 
-## Syntax
+## 语法
 
 ```
 SET key value [NX | XX] [EX seconds | PX milliseconds ]
 ```
 
-## Option
+## 选项
 
-The SET command supports a set of options that modify its behavior:
+SET 命令支持一组修改其行为的选项：
 
-- EX seconds -- Set the specified expire time, in seconds (a positive integer).
-- PX milliseconds -- Set the specified expire time, in milliseconds (a positive integer).
-- NX -- Only set the key if it does not already exist.
-- XX -- Only set the key if it already exists.
+- EX seconds -- 设置指定的过期时间，以秒为单位（正整数）。
+- PX milliseconds -- 设置指定的过期时间，以毫秒为单位（正整数）。
+- NX -- 只有当键不存在时才设置键。
+- XX -- 只有当键已存在时才设置键。
 
-## Return
+## 返回值
 
-Simple string reply: OK if SET was executed correctly.
+简单字符串回复：如果 SET 正确执行则返回 OK。
 
-Null reply: (nil) if the SET operation was not performed because the user specified the NX or XX option but the condition was not met.
+空回复：如果由于用户指定了 NX 或 XX 选项但条件不满足而导致 SET 操作未执行，则返回 (nil)。

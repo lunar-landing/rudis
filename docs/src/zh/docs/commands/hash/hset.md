@@ -1,13 +1,13 @@
 # HSET
 
-The Redis Hset command is used to assign values to fields in a hash table.
+Redis Hset 命令用于为哈希表中的字段赋值。
 
-## Syntax
+## 语法
 
 ```
 HSET key field value [field value ...]
 ```
 
-## Return
+## 返回值
 
-If the field is a newly created field in the hash table and the value is successfully set, return 1. If the field in the hash table already exists and the old value has been overwritten by the new value, return 0.
+如果字段是哈希表中新创建的字段且值设置成功，则返回 1。如果哈希表中的字段已存在且旧值已被新值覆盖，则返回 0。

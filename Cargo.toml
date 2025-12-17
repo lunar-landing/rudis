@@ -1,6 +1,6 @@
 [package]
 name = "rudis-server"
-version = "0.1.0"
+version = "0.2.1"
 authors = ["就眠儀式"]
 edition = "2021"
 
@@ -19,4 +19,4 @@ log = "0.4"
 serde_json = "1.0"
 
 [dev-dependencies]
-redis = "0.32.7"
+redis = "1.0.1"

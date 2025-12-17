@@ -1,6 +1,6 @@
 # GET
 
-Get the value of. If the key does not exist the special value is returned. An error is returned if the value stored at is not a string, because only handles string values.
+获取指定键的值。如果键不存在，则返回特殊值 nil。如果存储在键中的值不是字符串，则返回错误，因为该命令只能处理字符串值。
 
 ## Syntax
 
@@ -8,6 +8,6 @@ Get the value of. If the key does not exist the special value is returned. An er
 GET key
 ```
 
-## Return
+## 返回值
 
-Bulk string reply: the value of key, or nil when key does not exist.
+批量字符串回复：键的值，或者当键不存在时返回 nil。

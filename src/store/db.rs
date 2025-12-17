@@ -319,7 +319,7 @@ impl Db {
      * 获取过期毫秒数
      *
      * @param key 键名
-     * @return 过期毫秒数，如果键不存在则返回 -2，如果键已过期则返回 -1
+     * @return 过期毫秒数，如果键不存在则返回 -2，如果键存在但没有设置过期时间则返回 -1
      */
     pub fn ttl_millis(&mut self, key: &str) -> i64 {
         if let Some(expire_time) = self.expire_records.get(key) {
@@ -336,7 +336,7 @@ impl Db {
                 }
             }
         } else if self.records.contains_key(key) {
-            -2
+            -1
         } else {
             -2
         }

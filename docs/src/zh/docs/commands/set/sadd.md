@@ -1,13 +1,13 @@
 # SADD
 
-The Redis Sadd command adds one or more member elements to a collection, and member elements that already exist in the collection will be ignored.
+Redis Sadd 命令向集合中添加一个或多个成员元素，集合中已存在的成员元素将被忽略。
 
-## Syntax
+## 语法
 
 ```
 SADD key member [member ...]
 ```
 
-## Return
+## 返回值
 
-The number of deleted keys.
+添加到集合中的新成员数量。

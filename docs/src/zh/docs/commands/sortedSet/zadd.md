@@ -1,13 +1,13 @@
 # ZADD
 
-The Redis Zadd command is used to add one or more member elements and their fractional values to an ordered set.
+Redis Zadd 命令用于向有序集合中添加一个或多个成员元素及其分数值。
 
-## Syntax
+## 语法
 
 ```
 ZADD key score member [score member ...]
 ```
 
-## Return
+## 返回值
 
-The number of new members successfully added does not include those that have been updated or already exist.
+成功添加的新成员数量，不包括那些已被更新或已存在的成员。

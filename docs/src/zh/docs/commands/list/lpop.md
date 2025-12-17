@@ -1,13 +1,13 @@
 # LPOP
 
-The Redis Lpop command is used to remove and return the first element of a list.
+Redis Lpop 命令用于移除并返回列表的第一个元素。
 
-## Syntax
+## 语法
 
 ```
 LPOP key [count]
 ```
 
-## Return
+## 返回值
 
-The first element of the list. When the list key does not exist, return nil.
+列表的第一个元素。当列表键不存在时，返回 nil。

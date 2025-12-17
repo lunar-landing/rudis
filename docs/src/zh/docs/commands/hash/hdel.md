@@ -1,13 +1,13 @@
 # HDEL
 
-The Redis Hdel command is used to delete one or more specified fields from the hash table key, and non-existent fields will be ignored.
+Redis Hdel 命令用于从哈希表键中删除一个或多个指定字段，不存在的字段将被忽略。
 
-## Syntax
+## 语法
 
 ```
 HDEL key field [field ...]
 ```
 
-## Return
+## 返回值
 
-The number of successfully deleted fields, excluding ignored fields.
+成功删除的字段数量，不包括被忽略的字段。

@@ -1,7 +1,8 @@
 ---
 title: 字符串命令
 titleTemplate: 命令
-description: Rudis 字符串命令概述，包括 APPEND、DECR、DECRBY、GET、GETRANGE、GETSET、INCR、INCRBY、INCRBYFLOAT、MGET、MSET、SET、SETRANGE 和 STRLEN 命令。---
+description: Rudis 字符串命令概述，包括 APPEND、DECR、DECRBY、GET、GETRANGE、GETSET、INCR、INCRBY、INCRBYFLOAT、MGET、MSET、SET、SETRANGE 和 STRLEN 命令。
+---
 
 # 字符串命令
 

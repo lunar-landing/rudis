@@ -1,13 +1,13 @@
 # SPOP
 
-The Redis Spop command is used to remove one or more random elements of a specified key from a collection, and after removal, it returns the removed elements.
+Redis Spop 命令用于从集合中移除指定键的一个或多个随机元素，移除后返回被移除的元素。
 
-## Syntax
+## 语法
 
 ```
 SPOP key [count]
 ```
 
-## Return
+## 返回值
 
-The removed random element. When the set does not exist or is empty, return nil.
+被移除的随机元素。当集合不存在或为空时，返回 nil。

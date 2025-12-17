@@ -1,13 +1,13 @@
 # LLEN
 
-The Redis Llen command is used to return the length of a list. If the list key does not exist, it is interpreted as an empty list and returns 0. If the key is not a list type, return an error.
+Redis Llen 命令用于返回列表的长度。如果列表键不存在，则将其解释为空列表并返回 0。如果键不是列表类型，则返回错误。
 
-## Syntax
+## 语法
 
 ```
 LLEN key
 ```
 
-## Return
+## 返回值
 
-The length of the list.
+列表的长度。
