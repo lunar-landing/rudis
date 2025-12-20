@@ -39,9 +39,9 @@ Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在�
 
 ### v0.3.0
 
-- 新增 Hash 数据结构 Hincrby 命令。
 - 新增 String 数据结构 Msetnx 命令。
 - 新增 SortedSet 数据结构 Zincrby 命令。
+- 新增 Hash 数据结构 Hincrby、Hincrbyfloat 命令。
 - 修复 TTL 命令，在键不存在或未设置过期时间时，返回 Integer 0 的问题。
 
 ### v0.2.0
