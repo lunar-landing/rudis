@@ -105,6 +105,13 @@ struct LoginRequest {
     password: String,
 }
 
+/// CLI命令请求
+#[derive(Deserialize)]
+struct CliRequest {
+    command: String,
+    db: Option<usize>,
+}
+
 /// 查询参数
 #[derive(Deserialize)]
 struct ListKeysQuery {
@@ -131,6 +138,9 @@ fn create_router(state: Arc<WebState>) -> Router {
         .route("/api/keys/:key", delete(delete_key))
         .route("/api/keys/:key/ttl", put(update_key_ttl))
         
+        // CLI接口
+        .route("/api/cli", post(execute_cli))
+        
         // 静态文件服务
         .nest_service("/", ServeDir::new("static"))
         
@@ -153,6 +163,92 @@ async fn login(
             "success": false,
             "message": "用户名或密码错误"
         }))
+    }
+}
+
+/// 执行CLI命令
+async fn execute_cli(
+    State(state): State<Arc<WebState>>,
+    Json(req): Json<CliRequest>,
+) -> impl IntoResponse {
+    let db_id = req.db.unwrap_or(0);
+    if db_id >= state.max_databases {
+        return Json(json!({
+            "success": false,
+            "result": "数据库索引超出范围"
+        }));
+    }
+
+    // 解析命令
+    let parts: Vec<&str> = req.command.trim().split_whitespace().collect();
+    if parts.is_empty() {
+        return Json(json!({
+            "success": false,
+            "result": "命令不能为空"
+        }));
+    }
+
+    let frame = Frame::Array(
+        parts.iter().map(|s| Frame::BulkString(s.to_string())).collect()
+    );
+
+    let command = match Command::parse_from_frame(frame) {
+        Ok(cmd) => cmd,
+        Err(e) => {
+            return Json(json!({
+                "success": false,
+                "result": format!("(error) {}", e)
+            }));
+        }
+    };
+
+    let sender = state.db_manager.get_sender(db_id);
+    let (tx, rx) = oneshot::channel();
+    let message = DatabaseMessage::Command { sender: tx, command };
+
+    if sender.send(message).await.is_err() {
+        return Json(json!({
+            "success": false,
+            "result": "(error) 发送命令失败"
+        }));
+    }
+
+    match rx.await {
+        Ok(result_frame) => {
+            let result = format_frame_result(&result_frame);
+            Json(json!({
+                "success": true,
+                "result": result
+            }))
+        }
+        Err(_) => Json(json!({
+            "success": false,
+            "result": "(error) 接收响应失败"
+        }))
+    }
+}
+
+/// 格式化Frame结果
+fn format_frame_result(frame: &Frame) -> String {
+    match frame {
+        Frame::SimpleString(s) => s.clone(),
+        Frame::BulkString(s) => format!("\"{}\"", s),
+        Frame::Integer(i) => format!("(integer) {}", i),
+        Frame::Null => "(nil)".to_string(),
+        Frame::Error(e) => format!("(error) {}", e),
+        Frame::Ok => "OK".to_string(),
+        Frame::RDBFile(_) => "(rdb file)".to_string(),
+        Frame::Array(arr) => {
+            if arr.is_empty() {
+                "(empty array)".to_string()
+            } else {
+                arr.iter()
+                    .enumerate()
+                    .map(|(i, f)| format!("{}) {}", i + 1, format_frame_result(f)))
+                    .collect::<Vec<_>>()
+                    .join("\n")
+            }
+        }
     }
 }
 

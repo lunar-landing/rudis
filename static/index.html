@@ -457,6 +457,107 @@
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
 
+        /* Footer 和 CLI */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-bar {
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            height: 36px;
+        }
+
+        .footer-tab {
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .footer-tab:hover { color: var(--text-primary); }
+        .footer-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        .cli-panel {
+            display: none;
+            height: 240px;
+            min-height: 100px;
+            max-height: 70vh;
+            border-top: 1px solid var(--border);
+            flex-direction: column;
+        }
+
+        .cli-panel.open { display: flex; }
+
+        .cli-resize-handle {
+            height: 6px;
+            background: var(--bg-tertiary);
+            cursor: ns-resize;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cli-resize-handle::after {
+            content: '';
+            width: 40px;
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .cli-resize-handle:hover { background: var(--border); }
+
+        .cli-output {
+            flex: 1;
+            padding: 12px 16px;
+            overflow-y: auto;
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            background: var(--bg-primary);
+        }
+
+        .cli-line { margin-bottom: 4px; }
+        .cli-prompt { color: var(--accent); }
+        .cli-result { color: var(--text-primary); white-space: pre-wrap; }
+
+        .cli-input-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            gap: 8px;
+            background: var(--bg-tertiary);
+            border-top: 1px solid var(--border);
+        }
+
+        .cli-prefix {
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 14px;
+            color: var(--accent);
+        }
+
+        .cli-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 14px;
+            outline: none;
+            line-height: 1.5;
+        }
+
+        .cli-input::placeholder { color: var(--text-secondary); }
+
         /* 登录页面 */
         .login-page {
             position: fixed;
@@ -636,6 +737,27 @@
             <div class="empty-state">
                 <div class="empty-icon">📦</div>
                 <div class="empty-text">选择一个键查看详情</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部 Footer -->
+    <div class="footer">
+        <div class="footer-bar">
+            <div class="footer-tab" id="cliTab" onclick="toggleCli()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="4 17 10 11 4 5"/>
+                    <line x1="12" y1="19" x2="20" y2="19"/>
+                </svg>
+                CLI
+            </div>
+        </div>
+        <div class="cli-panel" id="cliPanel">
+            <div class="cli-resize-handle" id="cliResizeHandle"></div>
+            <div class="cli-output" id="cliOutput"></div>
+            <div class="cli-input-row">
+                <span class="cli-prefix">127.0.0.1:6379&gt;</span>
+                <input type="text" class="cli-input" id="cliInput" placeholder="输入命令..." autocomplete="off">
             </div>
         </div>
     </div>
@@ -1009,6 +1131,103 @@
         // 工具函数
         function escapeHtml(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
         function escapeAttr(t) { return String(t).replace(/'/g, "\\'").replace(/"/g, '\\"'); }
+
+        // CLI 功能
+        let cliHistory = [];
+        let cliHistoryIndex = -1;
+
+        // CLI拖拽调整大小
+        (function() {
+            const panel = document.getElementById('cliPanel');
+            const handle = document.getElementById('cliResizeHandle');
+            let startY, startHeight;
+
+            handle.addEventListener('mousedown', (e) => {
+                startY = e.clientY;
+                startHeight = panel.offsetHeight;
+                document.addEventListener('mousemove', onDrag);
+                document.addEventListener('mouseup', onDragEnd);
+                document.body.style.cursor = 'ns-resize';
+                document.body.style.userSelect = 'none';
+            });
+
+            function onDrag(e) {
+                const delta = startY - e.clientY;
+                const newHeight = Math.min(Math.max(startHeight + delta, 100), window.innerHeight * 0.7);
+                panel.style.height = newHeight + 'px';
+            }
+
+            function onDragEnd() {
+                document.removeEventListener('mousemove', onDrag);
+                document.removeEventListener('mouseup', onDragEnd);
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+            }
+        })();
+
+        function toggleCli() {
+            const panel = document.getElementById('cliPanel');
+            const tab = document.getElementById('cliTab');
+            panel.classList.toggle('open');
+            tab.classList.toggle('active');
+            if (panel.classList.contains('open')) {
+                document.getElementById('cliInput').focus();
+            }
+        }
+
+        async function executeCli(cmd) {
+            const output = document.getElementById('cliOutput');
+            
+            // 显示输入的命令
+            output.innerHTML += `<div class="cli-line"><span class="cli-prompt">127.0.0.1:6379&gt;</span> ${escapeHtml(cmd)}</div>`;
+            
+            try {
+                const res = await fetch('/api/cli', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ command: cmd, db: currentDb })
+                });
+                const data = await res.json();
+                output.innerHTML += `<div class="cli-line cli-result">${escapeHtml(data.result)}</div>`;
+            } catch (e) {
+                output.innerHTML += `<div class="cli-line cli-result">(error) 网络错误</div>`;
+            }
+            
+            output.scrollTop = output.scrollHeight;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const cliInput = document.getElementById('cliInput');
+            if (cliInput) {
+                cliInput.addEventListener('keydown', async (e) => {
+                    if (e.key === 'Enter') {
+                        const cmd = cliInput.value.trim();
+                        if (cmd) {
+                            cliHistory.push(cmd);
+                            cliHistoryIndex = cliHistory.length;
+                            await executeCli(cmd);
+                            cliInput.value = '';
+                            await refreshAll();
+                        }
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        if (cliHistoryIndex > 0) {
+                            cliHistoryIndex--;
+                            cliInput.value = cliHistory[cliHistoryIndex];
+                        }
+                    } else if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        if (cliHistoryIndex < cliHistory.length - 1) {
+                            cliHistoryIndex++;
+                            cliInput.value = cliHistory[cliHistoryIndex];
+                        } else {
+                            cliHistoryIndex = cliHistory.length;
+                            cliInput.value = '';
+                        }
+                    }
+                });
+            }
+        });
 
         init();
     </script>
