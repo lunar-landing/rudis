@@ -132,8 +132,8 @@ impl Frame {
         
         match bytes[0] {
             b'*' => {
-                // 数组类型的帧
-                // 首先找到数组长度行的结束位置
+            
+                // 数组类型的帧, 首先找到数组长度行的结束位置
                 let mut line_end = None;
                 for i in 1..bytes.len().min(20) { // 限制搜索范围，防止过长的第一行
                     if bytes[i] == b'\r' && i + 1 < bytes.len() && bytes[i + 1] == b'\n' {
@@ -158,7 +158,6 @@ impl Frame {
                         return None;
                     }
                     
-                    // 查找当前元素的结束位置
                     if let Some(element_end) = Frame::find_element_end(&bytes[current_pos..]) {
                         current_pos += element_end;
                     } else {
@@ -178,8 +177,8 @@ impl Frame {
                 None
             },
             b'$' => {
+
                 // 批量字符串类型
-                // 找到长度行的结束
                 let mut line_end = None;
                 for i in 1..bytes.len().min(20) {
                     if bytes[i] == b'\r' && i + 1 < bytes.len() && bytes[i + 1] == b'\n' {
@@ -195,8 +194,7 @@ impl Frame {
                 
                 // 解析字符串长度
                 let line = std::str::from_utf8(&bytes[1..line_end - 2]).ok()?;
-                if line == "-1" {
-                    // NULL批量字符串
+                if line == "-1" { // NULL批量字符串
                     return Some(line_end);
                 }
                 
@@ -210,6 +208,7 @@ impl Frame {
                 }
             },
             b'~' => {
+
                 // RDB文件类型
                 let mut len_end = None;
                 for i in 1..bytes.len().min(20) {

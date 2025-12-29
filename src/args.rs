@@ -82,10 +82,6 @@ impl Args {
     }
 
     /// 从配置文件中加载配置
-    /// 
-    /// 1.首先解析命令行参数
-    /// 2.尝试从配置文件加载配置
-    /// 3.合并配置，命令行参数优先级更高
     pub fn load() -> Self {
         let mut args = Args::parse();
         if let Ok(config_map) = parse_config_file(&args.config) {
