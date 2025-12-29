@@ -134,7 +134,6 @@ fn create_router(state: Arc<WebState>) -> Router {
         
         // 静态文件服务
         .nest_service("/", ServeDir::new("static"))
-        
         .layer(CorsLayer::permissive())
         .with_state(state)
 }
