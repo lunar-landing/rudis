@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rudis - 登录</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* 暗色主题（默认） */
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent: #DC382D;
+            --accent-hover: #E85A4F;
+            --danger: #f85149;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 亮色主题 */
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f6f8fa;
+            --bg-tertiary: #eaeef2;
+            --border: #d0d7de;
+            --text-primary: #1f2328;
+            --text-secondary: #656d76;
+            --accent: #DC382D;
+            --accent-hover: #c02d23;
+            --danger: #cf222e;
+            --shadow: rgba(31, 35, 40, 0.12);
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 48px 40px;
+            width: 380px;
+            box-shadow: 0 8px 32px var(--shadow);
+        }
+
+        .login-logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .login-logo img { height: 56px; }
+
+        .login-logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .login-logo-text span {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .login-desc {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(220, 56, 45, 0.15);
+        }
+        .login-form input::placeholder { color: var(--text-secondary); }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.1s;
+        }
+
+        .login-btn:hover { background: var(--accent-hover); }
+        .login-btn:active { transform: scale(0.98); }
+
+        .login-error {
+            color: var(--danger);
+            font-size: 13px;
+            text-align: center;
+            margin-top: 16px;
+            min-height: 20px;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .theme-toggle:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- 主题切换按钮 -->
+    <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">
+        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <!-- 登录表单 -->
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="/logo.png" alt="Rudis">
+            <div class="login-logo-text">
+                <span>Rudis</span>
+                <div class="login-desc">A high-performance in-memory database</div>
+            </div>
+        </div>
+        <form class="login-form" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <input type="text" id="loginUser" placeholder="用户名" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <input type="password" id="loginPass" placeholder="密码" autocomplete="current-password">
+            </div>
+            <button type="submit" class="login-btn">登 录</button>
+            <div class="login-error" id="loginError"></div>
+        </form>
+    </div>
+
+    <script>
+        // 主题切换功能
+        function initTheme() {
+            const saved = localStorage.getItem('rudis_theme');
+            if (saved === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                updateThemeIcon('light');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                updateThemeIcon('dark');
+            }
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            if (current === 'light') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('rudis_theme', 'dark');
+                updateThemeIcon('dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rudis_theme', 'light');
+                updateThemeIcon('light');
+            }
+        }
+
+        function updateThemeIcon(theme) {
+            document.querySelectorAll('.theme-icon-sun').forEach(el => {
+                el.style.display = theme === 'light' ? 'block' : 'none';
+            });
+            document.querySelectorAll('.theme-icon-moon').forEach(el => {
+                el.style.display = theme === 'light' ? 'none' : 'block';
+            });
+        }
+
+        initTheme();
+
+        // 登录处理
+        async function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value;
+            const pass = document.getElementById('loginPass').value;
+            const errorEl = document.getElementById('loginError');
+            errorEl.textContent = '';
+
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user, password: pass })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    sessionStorage.setItem('rudis_logged', '1');
+                    window.location.href = '/';
+                } else {
+                    errorEl.textContent = data.message || '登录失败';
+                }
+            } catch (err) {
+                errorEl.textContent = '网络错误';
+            }
+        }
+
+        // 已登录则直接跳转
+        if (sessionStorage.getItem('rudis_logged') === '1') {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>
