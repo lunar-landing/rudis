@@ -1,6 +1,6 @@
 [package]
 name = "rudis-server"
-version = "0.2.1"
+version = "0.3.0"
 authors = ["就眠儀式"]
 edition = "2021"
 
