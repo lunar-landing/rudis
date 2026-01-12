@@ -598,6 +598,49 @@
             margin-top: 20px;
         }
 
+        .key-type-form {
+            transition: all 0.2s ease;
+        }
+
+        .input-pair {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        .input-pair input {
+            flex: 1;
+        }
+
+        .input-with-btn {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        .input-with-btn input {
+            flex: 1;
+        }
+
+        .remove-field {
+            padding: 6px 10px;
+            min-width: 32px;
+            background: rgba(248, 81, 73, 0.1);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .remove-field:hover {
+            background: rgba(248, 81, 73, 0.2);
+        }
+
+        .hash-fields-container,
+        .collection-items-container {
+            margin-bottom: 12px;
+        }
+
         /* 滚动条 */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-primary); }
@@ -870,17 +913,56 @@
             </div>
             <div class="form-group">
                 <label>类型</label>
-                <select id="newKeyType">
+                <select id="newKeyType" onchange="onKeyTypeChange()">
                     <option value="string">String</option>
                     <option value="hash">Hash</option>
                     <option value="list">List</option>
                     <option value="set">Set</option>
+                    <option value="zset">Sorted Set</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>值</label>
-                <textarea id="newKeyValue" placeholder="请输入值"></textarea>
+            
+            <!-- String 类型表单 -->
+            <div id="stringForm" class="key-type-form">
+                <div class="form-group">
+                    <label>字符串值</label>
+                    <textarea id="newStringValue" placeholder="请输入字符串值"></textarea>
+                </div>
             </div>
+            
+            <!-- Hash 类型表单 -->
+            <div id="hashForm" class="key-type-form" style="display:none;">
+                <div class="form-group">
+                    <label>哈希字段</label>
+                    <div class="hash-fields-container">
+                        <div class="hash-field-item">
+                            <div class="input-pair">
+                                <input type="text" class="hash-field" placeholder="字段名">
+                                <input type="text" class="hash-value" placeholder="字段值">
+                                <button type="button" class="btn remove-field" onclick="removeHashField(this)">-</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn" onclick="addHashField()">+ 添加字段</button>
+                </div>
+            </div>
+            
+            <!-- List/Set/ZSet 类型表单 -->
+            <div id="collectionForm" class="key-type-form" style="display:none;">
+                <div class="form-group">
+                    <label>元素列表</label>
+                    <div class="collection-items-container">
+                        <div class="collection-item">
+                            <div class="input-with-btn">
+                                <input type="text" class="collection-value" placeholder="元素值">
+                                <button type="button" class="btn remove-field" onclick="removeCollectionItem(this)">-</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn" onclick="addCollectionItem()">+ 添加元素</button>
+                </div>
+            </div>
+            
             <div class="form-group">
                 <label>过期时间（秒，留空永不过期）</label>
                 <input type="number" id="newKeyTtl" placeholder="留空表示永不过期">
@@ -1363,19 +1445,152 @@
         }
 
         // 创建键
-        function openCreateModal() { document.getElementById('createModal').classList.add('show'); }
-        function closeCreateModal() { document.getElementById('createModal').classList.remove('show'); }
+        function openCreateModal() { 
+            // 重置模态框状态
+            document.getElementById('newKeyType').value = 'string';
+            onKeyTypeChange(); // 初始化显示默认表单
+            document.getElementById('createModal').classList.add('show'); 
+        }
+        function closeCreateModal() { 
+            document.getElementById('createModal').classList.remove('show'); 
+        }
+        
+        // 根据键类型切换表单显示
+        function onKeyTypeChange() {
+            const keyType = document.getElementById('newKeyType').value;
+            
+            // 隐藏所有表单
+            document.getElementById('stringForm').style.display = 'none';
+            document.getElementById('hashForm').style.display = 'none';
+            document.getElementById('collectionForm').style.display = 'none';
+            
+            // 显示对应表单
+            if (keyType === 'string') {
+                document.getElementById('stringForm').style.display = 'block';
+            } else if (keyType === 'hash') {
+                document.getElementById('hashForm').style.display = 'block';
+            } else if (['list', 'set', 'zset'].includes(keyType)) {
+                document.getElementById('collectionForm').style.display = 'block';
+            }
+        }
+        
+        // Hash表单相关函数
+        function addHashField() {
+            const container = document.querySelector('.hash-fields-container');
+            const newItem = document.createElement('div');
+            newItem.className = 'hash-field-item';
+            newItem.innerHTML = `
+                <div class="input-pair">
+                    <input type="text" class="hash-field" placeholder="字段名">
+                    <input type="text" class="hash-value" placeholder="字段值">
+                    <button type="button" class="btn remove-field" onclick="removeHashField(this)">-</button>
+                </div>
+            `;
+            container.appendChild(newItem);
+        }
+        
+        function removeHashField(button) {
+            const fieldItem = button.closest('.hash-field-item');
+            if (document.querySelectorAll('.hash-field-item').length > 1) {
+                fieldItem.remove();
+            } else {
+                // 如果只有一个字段，清空而不是删除
+                const inputs = fieldItem.querySelectorAll('input');
+                inputs.forEach(input => input.value = '');
+            }
+        }
+        
+        // Collection表单相关函数
+        function addCollectionItem() {
+            const container = document.querySelector('.collection-items-container');
+            const newItem = document.createElement('div');
+            newItem.className = 'collection-item';
+            newItem.innerHTML = `
+                <div class="input-with-btn">
+                    <input type="text" class="collection-value" placeholder="元素值">
+                    <button type="button" class="btn remove-field" onclick="removeCollectionItem(this)">-</button>
+                </div>
+            `;
+            container.appendChild(newItem);
+        }
+        
+        function removeCollectionItem(button) {
+            const item = button.closest('.collection-item');
+            if (document.querySelectorAll('.collection-item').length > 1) {
+                item.remove();
+            } else {
+                // 如果只有一个元素，清空而不是删除
+                const input = item.querySelector('input');
+                input.value = '';
+            }
+        }
 
         async function createKey() {
             const name = document.getElementById('newKeyName').value.trim();
-            const value = document.getElementById('newKeyValue').value.trim();
+            const keyType = document.getElementById('newKeyType').value;
             const ttl = document.getElementById('newKeyTtl').value;
-            if (!name || !value) { alert('请输入键名和值'); return; }
+            
+            if (!name) { 
+                alert('请输入键名'); 
+                return; 
+            }
+            
+            let value;
+            let payload = {};
+            
+            if (keyType === 'string') {
+                value = document.getElementById('newStringValue').value;
+                if (!value) { 
+                    alert('请输入字符串值'); 
+                    return; 
+                }
+                payload.value = value;
+            } else if (keyType === 'hash') {
+                const fields = [];
+                document.querySelectorAll('.hash-field-item').forEach(item => {
+                    const fieldInput = item.querySelector('.hash-field');
+                    const valueInput = item.querySelector('.hash-value');
+                    if (fieldInput.value.trim() !== '' || valueInput.value.trim() !== '') {
+                        fields.push([fieldInput.value.trim(), valueInput.value.trim()]);
+                    }
+                });
+                if (fields.length === 0 || fields.every(f => f[0] === '' && f[1] === '')) { 
+                    alert('请至少添加一个非空的哈希字段'); 
+                    return; 
+                }
+                payload.fields = fields;
+            } else if (keyType === 'zset') {
+                // 对于zset类型，需要提供带分数的成员
+                const membersWithScores = [];
+                document.querySelectorAll('.collection-value').forEach(input => {
+                    if (input.value.trim() !== '') {
+                        // 使用默认分数0，实际应用中可能需要用户提供分数
+                        membersWithScores.push([0, input.value.trim()]);
+                    }
+                });
+                if (membersWithScores.length === 0 || membersWithScores.every(v => v[1] === '')) { 
+                    alert('请至少添加一个非空的元素'); 
+                    return; 
+                }
+                payload.members_with_scores = membersWithScores;
+            } else if (['list', 'set'].includes(keyType)) {
+                const values = [];
+                document.querySelectorAll('.collection-value').forEach(input => {
+                    if (input.value.trim() !== '') {
+                        values.push(input.value.trim());
+                    }
+                });
+                if (values.length === 0 || values.every(v => v === '')) { 
+                    alert('请至少添加一个非空的元素'); 
+                    return; 
+                }
+                payload.values = values;
+            }
+            
+            if (ttl) payload.ttl = parseInt(ttl);
             
             try {
-                const payload = { value };
-                if (ttl) payload.ttl = parseInt(ttl);
-                const res = await fetch(`/api/keys/${encodeURIComponent(name)}?db=${currentDb}`, {
+                const res = await fetch(`/api/keys/${encodeURIComponent(name)}?db=${currentDb}&type=${keyType}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
@@ -1383,9 +1598,31 @@
                 const data = await res.json();
                 if (data.success) {
                     closeCreateModal();
+                    // 重置表单
                     document.getElementById('newKeyName').value = '';
-                    document.getElementById('newKeyValue').value = '';
+                    document.getElementById('newStringValue').value = '';
                     document.getElementById('newKeyTtl').value = '';
+                    // 重置hash表单
+                    const hashFieldsContainer = document.querySelector('.hash-fields-container');
+                    hashFieldsContainer.innerHTML = `
+                        <div class="hash-field-item">
+                            <div class="input-pair">
+                                <input type="text" class="hash-field" placeholder="字段名">
+                                <input type="text" class="hash-value" placeholder="字段值">
+                                <button type="button" class="btn remove-field" onclick="removeHashField(this)">-</button>
+                            </div>
+                        </div>
+                    `;
+                    // 重置collection表单
+                    const collectionItemsContainer = document.querySelector('.collection-items-container');
+                    collectionItemsContainer.innerHTML = `
+                        <div class="collection-item">
+                            <div class="input-with-btn">
+                                <input type="text" class="collection-value" placeholder="元素值">
+                                <button type="button" class="btn remove-field" onclick="removeCollectionItem(this)">-</button>
+                            </div>
+                        </div>
+                    `;
                     await refreshAll();
                     await selectKey(name);
                 } else {

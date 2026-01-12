@@ -92,7 +92,14 @@ struct KeyValueResponse {
 /// 设置键值请求
 #[derive(Deserialize)]
 struct SetKeyRequest {
-    value: String,
+    #[serde(default)]
+    value: String,                           // 用于string类型
+    #[serde(default)]
+    fields: Vec<(String, String)>,          // 用于hash类型，包含(field, value)对
+    #[serde(default)]
+    values: Vec<String>,                     // 用于list/set类型
+    #[serde(default)]
+    members_with_scores: Vec<(f64, String)>,  // 用于zset类型，包含(score, member)对
     ttl: Option<u64>,
 }
 
@@ -121,6 +128,8 @@ struct CliRequest {
 struct ListKeysQuery {
     pattern: Option<String>,
     db: Option<usize>,
+    #[serde(rename = "type")]
+    key_type: Option<String>,
 }
 
 /// AOF日志查询参数
@@ -813,7 +822,7 @@ async fn set_key_value(
     if db_id >= state.max_databases {
         return (
             StatusCode::BAD_REQUEST,
-            Json(json!({
+            Json(json!( {
                 "success": false,
                 "error": "数据库索引超出范围"
             }))
@@ -822,21 +831,57 @@ async fn set_key_value(
     
     let sender = state.db_manager.get_sender(db_id);
     
-    // 执行SET命令
-    let frame = Frame::Array(vec![
-        Frame::BulkString("SET".to_string()),
-        Frame::BulkString(key.clone()),
-        Frame::BulkString(payload.value),
-    ]);
+    // 根据payload内容决定使用哪种命令
+    let command_result = if !payload.fields.is_empty() {
+        // 创建hash类型
+        let mut args = vec![Frame::BulkString("HMSET".to_string()), Frame::BulkString(key.clone())];
+        for (field, value) in payload.fields {
+            args.push(Frame::BulkString(field));
+            args.push(Frame::BulkString(value));
+        }
+        let frame = Frame::Array(args);
+        Command::parse_from_frame(frame)
+    } else if !payload.members_with_scores.is_empty() {
+        // 创建zset类型
+        let mut args = vec![Frame::BulkString("ZADD".to_string()), Frame::BulkString(key.clone())];
+        for (score, member) in payload.members_with_scores {
+            args.push(Frame::BulkString(score.to_string()));
+            args.push(Frame::BulkString(member));
+        }
+        let frame = Frame::Array(args);
+        Command::parse_from_frame(frame)
+    } else if !payload.values.is_empty() {
+        // 从查询参数获取类型，默认为list
+        let key_type = params.key_type.clone().unwrap_or_else(|| "list".to_string()).to_lowercase();
+        let (cmd_name, _) = match key_type.as_str() {
+            "set" => ("SADD", "集合"),
+            "list" | _ => ("LPUSH", "列表"),
+        };
+        
+        let mut args = vec![Frame::BulkString(cmd_name.to_string()), Frame::BulkString(key.clone())];
+        for value in payload.values {
+            args.push(Frame::BulkString(value));
+        }
+        let frame = Frame::Array(args);
+        Command::parse_from_frame(frame)
+    } else {
+        // 创建string类型
+        let frame = Frame::Array(vec![
+            Frame::BulkString("SET".to_string()),
+            Frame::BulkString(key.clone()),
+            Frame::BulkString(payload.value),
+        ]);
+        Command::parse_from_frame(frame)
+    };
     
-    let command = match Command::parse_from_frame(frame) {
+    let command = match command_result {
         Ok(cmd) => cmd,
         Err(e) => {
             return (
                 StatusCode::INTERNAL_SERVER_ERROR,
-                Json(json!({
+                Json(json!( {
                     "success": false,
-                    "error": format!("解析SET命令失败: {}", e)
+                    "error": format!("解析命令失败: {}", e)
                 }))
             );
         }
@@ -846,9 +891,9 @@ async fn set_key_value(
     if sender.send(DatabaseMessage::Command { sender: tx, command }).await.is_err() {
         return (
             StatusCode::INTERNAL_SERVER_ERROR,
-            Json(json!({
+            Json(json!( {
                 "success": false,
-                "error": "发送SET命令失败"
+                "error": "发送命令失败"
             }))
         );
     }
@@ -856,7 +901,7 @@ async fn set_key_value(
     if rx.await.is_err() {
         return (
             StatusCode::INTERNAL_SERVER_ERROR,
-            Json(json!({
+            Json(json!( {
                 "success": false,
                 "error": "设置键值失败"
             }))
@@ -879,7 +924,7 @@ async fn set_key_value(
     
     (
         StatusCode::OK,
-        Json(json!({
+        Json(json!( {
             "success": true,
             "message": "键值设置成功"
         }))
