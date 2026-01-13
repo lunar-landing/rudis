@@ -35,6 +35,10 @@ description: Rudis 有序集合命令概述，包括 ZADD、ZCARD、ZCOUNT、ZRA
     <div class="card-title">ZSCORE</div>
     <div class="card-description">返回有序集合中指定成员的分数</div>
   </a>
+  <a href="./sortedSet/zincrby" class="command-card">
+    <div class="card-title">ZINCRBY</div>
+    <div class="card-description">为有序集合中指定成员的分数加上增量 increment</div>
+  </a>
 </div>
 
 ## 使用场景

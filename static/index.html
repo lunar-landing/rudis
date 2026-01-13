@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rudis Web</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* 暗色主题（默认） */
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent: #DC382D;
+            --accent-hover: #E85A4F;
+            --danger: #f85149;
+            --success: #3fb950;
+            --warning: #d29922;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --modal-overlay: rgba(0, 0, 0, 0.6);
+        }
+        
+        /* 亮色主题 */
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f6f8fa;
+            --bg-tertiary: #eaeef2;
+            --border: #d0d7de;
+            --text-primary: #1f2328;
+            --text-secondary: #656d76;
+            --accent: #DC382D;
+            --accent-hover: #c02d23;
+            --danger: #cf222e;
+            --success: #1a7f37;
+            --warning: #9a6700;
+            --shadow: rgba(31, 35, 40, 0.12);
+            --modal-overlay: rgba(31, 35, 40, 0.5);
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部区域 */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .logo img {
+            height: 32px;
+        }
+
+        /* 中间指标区 */
+        .stats-bar {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 16px;
+            border-right: 1px solid var(--border);
+        }
+
+        .stat-item:last-child { border-right: none; }
+
+        .stat-icon { font-size: 16px; }
+        .stat-value { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .db-select {
+            padding: 6px 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+            width: 60px;
+            text-align: center;
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        .db-select::-webkit-outer-spin-button,
+        .db-select::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .db-icon {
+            color: var(--text-secondary);
+        }
+
+        .db-select:focus { outline: none; border-color: var(--accent); }
+
+        .db-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* 主内容区 */
+        .main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* 左侧菜单栏 */
+        .sidebar {
+            width: 60px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 12px;
+        }
+
+        .sidebar-item {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            transition: all 0.15s;
+        }
+
+        .sidebar-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .sidebar-item.active { background: var(--bg-tertiary); color: var(--accent); }
+
+        .sidebar-item svg { width: 20px; height: 20px; }
+        .sidebar-item span { font-size: 10px; margin-top: 2px; }
+
+        /* 内容区 */
+        .content-area {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* 日志页面 */
+        .logs-panel {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            background: var(--bg-primary);
+        }
+
+        .logs-panel.active { display: flex; }
+
+        .logs-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logs-title { font-size: 16px; font-weight: 600; }
+
+        .logs-file-info {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .logs-file-info span { display: flex; align-items: center; gap: 4px; }
+
+        .logs-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .log-item {
+            padding: 16px 14px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .log-item:hover { background: var(--bg-tertiary); }
+
+        .logs-empty {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .logs-footer {
+            padding: 12px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-secondary);
+        }
+
+        .logs-info { font-size: 13px; color: var(--text-secondary); }
+
+        .pagination {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .pagination .btn { padding: 6px 12px; font-size: 13px; }
+        .pagination .page-info { font-size: 13px; color: var(--text-secondary); }
+
+        /* 数据页面 */
+        .data-panel {
+            flex: 1;
+            display: none;
+            overflow: hidden;
+        }
+
+        .data-panel.active { display: flex; }
+
+        /* 左侧键列表 */
+        .key-panel {
+            width: 340px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .key-toolbar {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .search-input:focus { outline: none; border-color: var(--accent); }
+        .search-input::placeholder { color: var(--text-secondary); }
+
+        .key-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .virtual-list-container {
+            position: relative;
+        }
+
+        .key-item {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .key-item:hover { background: var(--bg-tertiary); }
+        .key-item.active { background: var(--bg-tertiary); border-left: 3px solid var(--accent); }
+
+        .key-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            word-break: break-all;
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            color: var(--text-primary);
+        }
+
+        .key-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .key-type {
+            padding: 2px 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        .key-type.string { color: var(--accent); }
+        .key-type.hash { color: var(--success); }
+        .key-type.list { color: var(--warning); }
+        .key-type.set { color: #a371f7; }
+        .key-type.zset { color: #f778ba; }
+
+        /* 右侧预览区 */
+        .preview-panel {
+            flex: 1;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .preview-header {
+            padding: 20px 24px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-key {
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            color: var(--accent);
+            margin-bottom: 12px;
+            word-break: break-all;
+        }
+
+        .preview-meta {
+            display: flex;
+            gap: 24px;
+        }
+
+        .preview-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-meta-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .preview-meta-value {
+            font-size: 14px;
+            font-weight: 600;
+            padding: 4px 10px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+        }
+
+        .preview-actions {
+            padding: 12px 24px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+        }
+
+        .preview-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:hover { background: var(--bg-secondary); border-color: var(--text-secondary); }
+        
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        
+        .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+        
+        .btn-danger { color: var(--danger); }
+        .btn-danger:hover { background: rgba(248, 81, 73, 0.1); border-color: var(--danger); }
+
+        /* 值展示 */
+        .value-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .value-header {
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .value-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+
+        .value-count {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .value-body {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* String类型展示 */
+        .string-value {
+            padding: 20px;
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: var(--text-primary);
+        }
+
+        /* 表格类型展示 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table th {
+            background: var(--bg-tertiary);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+
+        .data-table td {
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 13px;
+        }
+
+        .data-table tbody tr:hover { background: var(--bg-tertiary); }
+        .data-table tbody tr:last-child td { border-bottom: none; }
+        
+        .field-name { color: var(--accent); font-weight: 500; }
+        .index-col { color: var(--text-secondary); width: 80px; }
+
+        /* 空状态 */
+        .empty-state {
+            flex: 1;
+            display: flex;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+        .empty-text { font-size: 14px; }
+
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--modal-overlay);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show { display: flex; }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            width: 480px;
+            max-width: 90%;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: 'SFMono-Regular', Consolas, monospace;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .key-type-form {
+            transition: all 0.2s ease;
+        }
+
+        .input-pair {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        .input-pair input {
+            flex: 1;
+        }
+
+        .input-with-btn {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        .input-with-btn input {
+            flex: 1;
+        }
+
+        .remove-field {
+            padding: 6px 10px;
+            min-width: 32px;
+            background: rgba(248, 81, 73, 0.1);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .remove-field:hover {
+            background: rgba(248, 81, 73, 0.2);
+        }
+
+        .hash-fields-container,
+        .collection-items-container {
+            margin-bottom: 12px;
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+        /* Footer 和 CLI */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-bar {
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            height: 36px;
+        }
+
+        .footer-tab {
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .footer-tab:hover { color: var(--text-primary); }
+        .footer-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        .cli-panel {
+            display: none;
+            height: 240px;
+            min-height: 100px;
+            max-height: 70vh;
+            border-top: 1px solid var(--border);
+            flex-direction: column;
+        }
+
+        .cli-panel.open { display: flex; }
+
+        .cli-resize-handle {
+            height: 6px;
+            background: var(--bg-tertiary);
+            cursor: ns-resize;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cli-resize-handle::after {
+            content: '';
+            width: 40px;
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .cli-resize-handle:hover { background: var(--border); }
+
+        .cli-output {
+            flex: 1;
+            padding: 12px 16px;
+            overflow-y: auto;
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            background: var(--bg-primary);
+        }
+
+        .cli-line { margin-bottom: 4px; }
+        .cli-prompt { color: var(--accent); }
+        .cli-result { color: var(--text-primary); white-space: pre-wrap; }
+
+        .cli-input-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            gap: 8px;
+            background: var(--bg-tertiary);
+            border-top: 1px solid var(--border);
+        }
+
+        .cli-prefix {
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 14px;
+            color: var(--accent);
+        }
+
+        .cli-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 14px;
+            outline: none;
+            line-height: 1.5;
+        }
+
+        .cli-input::placeholder { color: var(--text-secondary); }
+
+
+    </style>
+</head>
+<body>
+    <!-- 主应用 -->
+    <div id="appContainer" style="height:100%;display:flex;flex-direction:column;">
+    <!-- 顶部区域 -->
+    <div class="header">
+        <div class="logo">
+            <img src="/logo.png" alt="Rudis">
+            <span>Rudis</span>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-item" title="总键数">
+                <span class="stat-icon">🔑</span>
+                <span class="stat-value" id="statKeys">0</span>
+            </div>
+            <div class="stat-item" title="内存占用">
+                <span class="stat-icon">💾</span>
+                <span class="stat-value" id="statMemory">0B</span>
+            </div>
+            <div class="stat-item" title="客户端">
+                <span class="stat-icon">👥</span>
+                <span class="stat-value" id="statClients">0</span>
+            </div>
+            <div class="stat-item" title="数据库">
+                <span class="stat-icon">🗄️</span>
+                <span class="stat-value" id="statDbs">0</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <svg class="db-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+            </svg>
+            <input type="number" class="db-select" id="dbSelect" value="0" min="0">
+            <button class="btn" onclick="refreshAll()" title="刷新">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                    <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+                    <path d="M16 16h5v5"/>
+                </svg>
+            </button>
+            <button class="btn" id="themeToggle" onclick="toggleTheme()" title="切换主题">
+                <svg class="theme-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/>
+                    <line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+                <svg class="theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main">
+        <!-- 左侧菜单栏 -->
+        <div class="sidebar">
+            <div class="sidebar-item active" id="menuData" onclick="switchPage('data')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                </svg>
+            </div>
+            <div class="sidebar-item" id="menuLogs" onclick="switchPage('logs')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- 内容区 -->
+        <div class="content-area">
+            <!-- 数据页面 -->
+            <div class="data-panel active" id="dataPanel">
+                <!-- 左侧键列表 -->
+                <div class="key-panel">
+                    <div class="key-toolbar">
+                        <input type="text" class="search-input" id="searchInput" placeholder="搜索键名...">
+                        <button class="btn btn-primary" onclick="openCreateModal()">+</button>
+                    </div>
+                    <div class="key-list" id="keyList"></div>
+                </div>
+
+                <!-- 右侧预览区 -->
+                <div class="preview-panel" id="previewPanel">
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <div class="empty-text">选择一个键查看详情</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 日志页面 -->
+            <div class="logs-panel" id="logsPanel">
+                <div class="logs-header">
+                    <div>
+                        <span class="logs-title">AOF 命令日志</span>
+                        <div class="logs-file-info">
+                            <span>📂 <span id="aofFilePath">-</span></span>
+                            <span>💾 <span id="aofFileSize">-</span></span>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="loadAofLogs(1)">刷新</button>
+                </div>
+                <div class="logs-list" id="logsList"></div>
+                <div class="logs-footer">
+                    <span class="logs-info" id="logsInfo"></span>
+                    <div class="pagination">
+                        <button class="btn" id="logsPrev" onclick="loadAofLogs(logsCurrentPage - 1)">上一页</button>
+                        <span class="page-info" id="logsPageInfo"></span>
+                        <button class="btn" id="logsNext" onclick="loadAofLogs(logsCurrentPage + 1)">下一页</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部 Footer -->
+    <div class="footer">
+        <div class="footer-bar">
+            <div class="footer-tab" id="cliTab" onclick="toggleCli()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="4 17 10 11 4 5"/>
+                    <line x1="12" y1="19" x2="20" y2="19"/>
+                </svg>
+                CLI
+            </div>
+        </div>
+        <div class="cli-panel" id="cliPanel">
+            <div class="cli-resize-handle" id="cliResizeHandle"></div>
+            <div class="cli-output" id="cliOutput"></div>
+            <div class="cli-input-row">
+                <span class="cli-prefix">127.0.0.1:6379&gt;</span>
+                <input type="text" class="cli-input" id="cliInput" placeholder="输入命令..." autocomplete="off">
+            </div>
+        </div>
+    </div>
+    </div> <!-- appContainer end -->
+
+    <!-- 新建键模态框 -->
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="modal-title">新建键</div>
+            <div class="form-group">
+                <label>键名</label>
+                <input type="text" id="newKeyName" placeholder="请输入键名">
+            </div>
+            <div class="form-group">
+                <label>类型</label>
+                <select id="newKeyType" onchange="onKeyTypeChange()">
+                    <option value="string">String</option>
+                    <option value="hash">Hash</option>
+                    <option value="list">List</option>
+                    <option value="set">Set</option>
+                    <option value="zset">Sorted Set</option>
+                </select>
+            </div>
+            
+            <!-- String 类型表单 -->
+            <div id="stringForm" class="key-type-form">
+                <div class="form-group">
+                    <label>字符串值</label>
+                    <textarea id="newStringValue" placeholder="请输入字符串值"></textarea>
+                </div>
+            </div>
+            
+            <!-- Hash 类型表单 -->
+            <div id="hashForm" class="key-type-form" style="display:none;">
+                <div class="form-group">
+                    <label>哈希字段</label>
+                    <div class="hash-fields-container">
+                        <div class="hash-field-item">
+                            <div class="input-pair">
+                                <input type="text" class="hash-field" placeholder="字段名">
+                                <input type="text" class="hash-value" placeholder="字段值">
+                                <button type="button" class="btn remove-field" onclick="removeHashField(this)">-</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn" onclick="addHashField()">+ 添加字段</button>
+                </div>
+            </div>
+            
+            <!-- List/Set/ZSet 类型表单 -->
+            <div id="collectionForm" class="key-type-form" style="display:none;">
+                <div class="form-group">
+                    <label>元素列表</label>
+                    <div class="collection-items-container">
+                        <div class="collection-item">
+                            <div class="input-with-btn">
+                                <input type="text" class="collection-value" placeholder="元素值">
+                                <button type="button" class="btn remove-field" onclick="removeCollectionItem(this)">-</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn" onclick="addCollectionItem()">+ 添加元素</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>过期时间（秒，留空永不过期）</label>
+                <input type="number" id="newKeyTtl" placeholder="留空表示永不过期">
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeCreateModal()">取消</button>
+                <button class="btn btn-primary" onclick="createKey()">创建</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 登录状态检查
+        if (sessionStorage.getItem('rudis_logged') !== '1') {
+            window.location.href = '/login.html';
+        }
+
+        let currentDb = 0;
+        let selectedKey = null;
+        let keys = [];
+        let currentPage = 'data';
+
+        // 主题切换功能
+        function initTheme() {
+            const saved = localStorage.getItem('rudis_theme');
+            if (saved === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                updateThemeIcon('light');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                updateThemeIcon('dark');
+            }
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            if (current === 'light') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('rudis_theme', 'dark');
+                updateThemeIcon('dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('rudis_theme', 'light');
+                updateThemeIcon('light');
+            }
+        }
+
+        function updateThemeIcon(theme) {
+            // 更新所有主题图标
+            document.querySelectorAll('.theme-icon-sun').forEach(el => {
+                el.style.display = theme === 'light' ? 'block' : 'none';
+            });
+            document.querySelectorAll('.theme-icon-moon').forEach(el => {
+                el.style.display = theme === 'light' ? 'none' : 'block';
+            });
+            // 兼容旧的 ID 选择器
+            const sunIcon = document.getElementById('themeIconSun');
+            const moonIcon = document.getElementById('themeIconMoon');
+            if (sunIcon && moonIcon) {
+                sunIcon.style.display = theme === 'light' ? 'block' : 'none';
+                moonIcon.style.display = theme === 'light' ? 'none' : 'block';
+            }
+        }
+
+        // 页面加载时初始化主题
+        initTheme();
+
+        // 初始化
+        async function init() {
+            await loadStats();
+            await loadDatabases();
+            await loadKeys();
+        }
+
+        // 页面加载后直接初始化
+        init();
+        function switchPage(page) {
+            currentPage = page;
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('menu' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active');
+            
+            document.getElementById('dataPanel').classList.remove('active');
+            document.getElementById('logsPanel').classList.remove('active');
+            
+            if (page === 'data') {
+                document.getElementById('dataPanel').classList.add('active');
+            } else if (page === 'logs') {
+                document.getElementById('logsPanel').classList.add('active');
+                loadAofLogs(1);
+            }
+        }
+
+        // 加载AOF日志
+        let logsCurrentPage = 1;
+        let logsTotalPages = 1;
+        let logsTotalCount = 0;
+
+        async function loadAofLogs(page = 1) {
+            if (page < 1) page = 1;
+            logsCurrentPage = page;
+            
+            const container = document.getElementById('logsList');
+            container.innerHTML = '<div class="logs-empty">加载中...</div>';
+            
+            try {
+                const res = await fetch(`/api/aof-logs?page=${page}&size=1000`);
+                const data = await res.json();
+                if (data.success) {
+                    logsTotalCount = data.total;
+                    logsTotalPages = Math.ceil(data.total / 1000) || 1;
+                    
+                    document.getElementById('aofFilePath').textContent = data.file_path || '-';
+                    document.getElementById('aofFileSize').textContent = data.file_size || '-';
+                    
+                    if (logsCurrentPage > logsTotalPages) {
+                        logsCurrentPage = logsTotalPages;
+                    }
+                    
+                    if (data.data.length > 0) {
+                        const startNum = (logsCurrentPage - 1) * 1000 + 1;
+                        container.innerHTML = data.data.map((cmd, i) => 
+                            `<div class="log-item">${logsTotalCount - startNum - i + 1}. ${escapeHtml(cmd)}</div>`
+                        ).join('');
+                    } else {
+                        container.innerHTML = '<div class="logs-empty">暂无日志记录</div>';
+                    }
+                    
+                    document.getElementById('logsInfo').textContent = `共 ${logsTotalCount} 条记录`;
+                    document.getElementById('logsPageInfo').textContent = `${logsCurrentPage} / ${logsTotalPages}`;
+                    document.getElementById('logsPrev').disabled = logsCurrentPage <= 1;
+                    document.getElementById('logsNext').disabled = logsCurrentPage >= logsTotalPages;
+                } else {
+                    container.innerHTML = '<div class="logs-empty">加载失败</div>';
+                }
+            } catch (e) {
+                container.innerHTML = '<div class="logs-empty">加载失败</div>';
+            }
+        }
+
+        // 加载统计信息
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('statKeys').textContent = data.data.total_keys;
+                    document.getElementById('statMemory').textContent = data.data.used_memory_human;
+                    document.getElementById('statClients').textContent = data.data.connected_clients;
+                    document.getElementById('statDbs').textContent = data.data.databases;
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        // 加载数据库列表
+        let maxDbIndex = 0;
+        async function loadDatabases() {
+            try {
+                const res = await fetch('/api/databases');
+                const data = await res.json();
+                if (data.success && data.data.length > 0) {
+                    maxDbIndex = data.data.length - 1;
+                    document.getElementById('dbSelect').max = maxDbIndex;
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        // 切换数据库
+        async function selectDatabase(id) {
+            const newDb = parseInt(id);
+            if (isNaN(newDb) || newDb < 0 || newDb > maxDbIndex) {
+                document.getElementById('dbSelect').value = currentDb;
+                return;
+            }
+            currentDb = newDb;
+            selectedKey = null;
+            await loadKeys();
+            await loadStats();
+            renderEmptyPreview();
+        }
+
+        // 数据库输入框事件
+        document.addEventListener('DOMContentLoaded', () => {
+            const dbInput = document.getElementById('dbSelect');
+            dbInput.addEventListener('change', () => selectDatabase(dbInput.value));
+            dbInput.addEventListener('keydown', e => {
+                if (e.key === 'Enter') { dbInput.blur(); selectDatabase(dbInput.value); }
+            });
+        });
+
+        // 刷新所有
+        async function refreshAll() {
+            await loadStats();
+            await loadDatabases();
+            await loadKeys();
+            if (selectedKey) await loadKeyDetail(selectedKey);
+        }
+
+        // 加载键列表
+        async function loadKeys(pattern = '*') {
+            try {
+                const res = await fetch(`/api/keys?db=${currentDb}&pattern=${encodeURIComponent(pattern)}`);
+                const data = await res.json();
+                if (data.success) {
+                    keys = data.data;
+                    renderKeyList();
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        // 虚拟滚动相关变量
+        let virtualList = null;
+        let visibleStart = 0;
+        let visibleEnd = 0;
+        const itemHeight = 64; // 每个键项的高度
+        
+        // 初始化虚拟滚动
+        function initVirtualList() {
+            const container = document.getElementById('keyList');
+            container.innerHTML = '<div class="virtual-list-container"></div>';
+            virtualList = document.querySelector('.virtual-list-container');
+            
+            container.addEventListener('scroll', handleScroll);
+            
+            // 设置容器样式
+            container.style.overflowY = 'auto';
+            container.style.height = '100%';
+        }
+        
+        // 处理滚动事件
+        function handleScroll(e) {
+            const container = e.target;
+            const scrollTop = container.scrollTop;
+            const containerHeight = container.clientHeight;
+            
+            const totalItems = keys.length;
+            const itemsPerScreen = Math.ceil(containerHeight / itemHeight) + 1;
+            
+            visibleStart = Math.floor(scrollTop / itemHeight);
+            visibleEnd = Math.min(visibleStart + itemsPerScreen, totalItems);
+            
+            renderVisibleItems();
+        }
+        
+        // 渲染可见项
+        function renderVisibleItems() {
+            if (!virtualList || keys.length === 0) return;
+            
+            const totalHeight = keys.length * itemHeight;
+            const visibleItems = keys.slice(visibleStart, visibleEnd);
+            
+            // 设置容器总高度以保持滚动条正确
+            virtualList.style.height = totalHeight + 'px';
+            virtualList.style.position = 'relative';
+            
+            // 创建可见项的容器
+            let content = `<div style="position: absolute; top: ${visibleStart * itemHeight}px; width: 100%;">`;
+            
+            for (let i = 0; i < visibleItems.length; i++) {
+                const k = visibleItems[i];
+                const index = visibleStart + i;
+                content += `
+                    <div class="key-item ${selectedKey === k.key ? 'active' : ''}" 
+                         data-index="${index}" 
+                         onclick="selectKey('${escapeAttr(k.key)}')">
+                        <div class="key-name">${escapeHtml(k.key)}</div>
+                        <div class="key-meta">
+                            <span class="key-type ${k.type}">${k.type}</span>
+                            <span>TTL: ${k.ttl === -1 ? '∞' : k.ttl + 's'}</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            content += '</div>';
+            virtualList.innerHTML = content;
+        }
+        
+        // 渲染键列表
+        function renderKeyList() {
+            const container = document.getElementById('keyList');
+            if (keys.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">暂无数据</div></div>';
+                virtualList = null;
+                return;
+            }
+            
+            if (!virtualList) {
+                initVirtualList();
+            }
+            
+            // 重置滚动位置
+            container.scrollTop = 0;
+            visibleStart = 0;
+            
+            // 计算可见范围
+            const containerHeight = container.clientHeight;
+            const itemsPerScreen = Math.ceil(containerHeight / itemHeight) + 1;
+            visibleEnd = Math.min(itemsPerScreen, keys.length);
+            
+            renderVisibleItems();
+        }
+
+        // 选择键
+        async function selectKey(key) {
+            selectedKey = key;
+            // 只更新选中状态，不重新渲染整个列表
+            updateKeySelection();
+            await loadKeyDetail(key);
+        }
+        
+        // 更新键选中状态
+        function updateKeySelection() {
+            // 只更新可见项的选中状态
+            if (virtualList) {
+                const container = document.getElementById('keyList');
+                const visibleItems = container.querySelectorAll('.key-item');
+                
+                visibleItems.forEach(item => {
+                    const keyNameElement = item.querySelector('.key-name');
+                    if (keyNameElement) {
+                        const keyName = unescapeHtml(keyNameElement.textContent);
+                        if (keyName === selectedKey) {
+                            item.classList.add('active');
+                        } else {
+                            item.classList.remove('active');
+                        }
+                    }
+                });
+            } else {
+                // 非虚拟滚动情况
+                const items = document.querySelectorAll('.key-item');
+                items.forEach(item => {
+                    const keyNameElement = item.querySelector('.key-name');
+                    if (keyNameElement) {
+                        const keyName = unescapeHtml(keyNameElement.textContent);
+                        if (keyName === selectedKey) {
+                            item.classList.add('active');
+                        } else {
+                            item.classList.remove('active');
+                        }
+                    }
+                });
+            }
+        }
+        
+        // 从元素中提取键名
+        function getKeyFromElement(element) {
+            const keyNameDiv = element.querySelector('.key-name');
+            if (keyNameDiv) {
+                return unescapeHtml(keyNameDiv.textContent);
+            }
+            return null;
+        }
+        
+        // 反转HTML转义
+        function unescapeHtml(str) {
+            return str
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&quot;/g, '"')
+                .replace(/&#039;/g, "'");
+        }
+
+        // 加载键详情
+        async function loadKeyDetail(key) {
+            try {
+                const res = await fetch(`/api/keys/${encodeURIComponent(key)}?db=${currentDb}`);
+                const data = await res.json();
+                if (data.success) renderPreview(data.data);
+            } catch (e) { console.error(e); }
+        }
+
+        // 渲染预览
+        function renderPreview(data) {
+            const panel = document.getElementById('previewPanel');
+            let valueHtml = '';
+
+            if (data.type === 'string') {
+                valueHtml = `
+                    <div class="value-container">
+                        <div class="value-header">
+                            <span class="value-title">字符串值</span>
+                            <span class="value-count">${data.value.length} 字符</span>
+                        </div>
+                        <div class="value-body">
+                            <div class="string-value">${escapeHtml(data.value)}</div>
+                        </div>
+                    </div>`;
+            } else if (data.type === 'hash') {
+                const entries = Object.entries(data.value);
+                valueHtml = `
+                    <div class="value-container">
+                        <div class="value-header">
+                            <span class="value-title">哈希字段</span>
+                            <span class="value-count">${entries.length} 个字段</span>
+                        </div>
+                        <div class="value-body">
+                            <table class="data-table">
+                                <thead><tr><th>字段</th><th>值</th></tr></thead>
+                                <tbody>${entries.map(([k,v]) => `<tr><td class="field-name">${escapeHtml(k)}</td><td>${escapeHtml(v)}</td></tr>`).join('')}</tbody>
+                            </table>
+                        </div>
+                    </div>`;
+            } else if (data.type === 'list') {
+                const items = data.value || [];
+                valueHtml = `
+                    <div class="value-container">
+                        <div class="value-header">
+                            <span class="value-title">列表元素</span>
+                            <span class="value-count">${items.length} 个元素</span>
+                        </div>
+                        <div class="value-body">
+                            <table class="data-table">
+                                <thead><tr><th>索引</th><th>值</th></tr></thead>
+                                <tbody>${items.map((v,i) => `<tr><td class="index-col">${i}</td><td>${escapeHtml(v)}</td></tr>`).join('')}</tbody>
+                            </table>
+                        </div>
+                    </div>`;
+            } else if (data.type === 'set') {
+                const items = data.value || [];
+                valueHtml = `
+                    <div class="value-container">
+                        <div class="value-header">
+                            <span class="value-title">集合成员</span>
+                            <span class="value-count">${items.length} 个成员</span>
+                        </div>
+                        <div class="value-body">
+                            <table class="data-table">
+                                <thead><tr><th>#</th><th>成员</th></tr></thead>
+                                <tbody>${items.map((v,i) => `<tr><td class="index-col">${i+1}</td><td>${escapeHtml(v)}</td></tr>`).join('')}</tbody>
+                            </table>
+                        </div>
+                    </div>`;
+            } else if (data.type === 'zset') {
+                const items = data.value || [];
+                valueHtml = `
+                    <div class="value-container">
+                        <div class="value-header">
+                            <span class="value-title">有序集合</span>
+                            <span class="value-count">${items.length} 个成员</span>
+                        </div>
+                        <div class="value-body">
+                            <table class="data-table">
+                                <thead><tr><th>排名</th><th>成员</th></tr></thead>
+                                <tbody>${items.map((v,i) => `<tr><td class="index-col">#${i+1}</td><td>${escapeHtml(v)}</td></tr>`).join('')}</tbody>
+                            </table>
+                        </div>
+                    </div>`;
+            }
+
+            panel.innerHTML = `
+                <div class="preview-header">
+                    <div class="preview-key">${escapeHtml(data.key)}</div>
+                    <div class="preview-meta">
+                        <div class="preview-meta-item">
+                            <span class="preview-meta-label">类型</span>
+                            <span class="preview-meta-value">${data.type.toUpperCase()}</span>
+                        </div>
+                        <div class="preview-meta-item">
+                            <span class="preview-meta-label">TTL</span>
+                            <span class="preview-meta-value">${data.ttl === -1 ? '永久' : data.ttl + ' 秒'}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="preview-actions">
+                    <button class="btn" onclick="editTtl()">⏱ 设置过期</button>
+                    <button class="btn btn-danger" onclick="deleteKey()">🗑 删除</button>
+                </div>
+                <div class="preview-content">${valueHtml}</div>
+            `;
+        }
+
+        function renderEmptyPreview() {
+            document.getElementById('previewPanel').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📦</div>
+                    <div class="empty-text">选择一个键查看详情</div>
+                </div>`;
+        }
+
+        // 创建键
+        function openCreateModal() { 
+            // 重置模态框状态
+            document.getElementById('newKeyType').value = 'string';
+            onKeyTypeChange(); // 初始化显示默认表单
+            document.getElementById('createModal').classList.add('show'); 
+        }
+        function closeCreateModal() { 
+            document.getElementById('createModal').classList.remove('show'); 
+        }
+        
+        // 根据键类型切换表单显示
+        function onKeyTypeChange() {
+            const keyType = document.getElementById('newKeyType').value;
+            
+            // 隐藏所有表单
+            document.getElementById('stringForm').style.display = 'none';
+            document.getElementById('hashForm').style.display = 'none';
+            document.getElementById('collectionForm').style.display = 'none';
+            
+            // 显示对应表单
+            if (keyType === 'string') {
+                document.getElementById('stringForm').style.display = 'block';
+            } else if (keyType === 'hash') {
+                document.getElementById('hashForm').style.display = 'block';
+            } else if (['list', 'set', 'zset'].includes(keyType)) {
+                document.getElementById('collectionForm').style.display = 'block';
+            }
+        }
+        
+        // Hash表单相关函数
+        function addHashField() {
+            const container = document.querySelector('.hash-fields-container');
+            const newItem = document.createElement('div');
+            newItem.className = 'hash-field-item';
+            newItem.innerHTML = `
+                <div class="input-pair">
+                    <input type="text" class="hash-field" placeholder="字段名">
+                    <input type="text" class="hash-value" placeholder="字段值">
+                    <button type="button" class="btn remove-field" onclick="removeHashField(this)">-</button>
+                </div>
+            `;
+            container.appendChild(newItem);
+        }
+        
+        function removeHashField(button) {
+            const fieldItem = button.closest('.hash-field-item');
+            if (document.querySelectorAll('.hash-field-item').length > 1) {
+                fieldItem.remove();
+            } else {
+                // 如果只有一个字段，清空而不是删除
+                const inputs = fieldItem.querySelectorAll('input');
+                inputs.forEach(input => input.value = '');
+            }
+        }
+        
+        // Collection表单相关函数
+        function addCollectionItem() {
+            const container = document.querySelector('.collection-items-container');
+            const newItem = document.createElement('div');
+            newItem.className = 'collection-item';
+            newItem.innerHTML = `
+                <div class="input-with-btn">
+                    <input type="text" class="collection-value" placeholder="元素值">
+                    <button type="button" class="btn remove-field" onclick="removeCollectionItem(this)">-</button>
+                </div>
+            `;
+            container.appendChild(newItem);
+        }
+        
+        function removeCollectionItem(button) {
+            const item = button.closest('.collection-item');
+            if (document.querySelectorAll('.collection-item').length > 1) {
+                item.remove();
+            } else {
+                // 如果只有一个元素，清空而不是删除
+                const input = item.querySelector('input');
+                input.value = '';
+            }
+        }
+
+        async function createKey() {
+            const name = document.getElementById('newKeyName').value.trim();
+            const keyType = document.getElementById('newKeyType').value;
+            const ttl = document.getElementById('newKeyTtl').value;
+            
+            if (!name) { 
+                alert('请输入键名'); 
+                return; 
+            }
+            
+            let value;
+            let payload = {};
+            
+            if (keyType === 'string') {
+                value = document.getElementById('newStringValue').value;
+                if (!value) { 
+                    alert('请输入字符串值'); 
+                    return; 
+                }
+                payload.value = value;
+            } else if (keyType === 'hash') {
+                const fields = [];
+                document.querySelectorAll('.hash-field-item').forEach(item => {
+                    const fieldInput = item.querySelector('.hash-field');
+                    const valueInput = item.querySelector('.hash-value');
+                    if (fieldInput.value.trim() !== '' || valueInput.value.trim() !== '') {
+                        fields.push([fieldInput.value.trim(), valueInput.value.trim()]);
+                    }
+                });
+                if (fields.length === 0 || fields.every(f => f[0] === '' && f[1] === '')) { 
+                    alert('请至少添加一个非空的哈希字段'); 
+                    return; 
+                }
+                payload.fields = fields;
+            } else if (keyType === 'zset') {
+                // 对于zset类型，需要提供带分数的成员
+                const membersWithScores = [];
+                document.querySelectorAll('.collection-value').forEach(input => {
+                    if (input.value.trim() !== '') {
+                        // 使用默认分数0，实际应用中可能需要用户提供分数
+                        membersWithScores.push([0, input.value.trim()]);
+                    }
+                });
+                if (membersWithScores.length === 0 || membersWithScores.every(v => v[1] === '')) { 
+                    alert('请至少添加一个非空的元素'); 
+                    return; 
+                }
+                payload.members_with_scores = membersWithScores;
+            } else if (['list', 'set'].includes(keyType)) {
+                const values = [];
+                document.querySelectorAll('.collection-value').forEach(input => {
+                    if (input.value.trim() !== '') {
+                        values.push(input.value.trim());
+                    }
+                });
+                if (values.length === 0 || values.every(v => v === '')) { 
+                    alert('请至少添加一个非空的元素'); 
+                    return; 
+                }
+                payload.values = values;
+            }
+            
+            if (ttl) payload.ttl = parseInt(ttl);
+            
+            try {
+                const res = await fetch(`/api/keys/${encodeURIComponent(name)}?db=${currentDb}&type=${keyType}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    closeCreateModal();
+                    // 重置表单
+                    document.getElementById('newKeyName').value = '';
+                    document.getElementById('newStringValue').value = '';
+                    document.getElementById('newKeyTtl').value = '';
+                    // 重置hash表单
+                    const hashFieldsContainer = document.querySelector('.hash-fields-container');
+                    hashFieldsContainer.innerHTML = `
+                        <div class="hash-field-item">
+                            <div class="input-pair">
+                                <input type="text" class="hash-field" placeholder="字段名">
+                                <input type="text" class="hash-value" placeholder="字段值">
+                                <button type="button" class="btn remove-field" onclick="removeHashField(this)">-</button>
+                            </div>
+                        </div>
+                    `;
+                    // 重置collection表单
+                    const collectionItemsContainer = document.querySelector('.collection-items-container');
+                    collectionItemsContainer.innerHTML = `
+                        <div class="collection-item">
+                            <div class="input-with-btn">
+                                <input type="text" class="collection-value" placeholder="元素值">
+                                <button type="button" class="btn remove-field" onclick="removeCollectionItem(this)">-</button>
+                            </div>
+                        </div>
+                    `;
+                    await refreshAll();
+                    await selectKey(name);
+                } else {
+                    alert('创建失败: ' + data.error);
+                }
+            } catch (e) { alert('创建失败: ' + e.message); }
+        }
+
+        // 删除键
+        async function deleteKey() {
+            if (!selectedKey || !confirm(`确定删除 "${selectedKey}" ?`)) return;
+            try {
+                const res = await fetch(`/api/keys/${encodeURIComponent(selectedKey)}?db=${currentDb}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    selectedKey = null;
+                    renderEmptyPreview();
+                    await refreshAll();
+                }
+            } catch (e) { alert('删除失败'); }
+        }
+
+        // 设置TTL
+        async function editTtl() {
+            const ttl = prompt('输入过期时间（秒）:');
+            if (ttl === null) return;
+            try {
+                const res = await fetch(`/api/keys/${encodeURIComponent(selectedKey)}/ttl?db=${currentDb}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ttl: parseInt(ttl) })
+                });
+                if ((await res.json()).success) await loadKeyDetail(selectedKey);
+            } catch (e) { alert('设置失败'); }
+        }
+
+        // 搜索
+        let searchTimer;
+        document.getElementById('searchInput').addEventListener('input', e => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => loadKeys(e.target.value || '*'), 300);
+        });
+
+        // 工具函数
+        function escapeHtml(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+        function escapeAttr(t) { return String(t).replace(/'/g, "\\'").replace(/"/g, '\\"'); }
+
+        // CLI 功能
+        let cliHistory = [];
+        let cliHistoryIndex = -1;
+
+        // CLI拖拽调整大小
+        (function() {
+            const panel = document.getElementById('cliPanel');
+            const handle = document.getElementById('cliResizeHandle');
+            let startY, startHeight;
+
+            handle.addEventListener('mousedown', (e) => {
+                startY = e.clientY;
+                startHeight = panel.offsetHeight;
+                document.addEventListener('mousemove', onDrag);
+                document.addEventListener('mouseup', onDragEnd);
+                document.body.style.cursor = 'ns-resize';
+                document.body.style.userSelect = 'none';
+            });
+
+            function onDrag(e) {
+                const delta = startY - e.clientY;
+                const newHeight = Math.min(Math.max(startHeight + delta, 100), window.innerHeight * 0.7);
+                panel.style.height = newHeight + 'px';
+            }
+
+            function onDragEnd() {
+                document.removeEventListener('mousemove', onDrag);
+                document.removeEventListener('mouseup', onDragEnd);
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+            }
+        })();
+
+        function toggleCli() {
+            const panel = document.getElementById('cliPanel');
+            const tab = document.getElementById('cliTab');
+            panel.classList.toggle('open');
+            tab.classList.toggle('active');
+            if (panel.classList.contains('open')) {
+                document.getElementById('cliInput').focus();
+            }
+        }
+
+        async function executeCli(cmd) {
+            const output = document.getElementById('cliOutput');
+            
+            // 显示输入的命令
+            output.innerHTML += `<div class="cli-line"><span class="cli-prompt">127.0.0.1:6379&gt;</span> ${escapeHtml(cmd)}</div>`;
+            
+            try {
+                const res = await fetch('/api/cli', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ command: cmd, db: currentDb })
+                });
+                const data = await res.json();
+                output.innerHTML += `<div class="cli-line cli-result">${escapeHtml(data.result)}</div>`;
+            } catch (e) {
+                output.innerHTML += `<div class="cli-line cli-result">(error) 网络错误</div>`;
+            }
+            
+            output.scrollTop = output.scrollHeight;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const cliInput = document.getElementById('cliInput');
+            if (cliInput) {
+                cliInput.addEventListener('keydown', async (e) => {
+                    if (e.key === 'Enter') {
+                        const cmd = cliInput.value.trim();
+                        if (cmd) {
+                            cliHistory.push(cmd);
+                            cliHistoryIndex = cliHistory.length;
+                            await executeCli(cmd);
+                            cliInput.value = '';
+                            await refreshAll();
+                        }
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        if (cliHistoryIndex > 0) {
+                            cliHistoryIndex--;
+                            cliInput.value = cliHistory[cliHistoryIndex];
+                        }
+                    } else if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        if (cliHistoryIndex < cliHistory.length - 1) {
+                            cliHistoryIndex++;
+                            cliInput.value = cliHistory[cliHistoryIndex];
+                        } else {
+                            cliHistoryIndex = cliHistory.length;
+                            cliInput.value = '';
+                        }
+                    }
+                });
+            }
+        });
+
+        init();
+    </script>
+</body>
+</html>

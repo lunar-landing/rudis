@@ -32,9 +32,8 @@ pub struct Server {
 
 impl Server {
 
-    pub fn new(args: Arc<Args>) -> Self {
+    pub fn new(args: Arc<Args>, db_manager: Arc<DatabaseManager>) -> Self {
         let session_manager = Arc::new(SessionManager::new());
-        let db_manager = Arc::new(DatabaseManager::new(args.clone()));
         let (aof_file, aof_sender) = if args.appendonly == "yes" {
             let file_path = PathBuf::from(&args.dir).join(&args.appendfilename);
             let sync_strategy = SyncStrategy::from_str(&args.appendfsync);
@@ -167,6 +166,7 @@ pub struct Handler {
 }
 
 impl Handler {
+    
     pub fn get_session(&self) -> &Session {
         &self.session
     }

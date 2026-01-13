@@ -35,6 +35,10 @@ Sorted set commands are similar to sets, but each member is associated with a sc
     <div class="card-title">ZSCORE</div>
     <div class="card-description">Returns the score of a specified member in a sorted set</div>
   </a>
+  <a href="./sortedSet/zincrby" class="command-card">
+    <div class="card-title">ZINCRBY</div>
+    <div class="card-description">Increments the score of member in the sorted set by increment</div>
+  </a>
 </div>
 
 ## Use Cases

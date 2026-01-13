@@ -1,6 +1,7 @@
 pub mod append;
 pub mod set;
 pub mod mset;
+pub mod msetnx;
 pub mod get;
 pub mod strlen;
 pub mod getrange;

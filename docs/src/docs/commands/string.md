@@ -1,7 +1,7 @@
 ---
 title: String Commands
 titleTemplate: Commands
-description: Overview of Rudis string commands including APPEND, DECR, DECRBY, GET, GETRANGE, GETSET, INCR, INCRBY, INCRBYFLOAT, MGET, MSET, SET, SETRANGE, and STRLEN commands.
+description: Overview of Rudis string commands including APPEND, DECR, DECRBY, GET, GETRANGE, GETSET, INCR, INCRBY, INCRBYFLOAT, MGET, MSET, MSETNX, SET, SETRANGE, and STRLEN commands.
 # String Commands
 
 String commands are the most basic data type commands, which can store strings, integers, or floating-point numbers. Strings can store up to 512 MB of data.
@@ -52,6 +52,10 @@ String commands are the most basic data type commands, which can store strings, 
   <a href="./string/mset" class="command-card">
     <div class="card-title">MSET</div>
     <div class="card-description">Sets one or more key-value pairs simultaneously</div>
+  </a>
+  <a href="./string/msetnx" class="command-card">
+    <div class="card-title">MSETNX</div>
+    <div class="card-description">Sets the given keys to their respective values only if all the keys do not exist</div>
   </a>
   <a href="./string/set" class="command-card">
     <div class="card-title">SET</div>

@@ -69,6 +69,18 @@ pub struct Args {
     /// 最大客户端连接数
     #[arg(long, default_value = "0")]
     pub maxclients: usize,
+
+    /// Web 管理界面端口
+    #[arg(long, default_value = "8080")]
+    pub webport: u16,
+
+    /// Web 管理界面用户名
+    #[arg(long, default_value = "admin")]
+    pub webuser: String,
+
+    /// Web 管理界面密码
+    #[arg(long, default_value = "admin")]
+    pub webpass: String,
 }
 
 impl Args {
@@ -82,10 +94,6 @@ impl Args {
     }
 
     /// 从配置文件中加载配置
-    /// 
-    /// 1.首先解析命令行参数
-    /// 2.尝试从配置文件加载配置
-    /// 3.合并配置，命令行参数优先级更高
     pub fn load() -> Self {
         let mut args = Args::parse();
         if let Ok(config_map) = parse_config_file(&args.config) {
@@ -201,6 +209,29 @@ impl Args {
                 if let Ok(mc) = maxclients.parse() {
                     self.maxclients = mc;
                 }
+            }
+        }
+
+        // webport
+        if self.webport == 8080 {
+            if let Some(wp) = config_map.get("webport") {
+                if let Ok(port) = wp.parse() {
+                    self.webport = port;
+                }
+            }
+        }
+
+        // webuser
+        if self.webuser == "admin" {
+            if let Some(user) = config_map.get("webuser") {
+                self.webuser = user.clone();
+            }
+        }
+
+        // webpass
+        if self.webpass == "admin" {
+            if let Some(pass) = config_map.get("webpass") {
+                self.webpass = pass.clone();
             }
         }
     }

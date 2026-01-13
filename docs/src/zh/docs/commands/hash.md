@@ -59,6 +59,14 @@ description: Rudis 哈希命令概述，包括 HDEL、HEXISTS、HGET、HGETALL�
     <div class="card-title">HVALS</div>
     <div class="card-description">返回哈希表中所有值</div>
   </a>
+  <a href="./hash/hincrby" class="command-card">
+    <div class="card-title">HINCRBY</div>
+    <div class="card-description">为哈希表中的字段值加上指定增量值</div>
+  </a>
+  <a href="./hash/hincrbyfloat" class="command-card">
+    <div class="card-title">HINCRBYFLOAT</div>
+    <div class="card-description">为哈希表中的字段值加上指定浮点数增量值</div>
+  </a>
 </div>
 
 ## 使用场景

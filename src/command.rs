@@ -3,19 +3,19 @@ use anyhow::Error;
 use crate::{
     cmds::{
         connect::{auth::Auth, client::Client, echo::Echo, ping::Ping, select::Select}, hash::{
-            hdel::Hdel, hexists::Hexists, hget::Hget, hgetall::Hgetall, hkeys::Hkeys, hlen::Hlen,
+            hdel::Hdel, hexists::Hexists, hget::Hget, hgetall::Hgetall, hincrby::Hincrby, hincrbyfloat::HincrbyFloat, hkeys::Hkeys, hlen::Hlen,
             hmget::Hmget, hmset::Hmset, hset::Hset, hsetnx::Hsetnx, hstrlen::Hstrlen, hvals::Hvals,
         }, key::{
             del::Del, exists::Exists, expire::Expire, expireat::ExpireAt, keys::Keys, r#move::Move, persist::Persist, pexpire::Pexpire, pexpireat::PexpireAt, pttl::Pttl, randomkey::RandomKey, rename::Rename, renamenx::Renamenx, scan::Scan, ttl::Ttl, r#type::Type
         }, listing::{
             lindex::Lindex, llen::Llen, lpop::Lpop, lpush::Lpush, lpushx::Lpushx, lrange::Lrange,
-            lset::Lset, ltrim::Ltrim, rpop::Rpop, rpush::Rpush, rpushx::Rpushx,
+            lrem::Lrem, lset::Lset, ltrim::Ltrim, rpop::Rpop, rpush::Rpush, rpushx::Rpushx,
         }, server::{bgsave::Bgsave, dbsize::Dbsize, flushall::Flushall, flushdb::Flushdb, info::Info, save::Save}, server_sync::{psync::Psync, replconf::Replconf}, set::{
             sadd::Sadd, scard::Scard, sdiff::Sdiff, sinter::Sinter, sismember::Sismember, smembers::Smembers, spop::Spop, srem::Srem, sscan::Sscan, sunion::Sunion, sunionstore::Sunionstore
         }, sorted_set::{
-            zadd::Zadd, zcard::Zcard, zcount::Zcount, zrank::Zrank, zrem::Zrem, zscore::Zscore,
+            zadd::Zadd, zcard::Zcard, zcount::Zcount, zincrby::Zincrby, zlexcount::Zlexcount, zrank::Zrank, zrem::Zrem, zscore::Zscore, zrange::Zrange,
         }, string::{
-            append::Append, decr::Decr, decrby::Decrby, get::Get, getrange::GetRange, getset::GetSet, incr::Incr, incrby::Incrby, incrbyfloat::IncrbyFloat, mget::Mget, mset::Mset, set::Set, setrange::SetRange, strlen::Strlen
+            append::Append, decr::Decr, decrby::Decrby, get::Get, getrange::GetRange, getset::GetSet, incr::Incr, incrby::Incrby, incrbyfloat::IncrbyFloat, mget::Mget, mset::Mset, msetnx::Msetnx, set::Set, setrange::SetRange, strlen::Strlen
         }, transaction::{
             discard::Discard, exec::Exec, multi::Multi
         }, unknown::Unknown
@@ -44,6 +44,7 @@ pub enum Command {
     Unknown(Unknown),
     Mset(Mset),
     Mget(Mget),
+    Msetnx(Msetnx),
     Strlen(Strlen),
     Sunionstore(Sunionstore),
     Renamenx(Renamenx),
@@ -60,6 +61,8 @@ pub enum Command {
     Hlen(Hlen),
     Hsetnx(Hsetnx),
     Hgetall(Hgetall),
+    Hincrby(Hincrby),
+    HincrbyFloat(HincrbyFloat),
     Hkeys(Hkeys),
     Lindex(Lindex),
     Persist(Persist),
@@ -84,13 +87,17 @@ pub enum Command {
     IncrbyFloat(IncrbyFloat),
     Lset(Lset),
     Ltrim(Ltrim),
+    Lrem(Lrem),
     Sunion(Sunion),
     Zcount(Zcount),
     Zadd(Zadd),
+    Zincrby(Zincrby),
+    Zlexcount(Zlexcount),
     Zscore(Zscore),
     Zcard(Zcard),
     Zrank(Zrank),
     Zrem(Zrem),
+    Zrange(Zrange),
     Incrby(Incrby),
     Decrby(Decrby),
     Echo(Echo),
@@ -136,6 +143,7 @@ impl Command {
             "STRLEN" => Command::Strlen(Strlen::parse_from_frame(frame)?),
             "MSET" => Command::Mset(Mset::parse_from_frame(frame)?),
             "MGET" => Command::Mget(Mget::parse_from_frame(frame)?),
+            "MSETNX" => Command::Msetnx(Msetnx::parse_from_frame(frame)?),
             "APPEND" => Command::Append(Append::parse_from_frame(frame)?),
             "DBSIZE" => Command::Dbsize(Dbsize::parse_from_frame(frame)?),
             "HSET" => Command::Hset(Hset::parse_from_frame(frame)?),
@@ -156,6 +164,8 @@ impl Command {
             "LPOP" => Command::Lpop(Lpop::parse_from_frame(frame)?),
             "LLEN" => Command::Llen(Llen::parse_from_frame(frame)?),
             "HVALS" => Command::Hvals(Hvals::parse_from_frame(frame)?),
+            "HINCRBY" => Command::Hincrby(Hincrby::parse_from_frame(frame)?),
+            "HINCRBYFLOAT" => Command::HincrbyFloat(HincrbyFloat::parse_from_frame(frame)?),
             "RPUSH" => Command::Rpush(Rpush::parse_from_frame(frame)?),
             "LPUSH" => Command::Lpush(Lpush::parse_from_frame(frame)?),
             "SADD" => Command::Sadd(Sadd::parse_from_frame(frame)?),
@@ -173,15 +183,19 @@ impl Command {
             "DECR" => Command::Decr(Decr::parse_from_frame(frame)?),
             "LSET" => Command::Lset(Lset::parse_from_frame(frame)?),
             "LTRIM" => Command::Ltrim(Ltrim::parse_from_frame(frame)?),
+            "LREM" => Command::Lrem(Lrem::parse_from_frame(frame)?),
             "SUNION" => Command::Sunion(Sunion::parse_from_frame(frame)?),
             "ZCOUNT" => Command::Zcount(Zcount::parse_from_frame(frame)?),
             "ZADD" => Command::Zadd(Zadd::parse_from_frame(frame)?),
+            "ZINCRBY" => Command::Zincrby(Zincrby::parse_from_frame(frame)?),
             "ZCARD" => Command::Zcard(Zcard::parse_from_frame(frame)?),
             "ZSCORE" => Command::Zscore(Zscore::parse_from_frame(frame)?),
             "ZREM" => Command::Zrem(Zrem::parse_from_frame(frame)?),
             "SDIFF" => Command::Sdiff(Sdiff::parse_from_frame(frame)?),
             "SINTER" => Command::Sinter(Sinter::parse_from_frame(frame)?),
             "ZRANK" => Command::Zrank(Zrank::parse_from_frame(frame)?),
+            "ZLEXCOUNT" => Command::Zlexcount(Zlexcount::parse_from_frame(frame)?),
+            "ZRANGE" => Command::Zrange(Zrange::parse_from_frame(frame)?),
             "INCRBY" => Command::Incrby(Incrby::parse_from_frame(frame)?),
             "INCRBYFLOAT" => Command::IncrbyFloat(IncrbyFloat::parse_from_frame(frame)?),
             "DECRBY" => Command::Decrby(Decrby::parse_from_frame(frame)?),
@@ -222,6 +236,7 @@ impl Command {
             Command::Incrby(_) |
             Command::IncrbyFloat(_) |
             Command::Mset(_) |
+            Command::Msetnx(_) |
             Command::Set(_) | 
             Command::SetRange(_) |
             Command::Flushall(_) |
@@ -229,12 +244,15 @@ impl Command {
             Command::Hdel(_) |
             Command::Hmset(_) |
             Command::Hset(_) |
+            Command::Hincrby(_) |
+            Command::HincrbyFloat(_) |
             Command::Hsetnx(_) |
             Command::Lpop(_) |
             Command::Lpush(_) |
             Command::Lpushx(_) |
             Command::Lset(_) |
             Command::Ltrim(_) |
+            Command::Lrem(_) |
             Command::Rpop(_) |
             Command::Rpush(_) |
             Command::Rpushx(_) |
@@ -245,6 +263,7 @@ impl Command {
             Command::Srem(_) |
             Command::Sunionstore(_) |
             Command::Zadd(_) |
+            Command::Zincrby(_) |
             Command::Zrem(_) |
             Command::Move(_) |
             _ => false,

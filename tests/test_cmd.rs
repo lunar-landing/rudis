@@ -415,4 +415,46 @@ mod tests {
         assert_eq!(range[0], "second");
         assert_eq!(range[1], "third");
     }
+
+    #[test]
+    fn test_ttl_command() {
+        let mut con = setup();
+
+        // 测试键不存在的情况
+        let ttl_result: i32 = con.ttl("non-existent-key").unwrap();
+        assert_eq!(ttl_result, -2);
+
+        // 测试键存在但没有设置过期时间的情况
+        let _: () = con.set("no-expire-key", "value").unwrap();
+        let ttl_result: i32 = con.ttl("no-expire-key").unwrap();
+        assert_eq!(ttl_result, -1);
+
+        // 测试键存在且设置了过期时间的情况
+        let _: () = con.set("expire-key", "value").unwrap();
+        let _: () = con.expire("expire-key", 10).unwrap();
+        let ttl_result: i32 = con.ttl("expire-key").unwrap();
+        // TTL 应该在 9 到 10 秒之间
+        assert!(ttl_result >= 9 && ttl_result <= 10);
+    }
+
+    #[test]
+    fn test_pttl_command() {
+        let mut con = setup();
+
+        // 测试键不存在的情况
+        let pttl_result: i32 = con.pttl("non-existent-key").unwrap();
+        assert_eq!(pttl_result, -2);
+
+        // 测试键存在但没有设置过期时间的情况
+        let _: () = con.set("no-expire-key", "value").unwrap();
+        let pttl_result: i32 = con.pttl("no-expire-key").unwrap();
+        assert_eq!(pttl_result, -1);
+
+        // 测试键存在且设置了过期时间的情况
+        let _: () = con.set("expire-key", "value").unwrap();
+        let _: () = con.pexpire("expire-key", 10000).unwrap(); // 10秒 = 10000毫秒
+        let pttl_result: i32 = con.pttl("expire-key").unwrap();
+        // PTTL 应该在 9000 到 10000 毫秒之间
+        assert!(pttl_result >= 9000 && pttl_result <= 10000);
+    }
 }
