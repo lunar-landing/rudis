@@ -1,7 +1,7 @@
 ---
 title: 集合命令
 titleTemplate: 命令
-description: Rudis 集合命令概述，包括 SADD、SCARD、SINTER、SISMEMBER、SMEMBERS、SPOP、SREM、SUNION、SUNIONSTORE、SDIFFSTORE、SINTERSTORE、SMOVE 命令。
+description: Rudis 集合命令概述，包括 SADD、SCARD、SINTER、SISMEMBER、SMEMBERS、SPOP、SRANDMEMBER、SREM、SUNION、SUNIONSTORE、SDIFFSTORE、SINTERSTORE、SMOVE 命令。
 ---
 
 # 集合命令
@@ -34,6 +34,10 @@ description: Rudis 集合命令概述，包括 SADD、SCARD、SINTER、SISMEMBER
   <a href="./set/spop" class="command-card">
     <div class="card-title">SPOP</div>
     <div class="card-description">移除并返回集合中的一个随机元素</div>
+  </a>
+  <a href="./set/srandmember" class="command-card">
+    <div class="card-title">SRANDMEMBER</div>
+    <div class="card-description">返回集合中的一个或多个随机成员，但不移除</div>
   </a>
   <a href="./set/srem" class="command-card">
     <div class="card-title">SREM</div>

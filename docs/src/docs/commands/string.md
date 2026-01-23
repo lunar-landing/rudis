@@ -1,7 +1,7 @@
 ---
 title: String Commands
 titleTemplate: Commands
-description: Overview of Rudis string commands including APPEND, DECR, DECRBY, GET, GETRANGE, GETSET, INCR, INCRBY, INCRBYFLOAT, MGET, MSET, MSETNX, SET, SETRANGE, and STRLEN commands.
+description: Overview of Rudis string commands including APPEND, DECR, DECRBY, GET, GETRANGE, GETSET, INCR, INCRBY, INCRBYFLOAT, MGET, MSET, MSETNX, SET, SETEX, PSETEX, SETNX, SETRANGE, and STRLEN commands.
 # String Commands
 
 String commands are the most basic data type commands, which can store strings, integers, or floating-point numbers. Strings can store up to 512 MB of data.
@@ -60,6 +60,18 @@ String commands are the most basic data type commands, which can store strings, 
   <a href="./string/set" class="command-card">
     <div class="card-title">SET</div>
     <div class="card-description">Sets the value of the specified key</div>
+  </a>
+  <a href="./string/setex" class="command-card">
+    <div class="card-title">SETEX</div>
+    <div class="card-description">Sets the value of a key with expiration time in seconds</div>
+  </a>
+  <a href="./string/psetex" class="command-card">
+    <div class="card-title">PSETEX</div>
+    <div class="card-description">Sets the value of a key with expiration time in milliseconds</div>
+  </a>
+  <a href="./string/setnx" class="command-card">
+    <div class="card-title">SETNX</div>
+    <div class="card-description">Sets the value of a key only if it does not exist</div>
   </a>
   <a href="./string/setrange" class="command-card">
     <div class="card-title">SETRANGE</div>

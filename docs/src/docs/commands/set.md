@@ -1,7 +1,7 @@
 ---
 title: Set Commands
 titleTemplate: Commands
-description: Overview of Rudis set commands including SADD, SCARD, SINTER, SISMEMBER, SMEMBERS, SPOP, SREM, SUNION, SUNIONSTORE, SDIFFSTORE, SINTERSTORE, and SMOVE commands.
+description: Overview of Rudis set commands including SADD, SCARD, SINTER, SISMEMBER, SMEMBERS, SPOP, SRANDMEMBER, SREM, SUNION, SUNIONSTORE, SDIFFSTORE, SINTERSTORE, and SMOVE commands.
 ---
 
 # Set Commands
@@ -34,6 +34,10 @@ Set commands allow you to store unique string elements. Sets are unordered and d
   <a href="./set/spop" class="command-card">
     <div class="card-title">SPOP</div>
     <div class="card-description">Removes and returns a random element from a set</div>
+  </a>
+  <a href="./set/srandmember" class="command-card">
+    <div class="card-title">SRANDMEMBER</div>
+    <div class="card-description">Returns one or more random members from a set without removing them</div>
   </a>
   <a href="./set/srem" class="command-card">
     <div class="card-title">SREM</div>
