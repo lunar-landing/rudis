@@ -13,3 +13,6 @@ pub mod incrbyfloat;
 pub mod decrby;
 pub mod decr;
 pub mod setrange;
+pub mod setex;
+pub mod psetex;
+pub mod setnx;
