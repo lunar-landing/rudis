@@ -15,7 +15,7 @@ use crate::{
         }, sorted_set::{
             zadd::Zadd, zcard::Zcard, zcount::Zcount, zincrby::Zincrby, zlexcount::Zlexcount, zrank::Zrank, zrem::Zrem, zscore::Zscore, zrange::Zrange,
         }, string::{
-            append::Append, decr::Decr, decrby::Decrby, get::Get, getrange::GetRange, getset::GetSet, incr::Incr, incrby::Incrby, incrbyfloat::IncrbyFloat, mget::Mget, mset::Mset, msetnx::Msetnx, set::Set, setrange::SetRange, strlen::Strlen, setex::Setex, psetex::Psetex, setnx::Setnx
+            append::Append, decr::Decr, decrby::Decrby, get::Get, getrange::GetRange, getset::GetSet, incr::Incr, incrby::Incrby, incrbyfloat::IncrbyFloat, mget::Mget, mset::Mset, msetnx::Msetnx, set::Set, setrange::SetRange, strlen::Strlen, setex::Setex, psetex::Psetex, setnx::Setnx, setbit::Setbit, getbit::Getbit, bitcount::Bitcount, bitop::Bitop
         }, transaction::{
             discard::Discard, exec::Exec, multi::Multi
         }, unknown::Unknown
@@ -49,6 +49,10 @@ pub enum Command {
     Setex(Setex),
     Psetex(Psetex),
     Setnx(Setnx),
+    Setbit(Setbit),
+    Getbit(Getbit),
+    Bitcount(Bitcount),
+    Bitop(Bitop),
     Sunionstore(Sunionstore),
     Renamenx(Renamenx),
     Rename(Rename),
@@ -156,6 +160,10 @@ impl Command {
             "SETEX" => Command::Setex(Setex::parse_from_frame(frame)?),
             "PSETEX" => Command::Psetex(Psetex::parse_from_frame(frame)?),
             "SETNX" => Command::Setnx(Setnx::parse_from_frame(frame)?),
+            "SETBIT" => Command::Setbit(Setbit::parse_from_frame(frame)?),
+            "GETBIT" => Command::Getbit(Getbit::parse_from_frame(frame)?),
+            "BITCOUNT" => Command::Bitcount(Bitcount::parse_from_frame(frame)?),
+            "BITOP" => Command::Bitop(Bitop::parse_from_frame(frame)?),
             "HSET" => Command::Hset(Hset::parse_from_frame(frame)?),
             "HGET" => Command::Hget(Hget::parse_from_frame(frame)?),
             "HMSET" => Command::Hmset(Hmset::parse_from_frame(frame)?),
@@ -256,6 +264,8 @@ impl Command {
             Command::Setex(_) |
             Command::Psetex(_) |
             Command::Setnx(_) |
+            Command::Setbit(_) |
+            Command::Bitop(_) |
             Command::Flushall(_) |
             Command::Flushdb(_) |
             Command::Hdel(_) |

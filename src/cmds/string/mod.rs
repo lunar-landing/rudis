@@ -16,3 +16,7 @@ pub mod setrange;
 pub mod setex;
 pub mod psetex;
 pub mod setnx;
+pub mod setbit;
+pub mod getbit;
+pub mod bitcount;
+pub mod bitop;
