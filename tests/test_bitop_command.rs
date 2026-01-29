@@ -26,7 +26,7 @@ async fn test_bitop_and() {
     assert!(result > 0);
 
     // verify the result exists
-    let value: Option<String> = con.get("test_bitop_dest").unwrap();
+    let value: Option<Vec<u8>> = con.get("test_bitop_dest").unwrap();
     assert!(value.is_some());
 }
 
@@ -53,7 +53,7 @@ async fn test_bitop_or() {
     assert!(result > 0);
 
     // verify the result exists
-    let value: Option<String> = con.get("test_bitop_or_dest").unwrap();
+    let value: Option<Vec<u8>> = con.get("test_bitop_or_dest").unwrap();
     assert!(value.is_some());
 }
 
@@ -80,7 +80,7 @@ async fn test_bitop_xor() {
     assert!(result > 0);
 
     // verify the result exists
-    let value: Option<String> = con.get("test_bitop_xor_dest").unwrap();
+    let value: Option<Vec<u8>> = con.get("test_bitop_xor_dest").unwrap();
     assert!(value.is_some());
 }
 
@@ -105,7 +105,7 @@ async fn test_bitop_not() {
     assert!(result > 0);
 
     // verify the result exists
-    let value: Option<String> = con.get("test_bitop_not_dest").unwrap();
+    let value: Option<Vec<u8>> = con.get("test_bitop_not_dest").unwrap();
     assert!(value.is_some());
 }
 
@@ -140,7 +140,7 @@ async fn test_bitop_multiple_keys() {
     assert!(result > 0);
 
     // verify the result exists
-    let value: Option<String> = con.get("test_bitop_multi_dest").unwrap();
+    let value: Option<Vec<u8>> = con.get("test_bitop_multi_dest").unwrap();
     assert!(value.is_some());
 }
 
@@ -163,7 +163,7 @@ async fn test_bitop_with_nonexistent_keys() {
     assert_eq!(result, 0); // AND of empty strings is empty
 
     // verify the result is empty or doesn't exist
-    let value: Option<String> = con.get("test_bitop_nonexistent_dest").unwrap();
+    let value: Option<Vec<u8>> = con.get("test_bitop_nonexistent_dest").unwrap();
     // Result should be empty string or None
     assert!(value.is_none() || value.unwrap().is_empty());
 }
@@ -191,7 +191,7 @@ async fn test_bitop_different_lengths() {
     assert_eq!(result, 6); // Should be length of longest string
 
     // verify the result
-    let value: Option<String> = con.get("test_bitop_len_dest").unwrap();
+    let value: Option<Vec<u8>> = con.get("test_bitop_len_dest").unwrap();
     assert!(value.is_some());
     assert_eq!(value.unwrap().len(), 6);
 }

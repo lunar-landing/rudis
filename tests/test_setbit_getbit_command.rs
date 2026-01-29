@@ -37,7 +37,7 @@ async fn test_setbit_command() {
     assert_eq!(result, 1);
 
     // verify the value
-    let value: String = con.get("test_setbit_key").unwrap();
+    let value: Vec<u8> = con.get("test_setbit_key").unwrap();
     // The string should contain the bits we set
     assert!(!value.is_empty());
 }
