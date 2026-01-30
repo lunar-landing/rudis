@@ -406,6 +406,17 @@ impl Handler {
                     results.push(Frame::Error("ERR nested transaction commands not allowed".to_string()));
                 },
                 _ => {
+                    // 优先尝试通过 try_apply_command 执行命令
+                    // 这对于 LPUSH/RPUSH 等命令至关重要，因为它们需要检查并唤醒阻塞的客户端（BLPOP/BRPOP）
+                    // 如果在这里绕过 try_apply_command，事务中的 LPUSH 将直接写入数据库，而不会唤醒等待者
+                    if let Some(res) = try_apply_command(self, &command).await {
+                        match res {
+                            Ok(frame) => results.push(frame),
+                            Err(e) => results.push(Frame::Error(e.to_string())),
+                        }
+                        continue;
+                    }
+
                     // 为了避免递归（实际不会有, 解决 Rust 编译问题）
                     let result = match command {
                         Command::Auth(auth) => auth.apply(self),

@@ -23,6 +23,11 @@ impl HandlerAsyncCommand for Brpop {
         if args.len() < 3 {
             return Err(Error::msg("ERR wrong number of arguments for 'brpop' command"));
         }
+
+        // 安全限制：防止恶意客户端发送过多的 key
+        if args.len() - 2 > 1000 {
+            return Err(Error::msg("ERR too many keys for 'brpop' command"));
+        }
         
         let keys: Vec<String> = args[1..args.len()-1]
             .iter()
