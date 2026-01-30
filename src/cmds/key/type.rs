@@ -47,6 +47,9 @@ impl Type {
                     },
                     Structure::Json(_) => {
                         Ok(Frame::SimpleString("json".to_string()))
+                    },
+                    Structure::HyperLogLog(_) => {
+                        Ok(Frame::SimpleString("string".to_string()))
                     }
                 }
             },

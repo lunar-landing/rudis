@@ -1,8 +1,7 @@
-use std::collections::BTreeMap;
-
 use anyhow::Error;
 
 use crate::{store::db::{Db, Structure}, frame::Frame};
+use crate::store::sorted_set::SortedSet;
 
 pub struct Zadd {
     key: String,
@@ -39,7 +38,7 @@ impl Zadd {
                 match structure {
                     Structure::SortedSet(set) => {
                         for (score, member) in self.members {
-                            if set.insert(member, score).is_none() {
+                            if set.add(member, score) {
                                 added_count += 1; // 成员新增成功
                             }
                         }
@@ -51,10 +50,11 @@ impl Zadd {
                 }
             },
             None => { // 键不存在，创建一个新的有序集合并插入所有成员
-                let mut set = BTreeMap::new();
+                let mut set = SortedSet::new();
                 for (score, member) in self.members {
-                    set.insert(member, score);
-                    added_count += 1; // 成员新增成功
+                    if set.add(member, score) {
+                        added_count += 1; // 成员新增成功
+                    }
                 }
                 db.records.insert(self.key, Structure::SortedSet(set));
             }

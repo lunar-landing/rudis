@@ -1,5 +1,4 @@
 use anyhow::Error;
-use std::cmp::Ordering;
 
 use crate::{store::db::{Db, Structure}, frame::Frame};
 
@@ -38,20 +37,10 @@ impl Zrange {
             Some(structure) => {
                 match structure {
                     Structure::SortedSet(set) => {
-                        // 获取有序集的所有成员，按分数排序（BTreeMap已按键排序）
-                        let mut members_with_scores: Vec<(String, f64)> = set
-                            .iter()
-                            .map(|(member, score)| (member.clone(), *score))
-                            .collect();
-                        
-                        // 按分数排序，分数相同时按字典序排序
-                        members_with_scores.sort_by(|a, b| {
-                            a.1.partial_cmp(&b.1).unwrap_or(Ordering::Equal)
-                                .then_with(|| a.0.cmp(&b.0))
-                        });
+                        // 跳表已经按 (score, member) 排序，直接使用
+                        let len = set.len() as i64;
                         
                         // 处理负数索引
-                        let len = members_with_scores.len() as i64;
                         let start_idx = if self.start < 0 {
                             (len + self.start).max(0)
                         } else {
@@ -69,16 +58,15 @@ impl Zrange {
                             return Ok(Frame::Array(vec![]));
                         }
                         
-                        // 截取指定范围
+                        // 使用跳表的 range 方法，O(log n + m) 时间复杂度
                         let start_idx = start_idx as usize;
-                        let stop_idx = ((stop_idx + 1) as usize).min(len as usize);
-                        
-                        let selected_members = &members_with_scores[start_idx..stop_idx];
+                        let stop_idx = stop_idx as usize;
+                        let selected_members = set.range(start_idx, stop_idx);
                         
                         // 构建返回结果
                         let mut result = Vec::new();
                         for (member, score) in selected_members {
-                            result.push(Frame::BulkString(member.clone()));
+                            result.push(Frame::BulkString(member));
                             if self.with_scores {
                                 result.push(Frame::BulkString(score.to_string()));
                             }

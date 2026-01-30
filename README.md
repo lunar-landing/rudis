@@ -28,7 +28,7 @@ Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在�
 ### 🌟 特性
 
 - 跨平台，兼容 windows、linux、macos 系统。
-- 兼容 字符串、集合、哈希、列表、有序集合、JSON数据结构。
+- 兼容 字符串、集合、哈希、列表、有序集合、HyperLogLog、JSON数据结构。
 - 提供 rdb 与 aof 机制以支持数据备份和恢复。
 - 拥有卓越的处理速度和即时响应能力。
 - 多个线程中并发创建和删除键值。
@@ -36,6 +36,15 @@ Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在�
 - 兼容 RESP 协议规范。
 
 ## 更新日志
+
+### v0.4.0
+
+- 新增 Hash 数据结构 HSCAN 命令，支持 MATCH 和 COUNT 参数。
+- 新增 String 数据结构 SETEX, PSETEX, SETNX, SETBIT, GETBIT, BITCOUNT, BITOP 命令。
+- 新增 Set 数据结构 SRANDMEMBER, SDIFFSTORE, SINTERSTORE, SMOVE 命令。
+- 新增 HyperLogLog 数据结构及 PFADD, PFCOUNT, PFMERGE 命令。
+- 重构 SortedSet 底层实现，采用 HashMap + SkipList 架构提升性能，并支持 bincode 序列化。
+- 修复 SETEX/PSETEX 过期记录清理逻辑以及系统时间倒退导致的 RDB 调度 Panic 问题。
 
 ### v0.3.0
 
@@ -76,7 +85,7 @@ Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在�
 ```
 
          /\_____/\
-        /  o   o  \          Rudis 0.1.0
+        /  o   o  \          Rudis 0.4.0
        ( ==  ^  == )
         )         (          Bind: 6379 PID: 40252
        (           )

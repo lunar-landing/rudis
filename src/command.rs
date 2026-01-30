@@ -2,9 +2,9 @@ use anyhow::Error;
 
 use crate::{
     cmds::{
-        connect::{auth::Auth, client::Client, echo::Echo, ping::Ping, select::Select}, hash::{
+        connect::{auth::Auth, client::Client, echo::Echo, ping::Ping, select::Select},         hash::{
             hdel::Hdel, hexists::Hexists, hget::Hget, hgetall::Hgetall, hincrby::Hincrby, hincrbyfloat::HincrbyFloat, hkeys::Hkeys, hlen::Hlen,
-            hmget::Hmget, hmset::Hmset, hset::Hset, hsetnx::Hsetnx, hstrlen::Hstrlen, hvals::Hvals,
+            hmget::Hmget, hmset::Hmset, hset::Hset, hsetnx::Hsetnx, hstrlen::Hstrlen, hvals::Hvals, hscan::Hscan,
         }, key::{
             del::Del, exists::Exists, expire::Expire, expireat::ExpireAt, keys::Keys, r#move::Move, persist::Persist, pexpire::Pexpire, pexpireat::PexpireAt, pttl::Pttl, randomkey::RandomKey, rename::Rename, renamenx::Renamenx, scan::Scan, ttl::Ttl, r#type::Type
         }, listing::{
@@ -15,9 +15,11 @@ use crate::{
         }, sorted_set::{
             zadd::Zadd, zcard::Zcard, zcount::Zcount, zincrby::Zincrby, zlexcount::Zlexcount, zrank::Zrank, zrem::Zrem, zscore::Zscore, zrange::Zrange,
         }, string::{
-            append::Append, decr::Decr, decrby::Decrby, get::Get, getrange::GetRange, getset::GetSet, incr::Incr, incrby::Incrby, incrbyfloat::IncrbyFloat, mget::Mget, mset::Mset, msetnx::Msetnx, set::Set, setrange::SetRange, strlen::Strlen, setex::Setex, psetex::Psetex, setnx::Setnx
+            append::Append, decr::Decr, decrby::Decrby, get::Get, getrange::GetRange, getset::GetSet, incr::Incr, incrby::Incrby, incrbyfloat::IncrbyFloat, mget::Mget, mset::Mset, msetnx::Msetnx, set::Set, setrange::SetRange, strlen::Strlen, setex::Setex, psetex::Psetex, setnx::Setnx, setbit::Setbit, getbit::Getbit, bitcount::Bitcount, bitop::Bitop
         }, transaction::{
             discard::Discard, exec::Exec, multi::Multi
+        }, hyperloglog::{
+            pfadd::Pfadd, pfcount::Pfcount, pfmerge::Pfmerge
         }, unknown::Unknown
     },
     frame::Frame,
@@ -49,6 +51,10 @@ pub enum Command {
     Setex(Setex),
     Psetex(Psetex),
     Setnx(Setnx),
+    Setbit(Setbit),
+    Getbit(Getbit),
+    Bitcount(Bitcount),
+    Bitop(Bitop),
     Sunionstore(Sunionstore),
     Renamenx(Renamenx),
     Rename(Rename),
@@ -73,6 +79,7 @@ pub enum Command {
     Lpop(Lpop),
     Llen(Llen),
     Hvals(Hvals),
+    Hscan(Hscan),
     Rpush(Rpush),
     Lpush(Lpush),
     Sadd(Sadd),
@@ -87,7 +94,8 @@ pub enum Command {
     Sinterstore(Sinterstore),
     Smove(Smove),
     Srandmember(Srandmember),
-    Flushall(Flushall),    Lpushx(Lpushx),
+    Flushall(Flushall),
+    Lpushx(Lpushx),
     Rpushx(Rpushx),
     Decr(Decr),
     Incr(Incr),
@@ -128,6 +136,10 @@ pub enum Command {
     Multi(Multi),
     Discard(Discard),
     Exec(Exec),
+    // HyperLogLog 命令
+    Pfadd(Pfadd),
+    Pfcount(Pfcount),
+    Pfmerge(Pfmerge),
 }
 impl Command {
     pub fn parse_from_frame(frame: Frame) -> Result<Self, Error> {
@@ -159,6 +171,10 @@ impl Command {
             "SETEX" => Command::Setex(Setex::parse_from_frame(frame)?),
             "PSETEX" => Command::Psetex(Psetex::parse_from_frame(frame)?),
             "SETNX" => Command::Setnx(Setnx::parse_from_frame(frame)?),
+            "SETBIT" => Command::Setbit(Setbit::parse_from_frame(frame)?),
+            "GETBIT" => Command::Getbit(Getbit::parse_from_frame(frame)?),
+            "BITCOUNT" => Command::Bitcount(Bitcount::parse_from_frame(frame)?),
+            "BITOP" => Command::Bitop(Bitop::parse_from_frame(frame)?),
             "HSET" => Command::Hset(Hset::parse_from_frame(frame)?),
             "HGET" => Command::Hget(Hget::parse_from_frame(frame)?),
             "HMSET" => Command::Hmset(Hmset::parse_from_frame(frame)?),
@@ -177,6 +193,7 @@ impl Command {
             "LPOP" => Command::Lpop(Lpop::parse_from_frame(frame)?),
             "LLEN" => Command::Llen(Llen::parse_from_frame(frame)?),
             "HVALS" => Command::Hvals(Hvals::parse_from_frame(frame)?),
+            "HSCAN" => Command::Hscan(Hscan::parse_from_frame(frame)?),
             "HINCRBY" => Command::Hincrby(Hincrby::parse_from_frame(frame)?),
             "HINCRBYFLOAT" => Command::HincrbyFloat(HincrbyFloat::parse_from_frame(frame)?),
             "RPUSH" => Command::Rpush(Rpush::parse_from_frame(frame)?),
@@ -231,6 +248,9 @@ impl Command {
             "DISCARD" => Command::Discard(Discard::parse_from_frame(frame)?),
             "SCAN" => Command::Scan(Scan::parse_from_frame(frame)?),
             "SSCAN" => Command::Sscan(Sscan::parse_from_frame(frame)?),
+            "PFADD" => Command::Pfadd(Pfadd::parse_from_frame(frame)?),
+            "PFCOUNT" => Command::Pfcount(Pfcount::parse_from_frame(frame)?),
+            "PFMERGE" => Command::Pfmerge(Pfmerge::parse_from_frame(frame)?),
             "BLPOP" => Command::Blpop(<Blpop as crate::cmds::async_command::HandlerAsyncCommand>::parse_from_frame(frame)?),
             "BRPOP" => Command::Brpop(<Brpop as crate::cmds::async_command::HandlerAsyncCommand>::parse_from_frame(frame)?),
             _ => Command::Unknown(Unknown::parse_from_frame(frame)?),
@@ -261,6 +281,8 @@ impl Command {
             Command::Setex(_) |
             Command::Psetex(_) |
             Command::Setnx(_) |
+            Command::Setbit(_) |
+            Command::Bitop(_) |
             Command::Flushall(_) |
             Command::Flushdb(_) |
             Command::Hdel(_) |
@@ -291,6 +313,8 @@ impl Command {
             Command::Zincrby(_) |
             Command::Zrem(_) |
             Command::Move(_) |
+            Command::Pfadd(_) |
+            Command::Pfmerge(_) |
             _ => false,
         }
     }

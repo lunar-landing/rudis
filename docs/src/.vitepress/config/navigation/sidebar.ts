@@ -338,6 +338,25 @@ function zhSidebar(): DefaultTheme.SidebarItem[] {
           ]
         },
         {
+          text: 'HyperLogLog',
+          link: '/zh/docs/commands/hyperloglog',
+          collapsed: true,
+          items: [
+            {
+              text: 'PFADD',
+              link: '/zh/docs/commands/hyperloglog/pfadd',
+            },
+            {
+              text: 'PFCOUNT',
+              link: '/zh/docs/commands/hyperloglog/pfcount',
+            },
+            {
+              text: 'PFMERGE',
+              link: '/zh/docs/commands/hyperloglog/pfmerge',
+            },
+          ]
+        },
+        {
           text: '通用',
           link: '/zh/docs/commands/generic',
           collapsed: true,
@@ -732,6 +751,25 @@ function enSidebar(): DefaultTheme.SidebarItem[] {
             {
               text: 'ZSCORE',
               link: '/docs/commands/sortedSet/zscore',
+            },
+          ]
+        },
+        {
+          text: 'HyperLogLog',
+          link: '/docs/commands/hyperloglog',
+          collapsed: true,
+          items: [
+            {
+              text: 'PFADD',
+              link: '/docs/commands/hyperloglog/pfadd',
+            },
+            {
+              text: 'PFCOUNT',
+              link: '/docs/commands/hyperloglog/pfcount',
+            },
+            {
+              text: 'PFMERGE',
+              link: '/docs/commands/hyperloglog/pfmerge',
             },
           ]
         },

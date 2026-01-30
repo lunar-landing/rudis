@@ -62,7 +62,10 @@ impl DatabaseManager {
 
                 let should_save = {
                     let now = SystemTime::now();
-                    let elapsed = now.duration_since(rdb_file.last_save_time).unwrap().as_secs();
+                    // 处理系统时间向后调整的情况，如果时间倒退则视为 0
+                    let elapsed = now.duration_since(rdb_file.last_save_time)
+                        .unwrap_or(Duration::from_secs(0))
+                        .as_secs();
                     args_clone.save.iter().any(|rule| {
                         elapsed >= rule.seconds && changes.saturating_sub(rdb_file.last_save_changes) >= rule.changes
                     })

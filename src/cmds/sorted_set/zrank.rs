@@ -23,10 +23,8 @@ impl Zrank {
             Some(structure) => {
                 match structure {
                     Structure::SortedSet(set) => {
-                        // 获取成员的分数
-                        if let Some(score) = set.get(&self.member) {
-                            // 计算排名（从小到大）
-                            let rank = set.values().filter(|&&s| s < *score).count();
+                        // 使用跳表计算排名，O(log n) 时间复杂度
+                        if let Some(rank) = set.rank(&self.member) {
                             Ok(Frame::Integer(rank as i64))
                         } else {
                             // 如果成员不存在，返回 nil
