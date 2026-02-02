@@ -39,10 +39,11 @@ Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在�
 
 ### v0.4.0
 
+- 新增 List 数据结构 Blpop、Brpop 命名。 
 - 新增 Hash 数据结构 HSCAN 命令，支持 MATCH 和 COUNT 参数。
-- 新增 String 数据结构 SETEX, PSETEX, SETNX, SETBIT, GETBIT, BITCOUNT, BITOP 命令。
-- 新增 Set 数据结构 SRANDMEMBER, SDIFFSTORE, SINTERSTORE, SMOVE 命令。
-- 新增 HyperLogLog 数据结构及 PFADD, PFCOUNT, PFMERGE 命令。
+- 新增 String 数据结构 SETEX、PSETEX、SETNX、SETBIT、GETBIT、BITCOUNT、BITOP 命令。
+- 新增 Set 数据结构 SRANDMEMBER、SDIFFSTORE、SINTERSTORE、SMOVE 命令。
+- 新增 HyperLogLog 数据结构及 PFADD、PFCOUNT、PFMERGE 命令。
 - 重构 SortedSet 底层实现，采用 HashMap + SkipList 架构提升性能，并支持 bincode 序列化。
 - 修复 SETEX/PSETEX 过期记录清理逻辑以及系统时间倒退导致的 RDB 调度 Panic 问题。
 
