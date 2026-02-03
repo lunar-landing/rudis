@@ -1,8 +1,7 @@
-use std::collections::BTreeMap;
-
 use anyhow::Error;
 
 use crate::{store::db::{Db, Structure}, frame::Frame};
+use crate::store::sorted_set::SortedSet;
 
 pub struct Zincrby {
     key: String,
@@ -31,8 +30,7 @@ impl Zincrby {
                 match structure {
                     Structure::SortedSet(set) => {
                         // 如果成员已存在，获取其当前分数，否则为0.0
-                        set.entry(self.member.clone()).or_insert(0.0);
-                        *set.get(&self.member).unwrap()
+                        set.get_score(&self.member).unwrap_or(0.0)
                     },
                     _ => {
                         // 键存在但不是有序集合类型
@@ -43,8 +41,8 @@ impl Zincrby {
             },
             None => {
                 // 键不存在，创建新的有序集合
-                let mut set = BTreeMap::new();
-                set.insert(self.member.clone(), 0.0);
+                let mut set = SortedSet::new();
+                set.add(self.member.clone(), 0.0);
                 db.records.insert(self.key.clone(), Structure::SortedSet(set));
                 0.0
             }
@@ -53,12 +51,12 @@ impl Zincrby {
         // 计算新分数
         let new_score = current_score + self.increment;
 
-        // 更新分数
+        // 更新分数（add 方法会自动处理已存在的成员）
         match db.records.get_mut(&self.key) {
             Some(structure) => {
                 match structure {
                     Structure::SortedSet(set) => {
-                        set.insert(self.member.clone(), new_score);
+                        set.add(self.member.clone(), new_score);
                     },
                     _ => {} // 这种情况已经在上面处理过了
                 }

@@ -1,7 +1,7 @@
 ---
 title: 字符串命令
 titleTemplate: 命令
-description: Rudis 字符串命令概述，包括 APPEND、DECR、DECRBY、GET、GETRANGE、GETSET、INCR、INCRBY、INCRBYFLOAT、MGET、MSET、MSETNX、SET、SETRANGE 和 STRLEN 命令。
+description: Rudis 字符串命令概述，包括 APPEND、BITCOUNT、BITOP、DECR、DECRBY、GET、GETBIT、GETRANGE、GETSET、INCR、INCRBY、INCRBYFLOAT、MGET、MSET、MSETNX、SET、SETBIT、SETEX、PSETEX、SETNX、SETRANGE 和 STRLEN 命令。
 ---
 
 # 字符串命令
@@ -15,6 +15,14 @@ description: Rudis 字符串命令概述，包括 APPEND、DECR、DECRBY、GET�
     <div class="card-title">APPEND</div>
     <div class="card-description">如果键已经存在并且是一个字符串，追加值到键的末尾</div>
   </a>
+  <a href="./string/bitcount" class="command-card">
+    <div class="card-title">BITCOUNT</div>
+    <div class="card-description">统计字符串中设置为 1 的位的数量</div>
+  </a>
+  <a href="./string/bitop" class="command-card">
+    <div class="card-title">BITOP</div>
+    <div class="card-description">对多个字符串执行位操作，并将结果存储在目标键中</div>
+  </a>
   <a href="./string/decr" class="command-card">
     <div class="card-title">DECR</div>
     <div class="card-description">将键中存储的数字值减一</div>
@@ -26,6 +34,10 @@ description: Rudis 字符串命令概述，包括 APPEND、DECR、DECRBY、GET�
   <a href="./string/get" class="command-card">
     <div class="card-title">GET</div>
     <div class="card-description">获取指定键的值</div>
+  </a>
+  <a href="./string/getbit" class="command-card">
+    <div class="card-title">GETBIT</div>
+    <div class="card-description">返回字符串值中指定偏移量的位值</div>
   </a>
   <a href="./string/getrange" class="command-card">
     <div class="card-title">GETRANGE</div>
@@ -62,6 +74,22 @@ description: Rudis 字符串命令概述，包括 APPEND、DECR、DECRBY、GET�
   <a href="./string/set" class="command-card">
     <div class="card-title">SET</div>
     <div class="card-description">设置指定键的值</div>
+  </a>
+  <a href="./string/setbit" class="command-card">
+    <div class="card-title">SETBIT</div>
+    <div class="card-description">设置或清除字符串值中指定偏移量的位</div>
+  </a>
+  <a href="./string/setex" class="command-card">
+    <div class="card-title">SETEX</div>
+    <div class="card-description">设置键的值并指定过期时间（秒）</div>
+  </a>
+  <a href="./string/psetex" class="command-card">
+    <div class="card-title">PSETEX</div>
+    <div class="card-description">设置键的值并指定过期时间（毫秒）</div>
+  </a>
+  <a href="./string/setnx" class="command-card">
+    <div class="card-title">SETNX</div>
+    <div class="card-description">只有在键不存在时才设置键的值</div>
   </a>
   <a href="./string/setrange" class="command-card">
     <div class="card-title">SETRANGE</div>

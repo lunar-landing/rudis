@@ -1,7 +1,7 @@
 ---
 title: Hash Commands
 titleTemplate: Commands
-description: Overview of Rudis hash commands including HDEL, HEXISTS, HGET, HGETALL, HKEYS, HLEN, HMGET, HMSET, HSET, HSETNX, HSTRLEN, and HVALS commands.
+description: Overview of Rudis hash commands including HDEL, HEXISTS, HGET, HGETALL, HKEYS, HLEN, HMGET, HMSET, HSET, HSETNX, HSCAN, HSTRLEN, and HVALS commands.
 ---
 
 # Hash Commands
@@ -26,6 +26,10 @@ Hash commands allow you to store key-value pairs as hash tables (also known as m
   <a href="./hash/hgetall" class="command-card">
     <div class="card-title">HGETALL</div>
     <div class="card-description">Gets all fields and values in a hash table</div>
+  </a>
+  <a href="./hash/hscan" class="command-card">
+    <div class="card-title">HSCAN</div>
+    <div class="card-description">Incrementally iterates over the fields and values of a hash</div>
   </a>
   <a href="./hash/hkeys" class="command-card">
     <div class="card-title">HKEYS</div>

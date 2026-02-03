@@ -1,7 +1,7 @@
 ---
 title: 哈希命令
 titleTemplate: 命令
-description: Rudis 哈希命令概述，包括 HDEL、HEXISTS、HGET、HGETALL、HKEYS、HLEN、HMGET、HMSET、HSET、HSETNX、HSTRLEN 和 HVALS 命令。
+description: Rudis 哈希命令概述，包括 HDEL、HEXISTS、HGET、HGETALL、HKEYS、HLEN、HMGET、HMSET、HSET、HSETNX、HSCAN、HSTRLEN 和 HVALS 命令。
 ---
 
 # 哈希命令
@@ -26,6 +26,10 @@ description: Rudis 哈希命令概述，包括 HDEL、HEXISTS、HGET、HGETALL�
   <a href="./hash/hgetall" class="command-card">
     <div class="card-title">HGETALL</div>
     <div class="card-description">获取在哈希表中所有的字段和值</div>
+  </a>
+  <a href="./hash/hscan" class="command-card">
+    <div class="card-title">HSCAN</div>
+    <div class="card-description">增量迭代哈希表中的字段和值</div>
   </a>
   <a href="./hash/hkeys" class="command-card">
     <div class="card-title">HKEYS</div>

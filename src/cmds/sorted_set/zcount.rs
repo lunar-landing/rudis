@@ -26,7 +26,8 @@ impl Zcount {
             Some(structure) => {
                 match structure {
                     Structure::SortedSet(set) => {
-                        let count = set.values().filter(|&&score| score >= self.min && score <= self.max).count();
+                        // 使用跳表的高效范围查询
+                        let count = set.count_by_score(self.min, self.max);
                         Ok(Frame::Integer(count as i64))
                     },
                     _ => {

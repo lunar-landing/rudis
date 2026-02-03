@@ -10,3 +10,6 @@ target/
 *.pdb
 *.rdb
 *.aof
+
+# IDE effect configuration
+.idea

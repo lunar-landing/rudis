@@ -10,3 +10,5 @@ pub mod llen;
 pub mod lrem;
 pub mod lset;
 pub mod ltrim;
+pub mod blpop;
+pub mod brpop;

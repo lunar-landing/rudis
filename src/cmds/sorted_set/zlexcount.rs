@@ -34,8 +34,9 @@ impl Zlexcount {
                             return Ok(Frame::Integer(0));
                         }
                         
-                        // 计数符合条件的成员
-                        let count = set.keys()
+                        // 计数符合条件的成员（按字典序）
+                        let count = set.members_lex()
+                            .iter()
                             .filter(|member| {
                                 self.is_in_range(member, &min_bound, &max_bound)
                             })

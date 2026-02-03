@@ -1,6 +1,7 @@
 use anyhow::Error;
 use crate::{store::db::{Db, Structure}, frame::Frame};
 
+#[derive(Clone)]
 pub struct Rpush {
     key: String,
     values: Vec<String>,
@@ -43,5 +44,15 @@ impl Rpush {
                 Ok(Frame::Integer(list.len() as i64))
             }
         }
+    }
+
+    /// 获取键名
+    pub fn key(&self) -> &str {
+        &self.key
+    }
+
+    /// 获取值列表
+    pub fn values(&self) -> &[String] {
+        &self.values
     }
 }

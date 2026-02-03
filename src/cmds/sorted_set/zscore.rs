@@ -23,7 +23,7 @@ impl Zscore {
             Some(structure) => {
                 match structure {
                     Structure::SortedSet(set) => {
-                        if let Some(score) = set.get(&self.member) {
+                        if let Some(score) = set.get_score(&self.member) {
                             Ok(Frame::BulkString(score.to_string()))
                         } else {
                             Ok(Frame::Null)

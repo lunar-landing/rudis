@@ -46,4 +46,9 @@ impl SessionManager {
         }
         self.get_connection_count() >= maxclients
     }
+
+    /// 获取指定 ID 的会话
+    pub fn get_session(&self, session_id: usize) -> Option<Session> {
+        self.sessions.get(&session_id).map(|entry| entry.value().clone())
+    }
 }

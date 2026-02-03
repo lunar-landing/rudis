@@ -1,5 +1,5 @@
 use std::{
-    collections::{BTreeMap, HashMap, HashSet}, sync::{atomic::{AtomicU64, Ordering}}
+    collections::{HashMap, HashSet}, sync::{atomic::{AtomicU64, Ordering}}
 };
 
 use anyhow::Error;
@@ -11,6 +11,8 @@ use tokio::sync::{
 };
 
 use crate::{command::Command, frame::Frame, tools::pattern};
+use crate::store::hyperloglog::HyperLogLog;
+use crate::store::sorted_set::SortedSet;
 
 // 数据库快照数据结构
 #[derive(Clone, Encode, Decode)]
@@ -49,11 +51,12 @@ impl Default for DatabaseSnapshot {
 pub enum Structure {
     String(String),
     Hash(HashMap<String, String>),
-    SortedSet(BTreeMap<String, f64>),
+    SortedSet(SortedSet),
     VectorCollection(Vector),
     Set(HashSet<String>),
     List(Vec<String>),
-    Json(String)  // 使用字符串存储JSON数据
+    Json(String),  // 使用字符串存储JSON数据
+    HyperLogLog(HyperLogLog),
 }
 
 #[derive(Clone, Encode, Decode)]
@@ -130,6 +133,12 @@ impl Db {
                 Some(DatabaseMessage::Restore(snapshot)) => {
                     self.records = snapshot.records;
                     self.expire_records = snapshot.expire_records;
+                    // 重置所有 HyperLogLog 的缓存
+                    for (_, structure) in self.records.iter_mut() {
+                        if let Structure::HyperLogLog(hll) = structure {
+                            hll.reset_cache();
+                        }
+                    }
                 },
                 Some(DatabaseMessage::ResetChanges) => {
                     self.changes.store(0, Ordering::Relaxed);
@@ -165,6 +174,13 @@ impl Db {
             Command::Mget(mget) => mget.apply(self),
             Command::Strlen(strlen) => strlen.apply(self),
             Command::SetRange(setrange) => setrange.apply(self),
+            Command::Setex(setex) => setex.apply(self),
+            Command::Psetex(psetex) => psetex.apply(self),
+            Command::Setnx(setnx) => setnx.apply(self),
+            Command::Setbit(setbit) => setbit.apply(self),
+            Command::Getbit(getbit) => getbit.apply(self),
+            Command::Bitcount(bitcount) => bitcount.apply(self),
+            Command::Bitop(bitop) => bitop.apply(self),
             Command::Append(append) => append.apply(self),
             Command::Dbsize(dbsize) => dbsize.apply(self),
             Command::Persist(persist) => persist.apply(self),
@@ -181,6 +197,7 @@ impl Db {
             Command::Hlen(hlen) => hlen.apply(self),
             Command::Hkeys(hkeys) => hkeys.apply(self),
             Command::Hvals(hvals) => hvals.apply(self),
+            Command::Hscan(hscan) => hscan.apply(self),
             Command::Hincrby(hincrby) => hincrby.apply(self),
             Command::HincrbyFloat(hincrbyfloat) => hincrbyfloat.apply(self),
             Command::Lpush(lpush) => lpush.apply(self),
@@ -194,6 +211,10 @@ impl Db {
             Command::Sdiff(sdiff) => sdiff.apply(self),
             Command::Spop(spop) => spop.apply(self),
             Command::Srem(srem) => srem.apply(self),
+            Command::Sdiffstore(sdiffstore) => sdiffstore.apply(self),
+            Command::Sinterstore(sinterstore) => sinterstore.apply(self),
+            Command::Smove(smove) => smove.apply(self),
+            Command::Srandmember(srandmember) => srandmember.apply(self),
             Command::Sinter(sinter) => sinter.apply(self),
             Command::Sismember(sismember) => sismember.apply(self),
             Command::Sunionstore(sunionstore) => sunionstore.apply(self),
@@ -227,6 +248,9 @@ impl Db {
             Command::Sscan(sscan) => sscan.apply(self),
             Command::Msetnx(msetnx) => msetnx.apply(self),
             Command::Zrange(zrange) => zrange.apply(self),
+            Command::Pfadd(pfadd) => pfadd.apply(self),
+            Command::Pfcount(pfcount) => pfcount.apply(self),
+            Command::Pfmerge(pfmerge) => pfmerge.apply(self),
             _ => Err(Error::msg("Unknown command")),
         }
     }

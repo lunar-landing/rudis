@@ -1,7 +1,7 @@
 ---
 title: 集合命令
 titleTemplate: 命令
-description: Rudis 集合命令概述，包括 SADD、SCARD、SINTER、SISMEMBER、SMEMBERS、SPOP、SREM、SUNION、SUNIONSTORE 命令。
+description: Rudis 集合命令概述，包括 SADD、SCARD、SINTER、SISMEMBER、SMEMBERS、SPOP、SRANDMEMBER、SREM、SUNION、SUNIONSTORE、SDIFFSTORE、SINTERSTORE、SMOVE 命令。
 ---
 
 # 集合命令
@@ -35,6 +35,10 @@ description: Rudis 集合命令概述，包括 SADD、SCARD、SINTER、SISMEMBER
     <div class="card-title">SPOP</div>
     <div class="card-description">移除并返回集合中的一个随机元素</div>
   </a>
+  <a href="./set/srandmember" class="command-card">
+    <div class="card-title">SRANDMEMBER</div>
+    <div class="card-description">返回集合中的一个或多个随机成员，但不移除</div>
+  </a>
   <a href="./set/srem" class="command-card">
     <div class="card-title">SREM</div>
     <div class="card-description">移除集合中的一个或多个成员</div>
@@ -46,6 +50,18 @@ description: Rudis 集合命令概述，包括 SADD、SCARD、SINTER、SISMEMBER
   <a href="./set/sunionstore" class="command-card">
     <div class="card-title">SUNIONSTORE</div>
     <div class="card-description">将给定所有集合的并集存储在指定的集合中</div>
+  </a>
+  <a href="./set/sdiffstore" class="command-card">
+    <div class="card-title">SDIFFSTORE</div>
+    <div class="card-description">计算给定所有集合的差集并存储在指定的集合中</div>
+  </a>
+  <a href="./set/sinterstore" class="command-card">
+    <div class="card-title">SINTERSTORE</div>
+    <div class="card-description">计算给定所有集合的交集并存储在指定的集合中</div>
+  </a>
+  <a href="./set/smove" class="command-card">
+    <div class="card-title">SMOVE</div>
+    <div class="card-description">将成员从一个集合移动到另一个集合</div>
   </a>
 </div>
 

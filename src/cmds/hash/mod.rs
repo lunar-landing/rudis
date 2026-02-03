@@ -12,3 +12,4 @@ pub mod hdel;
 pub mod hlen;
 pub mod hincrby;
 pub mod hincrbyfloat;
+pub mod hscan;

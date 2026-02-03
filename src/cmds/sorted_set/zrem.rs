@@ -24,7 +24,7 @@ impl Zrem {
                     Structure::SortedSet(set) => {
                         let mut removed_count = 0;
                         for member in &self.members {
-                            if set.remove(member).is_some() {
+                            if set.remove(member) {
                                 removed_count += 1;
                             }
                         }

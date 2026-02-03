@@ -9,3 +9,4 @@ pub mod server_sync;
 pub mod string;
 pub mod set;
 pub mod transaction;
+pub mod hyperloglog;
