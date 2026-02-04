@@ -39,7 +39,7 @@ Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在�
 
 ### v0.4.0
 
-- 新增 List 数据结构 Blpop、Brpop 命名。 
+- 新增 List 数据结构 Blpop、Brpop 命令。 
 - 新增 Hash 数据结构 HSCAN 命令，支持 MATCH 和 COUNT 参数。
 - 新增 String 数据结构 SETEX、PSETEX、SETNX、SETBIT、GETBIT、BITCOUNT、BITOP 命令。
 - 新增 Set 数据结构 SRANDMEMBER、SDIFFSTORE、SINTERSTORE、SMOVE 命令。
