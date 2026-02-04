@@ -40,8 +40,10 @@ impl Encode for SortedSet {
 }
 
 // 手动实现 Decode（反序列化）
-impl Decode for SortedSet {
-    fn decode<D: bincode::de::Decoder>(decoder: &mut D) -> Result<Self, bincode::error::DecodeError> {
+impl<Context> Decode<Context> for SortedSet {
+    fn decode<D: bincode::de::Decoder<Context = Context>>(
+        decoder: &mut D,
+    ) -> Result<Self, bincode::error::DecodeError> {
         // 从 Vec<(f64, String)> 反序列化，然后重建跳表
         let items: Vec<(f64, String)> = Vec::decode(decoder)?;
         let mut set = SortedSet::new();
@@ -53,8 +55,8 @@ impl Decode for SortedSet {
 }
 
 // 手动实现 BorrowDecode（借用反序列化）
-impl<'de> BorrowDecode<'de> for SortedSet {
-    fn borrow_decode<D: bincode::de::BorrowDecoder<'de>>(
+impl<'de, Context> BorrowDecode<'de, Context> for SortedSet {
+    fn borrow_decode<D: bincode::de::BorrowDecoder<'de, Context = Context>>(
         decoder: &mut D,
     ) -> Result<Self, bincode::error::DecodeError> {
         // 从 Vec 反序列化，然后重建跳表
