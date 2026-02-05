@@ -8,12 +8,12 @@
 
 [ROADMAP 2026](./ROADMAP-2026.md)
 
-[Github](https://github.com/sleeprite/rudis) | [Gitee](https://gitee.com/Jmysy/rudis) | [Packages](./release) | [Docker](https://github.com/sleeprite/rudis/blob/master/docker/README.md) 
+[Github](https://github.com/lunar-landing/rudis) | [Gitee](https://gitee.com/lunarlanding/rudis) | [Packages](./release) | [Docker](https://github.com/lunar-landing/rudis/blob/master/docker/README.md) 
 
-<a href='https://gitee.com/rudis/rudis/stargazers'><img src='https://gitee.com/rudis/rudis/badge/star.svg?theme=gvp' alt='star'/></a>
+<a href='https://gitee.com/lunarlanding/rudis/stargazers'><img src='https://gitee.com/lunarlanding/rudis/badge/star.svg?theme=gvp' alt='star'/></a>
 <a href="https://gitcode.com/rudis/rudis/stargazers"><img src="https://gitcode.com/rudis/rudis/star/badge.svg"/></a>
-<a href="https://github.com/sleeprite/rudis"><img src="https://img.shields.io/github/stars/sleeprite/rudis?style=flat-square&logo=GitHub"/></a>
-<a href="https://github.com/sleeprite/rudis/blob/master/LICENSE"><img src="https://img.shields.io/github/license/sleeprite/rudis.svg?style=flat-square"/></a>
+<a href="https://github.com/lunar-landing/rudis"><img src="https://img.shields.io/github/stars/lunar-landing/rudis?style=flat-square&logo=GitHub"/></a>
+<a href="https://github.com/lunar-landing/rudis/blob/master/LICENSE"><img src="https://img.shields.io/github/license/lunar-landing/rudis.svg?style=flat-square"/></a>
 
 <h4>高 性 能 内 存 数 据 库 </h4>
 
@@ -32,8 +32,8 @@ Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在�
 - 提供 rdb 与 aof 机制以支持数据备份和恢复。
 - 拥有卓越的处理速度和即时响应能力。
 - 多个线程中并发创建和删除键值。
-- 提供 Docker 部署方式。
 - 兼容 RESP 协议规范。
+- 提供 Docker 部署方式。
 
 ## 快速入门
 
@@ -262,8 +262,8 @@ cargo clippy
 
 ## 开源共建
 
-Rudis 项目遵循 [GNU GENERAL PUBLIC LICENSE](https://github.com/sleeprite/rudis/blob/master/LICENSE) 开源协议，感谢这些优秀的 [Contributors](https://github.com/sleeprite/rudis/graphs/contributors)。
+Rudis 项目遵循 [GNU GENERAL PUBLIC LICENSE](https://github.com/lunar-landing/rudis/blob/master/LICENSE) 开源协议,感谢这些优秀的 [Contributors](https://github.com/lunar-landing/rudis/graphs/contributors)。
 
-<a href="https://github.com/sleeprite/rudis/graphs/contributors">
+<a href="https://github.com/lunar-landing/rudis/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=sleeprite/rudis" />
 </a>
