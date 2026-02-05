@@ -8,12 +8,12 @@
 
 [ROADMAP 2026](./ROADMAP-2026.md)
 
-[Github](https://github.com/sleeprite/rudis) | [Gitee](https://gitee.com/Jmysy/rudis) | [Packages](./release) | [Docker](https://github.com/sleeprite/rudis/blob/master/docker/README.md) 
+[Github](https://github.com/lunar-landing/rudis) | [Gitee](https://gitee.com/lunarlanding/rudis) | [Packages](./release) | [Docker](https://github.com/lunar-landing/rudis/blob/master/docker/README.md) 
 
-<a href='https://gitee.com/rudis/rudis/stargazers'><img src='https://gitee.com/rudis/rudis/badge/star.svg?theme=gvp' alt='star'/></a>
+<a href='https://gitee.com/lunarlanding/rudis/stargazers'><img src='https://gitee.com/lunarlanding/rudis/badge/star.svg?theme=gvp' alt='star'/></a>
 <a href="https://gitcode.com/rudis/rudis/stargazers"><img src="https://gitcode.com/rudis/rudis/star/badge.svg"/></a>
-<a href="https://github.com/sleeprite/rudis"><img src="https://img.shields.io/github/stars/sleeprite/rudis?style=flat-square&logo=GitHub"/></a>
-<a href="https://github.com/sleeprite/rudis/blob/master/LICENSE"><img src="https://img.shields.io/github/license/sleeprite/rudis.svg?style=flat-square"/></a>
+<a href="https://github.com/lunar-landing/rudis"><img src="https://img.shields.io/github/stars/lunar-landing/rudis?style=flat-square&logo=GitHub"/></a>
+<a href="https://github.com/lunar-landing/rudis/blob/master/LICENSE"><img src="https://img.shields.io/github/license/lunar-landing/rudis.svg?style=flat-square"/></a>
 
 <h4>High Performance In-Memory Database</h4>
 
@@ -32,8 +32,8 @@ Rudis is a high-performance key-value storage system written in Rust, designed t
 - Provides RDB and AOF mechanisms to support data backup and recovery.
 - Delivers exceptional processing speed and instant response capability.
 - Concurrent key-value creation and deletion across multiple threads.
-- Provides Docker deployment option.
 - Compatible with RESP protocol specification.
+- Provides Docker deployment option.
 
 ## Quick Start
 
@@ -262,8 +262,8 @@ cargo clippy
 
 ## Open Source Collaboration
 
-The Rudis project follows the [GNU GENERAL PUBLIC LICENSE](https://github.com/sleeprite/rudis/blob/master/LICENSE) open source license. Thanks to these outstanding [Contributors](https://github.com/sleeprite/rudis/graphs/contributors).
+The Rudis project follows the [GNU GENERAL PUBLIC LICENSE](https://github.com/lunar-landing/rudis/blob/master/LICENSE) open source license. Thanks to these outstanding [Contributors](https://github.com/lunar-landing/rudis/graphs/contributors).
 
-<a href="https://github.com/sleeprite/rudis/graphs/contributors">
+<a href="https://github.com/lunar-landing/rudis/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=sleeprite/rudis" />
 </a>
