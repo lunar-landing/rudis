@@ -15,27 +15,27 @@
 <a href="https://github.com/lunar-landing/rudis"><img src="https://img.shields.io/github/stars/lunar-landing/rudis?style=flat-square&logo=GitHub"/></a>
 <a href="https://github.com/lunar-landing/rudis/blob/master/LICENSE"><img src="https://img.shields.io/github/license/lunar-landing/rudis.svg?style=flat-square"/></a>
 
-<h4>High Performance In-Memory Database</h4>
+<h4>高 性 能 内 存 数 据 库 </h4>
 
 **[🔶 Explore the docs »](https://sleeprite.github.io/rudis)**
 
 </div>
 
-## Introduction
+## 项目介绍
 
-Rudis is a high-performance key-value storage system written in Rust, designed to recreate Redis's core functionality by leveraging Rust's advantages to meet user demands for high performance, reliability, and security, while maintaining compatibility with the Redis API.
+Rudis 是一个采用 Rust 语言编写得高性能键值存储系统，旨在利用 Rust 语言的优势来重新复现 Redis 的核心功能，以满足用户对高性能、可靠性和安全性的需求，同时保证与 Redis API 的兼容。
 
-### 🌟 Features
+### 🌟 特性
 
-- Cross-platform, compatible with Windows, Linux, and macOS systems.
-- Supports String, Set, Hash, List, Sorted Set, HyperLogLog, and JSON data structures.
-- Provides RDB and AOF mechanisms to support data backup and recovery.
-- Delivers exceptional processing speed and instant response capability.
-- Concurrent key-value creation and deletion across multiple threads.
-- Provides Docker deployment option.
-- Compatible with RESP protocol specification.
+- 跨平台，兼容 windows、linux、macos 系统。
+- 兼容 字符串、集合、哈希、列表、有序集合、HyperLogLog、JSON数据结构。
+- 提供 rdb 与 aof 机制以支持数据备份和恢复。
+- 拥有卓越的处理速度和即时响应能力。
+- 多个线程中并发创建和删除键值。
+- 提供 Docker 部署方式。
+- 兼容 RESP 协议规范。
 
-## Quick Start
+## 快速入门
 
 
 ```
@@ -56,121 +56,121 @@ Rudis is a high-performance key-value storage system written in Rust, designed t
 [2025-12-03T03:49:43Z INFO  rudis_server::server] Ready to accept connections
 ```
 
-### Standard Installation
+### 普通安装
 
-Download the matching Rudis version according to your system requirements from [release](./release)
+根据系统环境要求，[下载](./release) 匹配的 Rudis 版本
 
-Start the Rudis service using standard system commands
+通过系统常规命令启动 Rudis 服务
 
 ```sh 
-// Windows standard startup
+// windows 常规启动
 start rudis-server.exe
 
-// Windows startup with configuration file
+// windows 配置文件启动
 start rudis-server.exe --config ./config/rudis.conf
 
-// Windows startup with specified parameters
+// windows 指定参数启动
 start rudis-server.exe --port 6379
 ```
 
-### Container Installation
+### 容器安装
 
-Start Rudis service through Docker container
+通过 docker 容器启动 Rudis 服务
 
-For more installation commands, please visit [docker/README.md](./docker/README.md)
+如需更多安装命令，请前往 [docker/README.md](./docker/README.md) 查看
 
 ```sh 
-// Docker standard startup
+// docker 常规启动
 docker run -p 6379:6379 ghcr.io/sleeprite/rudis:latest
 
-// Docker startup with specified parameters
+// docker 指定参数启动
 docker run -p 6379:8848 ghcr.io/sleeprite/rudis:latest --port 8848
 ```
 
-## Configuration
+## 配置说明
 
-- Configuration file (config): Specify the Rudis configuration file path.
-- Bind host address (bind): Specify the Rudis server bind address.
-- Port (port): Rudis server listening port, default 6379.
-- Password (password): Set Rudis access password.
-- Number of databases (databases): Number of Rudis databases, default 16.
-- Data persistence directory (dir): RDB and AOF file storage directory, default "./".
-- Persistence log path (appendfilename): AOF log file storage path.
-- Enable persistence (appendonly): Whether to enable AOF persistence.
-- Data filename (dbfilename): RDB persistence filename, default "dump.rdb".
-- Session limit (maxclients): Maximum client connections, default 1000.
-- Scheduled task frequency (hz): Scheduled task execution frequency, default 10 times/second.
-- RDB save strategy (save): Set RDB automatic save conditions.
+- 配置文件 (config): 指定Rudis配置文件路径。
+- 绑定的主机地址 (bind): 指定Rudis服务器绑定地址。
+- 端口 (port): Rudis服务器监听端口，默认6379。
+- 密码 (password): 设置Rudis访问密码。
+- 数据库数量 (databases): Rudis数据库数量，默认16。
+- 数据持久化目录 (dir): RDB和AOF文件存储目录，默认"./"。
+- 持久化日志路径 (appendfilename): AOF日志文件存储路径。
+- 开启持久化 (appendonly): 是否开启AOF持久化。
+- 数据文件名 (dbfilename): RDB持久化文件名，默认"dump.rdb"。
+- 会话上限 (maxclients): 最大客户端连接数，默认1000。
+- 定时任务频率 (hz): 定时任务执行频率，默认10次/秒。
+- RDB保存策略 (save): 设置RDB自动保存条件。
 
-## Network Architecture
+## 网络架构
 
 ![alt text](./images/image.png)
 
-## Project Structure
+## 项目结构
 
 ### cmds
 
-The Cmds package is a component written in Rust that simulates a Rudis server. It is primarily responsible for parsing the Rudis protocol, executing database operations, and responding with results. The package contains implementations for various Rudis commands such as SELECT, GET, SET, and more. Its core functionality is to parse command requests from clients according to the Rudis protocol specification, execute corresponding operations on the simulated Rudis database, and return results to clients. By implementing handlers for each Rudis command, it achieves complete support for the Rudis protocol and provides a simple yet effective strategy for handling different types of commands.
+Cmds 包是一个用 Rust 编写的模拟Rudis服务器的组件，主要负责实现Rudis协议的解析、数据库操作的执行以及相关结果的响应。该包内部包含了针对不同Rudis命令的实现，如SELECT、GET、SET等。其核心功能是根据Rudis协议规范，解析来自客户端的命令请求，并在模拟的Rudis数据库上执行相应的操作，再将结果返回给客户端。通过实现各个Rudis命令处理器，实现了对Rudis协议的完整支持，并提供了一个简单而有效的策略来处理不同类型的命令。
 
 ### network
 
-The Network module is the core network communication component of Rudis, responsible for handling client connections, session management, and network data transmission. Built on the Tokio async runtime, this module provides high-performance TCP connection handling capabilities and concurrent connection support. Connection encapsulates read/write operations for underlying TCP streams, Session manages client session state, SessionManager provides thread-safe session storage and retrieval, and SessionRole defines different types of client roles. The entire module adopts an async non-blocking design philosophy, enabling efficient handling of large numbers of concurrent connections and ensuring high performance and stability at the network layer.
+Network 模块是 Rudis 的网络通信核心组件，负责处理客户端连接、会话管理和网络数据传输。该模块基于 Tokio 异步运行时构建，提供了高性能的 TCP 连接处理能力和并发连接支持。通过 Connection 封装了底层 TCP 流的读写操作，Session 管理客户端会话状态，SessionManager 提供线程安全的会话存储和检索，SessionRole 定义不同类型的客户端角色。整个模块采用了异步非阻塞的设计理念，能够有效处理大量并发连接，确保服务器在网络层面的高性能和稳定性。
 
 ### persistence
 
-The Persistence module provides two persistence mechanisms: AOF (Append-Only File) and RDB (Rudis Database), which together ensure data persistence and consistency in the Rudis database. The AOF mechanism records each write operation and appends them to the AOF file, achieving continuous data updates and integrity. This mechanism is crucial for data accuracy and reliability, especially ensuring data recovery after system failures or restarts.
+Persistence 模块提供了 AOF（Append-Only File）和 RDB（Rudis Database） 两种持久化机制，它们共同确保了 Rudis 数据库的数据持久性和一致性。AOF 机制通过记录每个写操作并将它们追加到 AOF 文件中，实现了数据的持续更新和完整性。这种机制对于数据的准确性和可靠性至关重要，尤其是在系统故障或重启后能够确保数据的恢复。
 
 ### store
 
-The Store module is Rudis's core in-memory database engine, providing high-performance key-value storage functionality. This module implements multiple data structures including strings, hash tables, lists, sets, and sorted sets, supporting a rich set of data operation commands. Through thread-safe design and efficient memory management mechanisms, the Store module delivers stable read/write performance in high-concurrency environments. Additionally, this module includes advanced features such as key expiration time management and lazy deletion, ensuring data consistency and system stability.
+Store 模块是 Rudis 的核心内存数据库引擎，提供了高性能的键值存储功能。该模块实现了多种数据结构，包括字符串、哈希表、列表、集合和有序集合，支持丰富的数据操作命令。通过线程安全的设计和高效的内存管理机制，Store 模块能够在高并发环境下提供稳定的读写性能。同时，该模块还内置了键的过期时间管理、惰性删除等高级特性，确保数据的一致性和系统的稳定性。
 
 ### args
 
-The Args module is Rudis's command-line argument and configuration file parser, responsible for handling various configuration options during server startup. Built on the clap library, this module supports rich command-line parameters and configuration file loading capabilities, enabling flexible configuration of server parameters including network binding, port settings, authentication passwords, persistence options, and database count. Through intelligent configuration merging mechanisms, command-line arguments take precedence over configuration files, ensuring configuration flexibility and overridability.
+Args 模块是 Rudis 的命令行参数和配置文件解析器，负责处理服务器启动时的各种配置选项。该模块基于 clap 库实现，支持丰富的命令行参数和配置文件加载功能，能够灵活地配置服务器的各项参数，包括网络绑定、端口设置、认证密码、持久化选项、数据库数量等。通过智能的配置合并机制，命令行参数优先于配置文件，确保了配置的灵活性和可覆盖性。
 
 ### command
 
-The Command module is Rudis's command parsing and dispatch center, responsible for parsing command requests sent by clients into specific command objects and dispatching them to appropriate handlers for execution. This module implements a complete Redis command system, supporting operation commands for data structures such as strings, hashes, lists, sets, and sorted sets, as well as advanced functionality commands including server management, transaction processing, and master-slave replication. Through a unified command parsing interface, it converts RESP protocol format command frames into internal command objects and determines whether persistence to AOF files or propagation to slave nodes is needed based on command type.
+Command 模块是 Rudis 的命令解析和分发中心，负责将客户端发送的命令请求解析为具体的命令对象并分发给相应的处理器执行。该模块实现了完整的 Redis 命令体系，支持字符串、哈希、列表、集合、有序集合等数据结构的操作命令，以及服务器管理、事务处理、主从复制等高级功能命令。通过统一的命令解析接口，能够将 RESP 协议格式的命令帧转换为内部命令对象，并根据命令类型决定是否需要持久化到 AOF 文件或传播到从节点。
 
 ### frame
 
-The Frame module is a core component in Rudis responsible for handling the RESP (Redis Serialization Protocol), defining command frame data structures and providing complete serialization and deserialization functionality. This module supports multiple RESP data types including Simple String, Bulk String, Integer, Array, Error, and Null, accurately parsing command requests from clients and converting them into internally processable data structures. The Frame module also implements a sticky command handling mechanism that effectively processes multiple concatenated command frames that may occur during network transmission, ensuring correct command parsing and execution. Through efficient encoding and decoding implementations, this module ensures efficient and stable communication between Redis clients and servers.
+Frame 模块是 Rudis 中负责处理 RESP (Redis Serialization Protocol) 协议的核心组件，定义了命令帧的数据结构并提供完整的序列化和反序列化功能。该模块支持 Simple String、Bulk String、Integer、Array、Error、Null 等多种 RESP 数据类型，能够准确解析来自客户端的命令请求并将其转换为内部可处理的数据结构。Frame 模块还特别实现了粘连命令处理机制，能够有效处理网络传输中可能出现的多个粘连命令帧，确保命令的正确解析和执行。通过高效的编码和解码实现，该模块保障了 Redis 客户端与服务器之间的高效稳定通信。
 
 ### replication
 
-The Replication module implements Rudis's master-slave replication functionality, allowing one or more slave nodes to connect to a master node to achieve data synchronization and high availability. This module supports the complete master-slave replication process, including connection establishment, handshake, full synchronization, and incremental synchronization. Through the PSYNC command, it implements master-slave node connection and data synchronization, supporting disconnection reconnection and incremental data transmission, effectively reducing network bandwidth consumption and synchronization time. During full synchronization, the master node generates an RDB snapshot file and transfers it to slave nodes, while during incremental synchronization, it propagates write commands in real-time. This module also maintains replication connection state management, ensuring stability of master-slave relationships and data consistency, providing a solid foundation for building highly available Rudis clusters.
+Replication 模块实现了 Rudis 的主从复制功能，允许一个或多个从节点连接到主节点以实现数据同步和高可用性。该模块支持完整的主从复制流程，包括连接建立、握手、全量同步和增量同步。通过 PSYNC 命令实现主从节点的连接和数据同步，支持断线重连和增量数据传输，有效减少了网络带宽消耗和同步时间。在全量同步过程中，主节点生成 RDB 快照文件并传输给从节点，而在增量同步阶段则实时传播写命令。该模块还维护了复制连接的状态管理，确保主从关系的稳定性和数据一致性，为构建高可用的 Rudis 集群提供了坚实的基础。
 
 ### server
 
-The Server module is Rudis's core entry point, responsible for server startup, configuration parsing, and client request handling. It integrates functional modules including network communication, database management, persistence, and replication, forming a complete Rudis server implementation.
+Server 模块是 Rudis 的核心入口点，负责整个服务器的启动、配置解析和客户端请求处理。它整合了网络通信、数据库管理、持久化和复制等功能模块，构成了完整的 Rudis 服务器实现。
 
-## Common Commands
+## 常用命令
 
-echo command
+echo 命令
 ```
 127.0.0.1:6379> echo helloword
 helloword
 ```
 
-ping command
+ping 命令
 ```
 127.0.0.1:6379> ping
 PONG
 ```
 
-set command
+set 命令
 ```
 127.0.0.1:6379> set user bailiang
 OK
 ```
 
-get command
+get 命令
 ```
 127.0.0.1:6379> get user
 bailiang
 ```
 
-del command
+del 命令
 ```
 127.0.0.1:6379> del username
 (integer) 1
@@ -178,81 +178,81 @@ del command
 (integer) 2
 ```
 
-exists command
+exists 命令
 ```
 127.0.0.1:6379> exists user
 (integer) 0
 ```
 
-keys command
+keys 命令
 ```
 127.0.0.1:6379> keys *
 (empty list or set)
 ```
 
-auth command
+auth 命令
 ```
 127.0.0.1:6379> auth 123456
 OK
 ```
 
-expire command
+expire 命令
 ```
 127.0.0.1:6379> expire user 10000
 (integer) 0
 ```
 
-select command
+select 命令
 ```
 127.0.0.1:6379> select 1
 OK
 ```
 
-dbsize command
+dbsize 命令
 ```
 127.0.0.1:6379> dbsize
 (integer) 2
 ```
 
-append command
+append 命令
 ```
 127.0.0.1:6379> append user bailiang
 (integer) 10
 ```
 
-move command
+move 命令
 ```
 127.0.0.1:6379> move user 0
 OK
 ```
 
-> For detailed information about transaction functionality, please refer to [Transaction Functionality Documentation](README-TRANSACTIONS.md)
+> 有关事务功能的详细信息，请参阅 [事务功能说明](README-TRANSACTIONS.md)
 
-## Build from Source
+## 构建源码
 
-If you wish to obtain the release package by building from source code.
+如果你希望通过构建源码的方式，得到发行包。
 
-Please use common cargo commands.
+请使用 cargo 常用命令。
 
 ```
-// Standard startup
+// 普通启动
 cargo run
 
-// Startup with parameters
+// 带参启动
 cargo run -- --port 8848
 cargo run -- --save 20/1 60/2
 
-// Specify configuration
+// 指定配置
 cargo run -- --config rudis.conf
 
-// Build program
+// 构建程序
 cargo build
 
 cargo build --release --target=x86_64-unknown-linux-musl
 
 cargo build --release
 
-// Code linting
+// 代码检测
 cargo clippy
 ```
 
@@ -260,9 +260,9 @@ cargo clippy
 
 [![Star History Chart](https://api.star-history.com/svg?repos=sleeprite/rudis&type=Date)](https://www.star-history.com/#sleeprite/rudis&Date)
 
-## Open Source Collaboration
+## 开源共建
 
-The Rudis project follows the [GNU GENERAL PUBLIC LICENSE](https://github.com/lunar-landing/rudis/blob/master/LICENSE) open source license. Thanks to these outstanding [Contributors](https://github.com/lunar-landing/rudis/graphs/contributors).
+Rudis 项目遵循 [GNU GENERAL PUBLIC LICENSE](https://github.com/lunar-landing/rudis/blob/master/LICENSE) 开源协议,感谢这些优秀的 [Contributors](https://github.com/lunar-landing/rudis/graphs/contributors)。
 
 <a href="https://github.com/lunar-landing/rudis/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=sleeprite/rudis" />
