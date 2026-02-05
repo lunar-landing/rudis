@@ -32,8 +32,8 @@ Rudis is a high-performance key-value storage system written in Rust, designed t
 - Provides RDB and AOF mechanisms to support data backup and recovery.
 - Delivers exceptional processing speed and instant response capability.
 - Concurrent key-value creation and deletion across multiple threads.
-- Compatible with RESP protocol specification.
 - Provides Docker deployment option.
+- Compatible with RESP protocol specification.
 
 ## Quick Start
 
