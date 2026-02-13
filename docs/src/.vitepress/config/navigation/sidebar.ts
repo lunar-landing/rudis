@@ -112,6 +112,14 @@ function zhSidebar(): DefaultTheme.SidebarItem[] {
               link: '/zh/docs/commands/string/append',
             },
             {
+              text: 'BITCOUNT',
+              link: '/zh/docs/commands/string/bitcount',
+            },
+            {
+              text: 'BITOP',
+              link: '/zh/docs/commands/string/bitop',
+            },
+            {
               text: 'DECR',
               link: '/zh/docs/commands/string/decr',
             },
@@ -122,6 +130,10 @@ function zhSidebar(): DefaultTheme.SidebarItem[] {
             {
               text: 'GET',
               link: '/zh/docs/commands/string/get',
+            },
+            {
+              text: 'GETBIT',
+              link: '/zh/docs/commands/string/getbit',
             },
             {
               text: 'GETRANGE',
@@ -152,8 +164,32 @@ function zhSidebar(): DefaultTheme.SidebarItem[] {
               link: '/zh/docs/commands/string/mset',
             },
             {
+              text: 'MSETNX',
+              link: '/zh/docs/commands/string/msetnx',
+            },
+            {
+              text: 'PSETEX',
+              link: '/zh/docs/commands/string/psetex',
+            },
+            {
               text: 'SET',
               link: '/zh/docs/commands/string/set',
+            },
+            {
+              text: 'SETBIT',
+              link: '/zh/docs/commands/string/setbit',
+            },
+            {
+              text: 'SETEX',
+              link: '/zh/docs/commands/string/setex',
+            },
+            {
+              text: 'SETNX',
+              link: '/zh/docs/commands/string/setnx',
+            },
+            {
+              text: 'SETRANGE',
+              link: '/zh/docs/commands/string/setrange',
             },
             {
               text: 'STRLEN',
@@ -218,6 +254,14 @@ function zhSidebar(): DefaultTheme.SidebarItem[] {
               link: '/zh/docs/commands/hash/hdel',
             },
             {
+              text: 'HINCRBY',
+              link: '/zh/docs/commands/hash/hincrby',
+            },
+            {
+              text: 'HINCRBYFLOAT',
+              link: '/zh/docs/commands/hash/hincrbyfloat',
+            },
+            {
               text: 'HEXISTS',
               link: '/zh/docs/commands/hash/hexists',
             },
@@ -254,6 +298,10 @@ function zhSidebar(): DefaultTheme.SidebarItem[] {
               link: '/zh/docs/commands/hash/hsetnx',
             },
             {
+              text: 'HSCAN',
+              link: '/zh/docs/commands/hash/hscan',
+            },
+            {
               text: 'HSTRLEN',
               link: '/zh/docs/commands/hash/hstrlen',
             },
@@ -277,8 +325,20 @@ function zhSidebar(): DefaultTheme.SidebarItem[] {
               link: '/zh/docs/commands/set/scard',
             },
             {
+              text: 'SDIFF',
+              link: '/zh/docs/commands/set/sdiff',
+            },
+            {
+              text: 'SDIFFSTORE',
+              link: '/zh/docs/commands/set/sdiffstore',
+            },
+            {
               text: 'SINTER',
               link: '/zh/docs/commands/set/sinter',
+            },
+            {
+              text: 'SINTERSTORE',
+              link: '/zh/docs/commands/set/sinterstore',
             },
             {
               text: 'SISMEMBER',
@@ -289,12 +349,24 @@ function zhSidebar(): DefaultTheme.SidebarItem[] {
               link: '/zh/docs/commands/set/smembers',
             },
             {
+              text: 'SMOVE',
+              link: '/zh/docs/commands/set/smove',
+            },
+            {
               text: 'SPOP',
               link: '/zh/docs/commands/set/spop',
             },
             {
+              text: 'SRANDMEMBER',
+              link: '/zh/docs/commands/set/srandmember',
+            },
+            {
               text: 'SREM',
               link: '/zh/docs/commands/set/srem',
+            },
+            {
+              text: 'SSCAN',
+              link: '/zh/docs/commands/set/sscan',
             },
             {
               text: 'SUNION',
@@ -314,6 +386,10 @@ function zhSidebar(): DefaultTheme.SidebarItem[] {
             {
               text: 'ZADD',
               link: '/zh/docs/commands/sortedSet/zadd',
+            },
+            {
+              text: 'ZINCRBY',
+              link: '/zh/docs/commands/sortedSet/zincrby',
             },
             {
               text: 'ZCARD',
@@ -395,6 +471,18 @@ function zhSidebar(): DefaultTheme.SidebarItem[] {
         {
           text: '在 Java 中使用',
           link: '/zh/docs/guides/java',
+        },
+        {
+          text: '在 Go 中使用',
+          link: '/zh/docs/guides/go',
+        },
+        {
+          text: '在 PHP 中使用',
+          link: '/zh/docs/guides/php',
+        },
+        {
+          text: '在 Python 中使用',
+          link: '/zh/docs/guides/python',
         },
       ],
     },
@@ -529,6 +617,14 @@ function enSidebar(): DefaultTheme.SidebarItem[] {
               link: '/docs/commands/string/append',
             },
             {
+              text: 'BITCOUNT',
+              link: '/docs/commands/string/bitcount',
+            },
+            {
+              text: 'BITOP',
+              link: '/docs/commands/string/bitop',
+            },
+            {
               text: 'DECR',
               link: '/docs/commands/string/decr',
             },
@@ -539,6 +635,10 @@ function enSidebar(): DefaultTheme.SidebarItem[] {
             {
               text: 'GET',
               link: '/docs/commands/string/get',
+            },
+            {
+              text: 'GETBIT',
+              link: '/docs/commands/string/getbit',
             },
             {
               text: 'GETRANGE',
@@ -569,8 +669,32 @@ function enSidebar(): DefaultTheme.SidebarItem[] {
               link: '/docs/commands/string/mset',
             },
             {
+              text: 'MSETNX',
+              link: '/docs/commands/string/msetnx',
+            },
+            {
+              text: 'PSETEX',
+              link: '/docs/commands/string/psetex',
+            },
+            {
               text: 'SET',
               link: '/docs/commands/string/set',
+            },
+            {
+              text: 'SETBIT',
+              link: '/docs/commands/string/setbit',
+            },
+            {
+              text: 'SETEX',
+              link: '/docs/commands/string/setex',
+            },
+            {
+              text: 'SETNX',
+              link: '/docs/commands/string/setnx',
+            },
+            {
+              text: 'SETRANGE',
+              link: '/docs/commands/string/setrange',
             },
             {
               text: 'STRLEN',
@@ -635,6 +759,14 @@ function enSidebar(): DefaultTheme.SidebarItem[] {
               link: '/docs/commands/hash/hdel',
             },
             {
+              text: 'HINCRBY',
+              link: '/docs/commands/hash/hincrby',
+            },
+            {
+              text: 'HINCRBYFLOAT',
+              link: '/docs/commands/hash/hincrbyfloat',
+            },
+            {
               text: 'HEXISTS',
               link: '/docs/commands/hash/hexists',
             },
@@ -671,6 +803,10 @@ function enSidebar(): DefaultTheme.SidebarItem[] {
               link: '/docs/commands/hash/hsetnx',
             },
             {
+              text: 'HSCAN',
+              link: '/docs/commands/hash/hscan',
+            },
+            {
               text: 'HSTRLEN',
               link: '/docs/commands/hash/hstrlen',
             },
@@ -694,8 +830,20 @@ function enSidebar(): DefaultTheme.SidebarItem[] {
               link: '/docs/commands/set/scard',
             },
             {
+              text: 'SDIFF',
+              link: '/docs/commands/set/sdiff',
+            },
+            {
+              text: 'SDIFFSTORE',
+              link: '/docs/commands/set/sdiffstore',
+            },
+            {
               text: 'SINTER',
               link: '/docs/commands/set/sinter',
+            },
+            {
+              text: 'SINTERSTORE',
+              link: '/docs/commands/set/sinterstore',
             },
             {
               text: 'SISMEMBER',
@@ -706,8 +854,16 @@ function enSidebar(): DefaultTheme.SidebarItem[] {
               link: '/docs/commands/set/smembers',
             },
             {
+              text: 'SMOVE',
+              link: '/docs/commands/set/smove',
+            },
+            {
               text: 'SPOP',
               link: '/docs/commands/set/spop',
+            },
+            {
+              text: 'SRANDMEMBER',
+              link: '/docs/commands/set/srandmember',
             },
             {
               text: 'SREM',
@@ -721,6 +877,10 @@ function enSidebar(): DefaultTheme.SidebarItem[] {
               text: 'SUNIONSTORE',
               link: '/docs/commands/set/sunionstore',
             },
+            {
+              text: 'SSCAN',
+              link: '/docs/commands/set/sscan',
+            },
           ]
         },
         {
@@ -731,6 +891,10 @@ function enSidebar(): DefaultTheme.SidebarItem[] {
             {
               text: 'ZADD',
               link: '/docs/commands/sortedSet/zadd',
+            },
+            {
+              text: 'ZINCRBY',
+              link: '/docs/commands/sortedSet/zincrby',
             },
             {
               text: 'ZCARD',
@@ -812,6 +976,18 @@ function enSidebar(): DefaultTheme.SidebarItem[] {
         {
           text: 'Using Rudis in Java',
           link: '/docs/guides/java',
+        },
+        {
+          text: 'Using Rudis in Go',
+          link: '/docs/guides/go',
+        },
+        {
+          text: 'Using Rudis in PHP',
+          link: '/docs/guides/php',
+        },
+        {
+          text: 'Using Rudis in Python',
+          link: '/docs/guides/python',
         },
       ],
     },
